@@ -55,7 +55,7 @@ public class NewsfeedForm extends BaseForm {
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
-        setTitle("Newsfeed");
+        setTitle("Produits");
         getContentPane().setScrollVisible(false);
         
         super.addSideMenu(res);
@@ -109,16 +109,15 @@ public class NewsfeedForm extends BaseForm {
         ButtonGroup barGroup = new ButtonGroup();
         RadioButton all = RadioButton.createToggle("All", barGroup);
         all.setUIID("SelectBar");
-        RadioButton featured = RadioButton.createToggle("Featured", barGroup);
+        RadioButton featured = RadioButton.createToggle("My products", barGroup);
         featured.setUIID("SelectBar");
-        RadioButton popular = RadioButton.createToggle("Popular", barGroup);
+        RadioButton popular = RadioButton.createToggle("Add products", barGroup);
         popular.setUIID("SelectBar");
-        RadioButton myFavorite = RadioButton.createToggle("My Favorites", barGroup);
-        myFavorite.setUIID("SelectBar");
+
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         
         add(LayeredLayout.encloseIn(
-                GridLayout.encloseIn(4, all, featured, popular, myFavorite),
+                GridLayout.encloseIn(3, all, featured, popular),
                 FlowLayout.encloseBottom(arrow)
         ));
         
@@ -131,7 +130,7 @@ public class NewsfeedForm extends BaseForm {
         bindButtonSelection(all, arrow);
         bindButtonSelection(featured, arrow);
         bindButtonSelection(popular, arrow);
-        bindButtonSelection(myFavorite, arrow);
+       // bindButtonSelection(myFavorite, arrow);
         
         // special case for rotation
         addOrientationListener(e -> {
