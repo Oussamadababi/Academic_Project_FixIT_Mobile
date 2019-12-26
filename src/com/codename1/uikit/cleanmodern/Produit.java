@@ -140,6 +140,12 @@ public class Produit extends BaseForm  {
         
         RadioButton popular = RadioButton.createToggle("Add products", barGroup);
         popular.setUIID("SelectBar");
+        popular.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+               new AjouterProduit(res).show();
+            }
+        });
 
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         

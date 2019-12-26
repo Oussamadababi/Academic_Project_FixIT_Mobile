@@ -126,11 +126,23 @@ public class MesEchangeForm extends BaseForm{
                         }
                         }
                 });
+          popular.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        
+                        {
+                       
+                           new AjouterEchange (res).show();
+                          
+                        }
+                        }
+                });
+     
      
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         
         add(LayeredLayout.encloseIn(
-                GridLayout.encloseIn(4, all, featured, popular),
+                GridLayout.encloseIn(3, all, featured, popular),
                 FlowLayout.encloseBottom(arrow)
         ));
         
@@ -139,7 +151,7 @@ public class MesEchangeForm extends BaseForm{
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
-            updateArrowPosition(all, arrow);
+            updateArrowPosition(featured, arrow);
         });
         bindButtonSelection(all, arrow);
         bindButtonSelection(featured, arrow);
