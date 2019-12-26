@@ -153,7 +153,7 @@ public class AjouterEchange extends BaseForm {
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
-            updateArrowPosition(all, arrow);
+            updateArrowPosition(popular, arrow);
         });
         bindButtonSelection(all, arrow);
         bindButtonSelection(featured, arrow);
