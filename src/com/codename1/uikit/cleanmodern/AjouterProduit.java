@@ -6,6 +6,7 @@
 package com.codename1.uikit.cleanmodern;
 
 
+import Entites.Categorie;
 import Entites.Task;
 import Service.Session;
 import com.codename1.components.ImageViewer;
@@ -19,6 +20,7 @@ import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.Button;
 import com.codename1.ui.ButtonGroup;
+import com.codename1.ui.ComboBox;
 import com.codename1.ui.Component;
 import static com.codename1.ui.Component.BOTTOM;
 import static com.codename1.ui.Component.CENTER;
@@ -163,20 +165,74 @@ public class AjouterProduit extends BaseForm {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
         
-        
-        TextField username = new TextField();
-        username.setUIID("TextFieldBlack");
-        addStringValue("Produit",username);
+         ComboBox cb = new ComboBox();
+        addStringValue("Categorie",cb);
+        TextField NomProduit = new TextField();
+        NomProduit.setUIID("TextFieldBlack");
+        addStringValue("Produit",NomProduit);
         TextField Prix = new TextField();
         Prix.setUIID("TextFieldBlack");
         addStringValue("Prix",Prix);
         int tel=Session.getInstance().getLoggedInUser().getTel();
         String tel2=Integer.toString(tel);
-        System.out.println(Session.getInstance().getLoggedInUser().getTel());
         TextField Num = new TextField(tel2);
         Num.setUIID("TextFieldBlack");
         addStringValue("Portable",Num);
+        TextArea Description = new TextArea();
+        Description.setUIID("TextAreaBlack");
+        addStringValue("Description",Description);
+       
+        ConnectionRequest con = new ConnectionRequest();
+        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/afficherCategorieMobile");  
+        ArrayList<Categorie> listTasks = new ArrayList<>();
+        con.addResponseListener((NetworkEvent evt) -> {
+            try {
+                String aff=new String(con.getResponseData());
+                JSONParser j = new JSONParser();// Instanciation d'un objet JSONParser permettant le parsing du résultat json
+                Map<String, Object> categorie = j.parseJSON(new CharArrayReader(aff.toCharArray()));
+                List<Map<String, Object>> list = (List<Map<String, Object>>) categorie.get("root");
+                for (Map<String, Object> obj : list)
+                {
+                    Categorie e = new Categorie();
+                    
+                    e.setNomcategorie(obj.get("categorie").toString()); 
+                    cb.addItem(obj.get("categorie").toString());
+                }   
+            }
+            catch (IOException ex) {
+                
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(con);
+        Button ajouter=new Button("Ajouter");
+        addStringValue("",ajouter);
+        ajouter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                int prix2=Integer.parseInt(Prix.getText());
+                int num=Integer.parseInt(Num.getText());
+                Task produit = new Task(NomProduit.getText(),Description.getText(),prix2,num);
+                ConnectionRequest con = new ConnectionRequest();// création d'une nouvelle demande de connexion
+        String Url = "http://localhost/fixitweb1/web/app_dev.php/wael/ajouterproduitMobile?nomproduit="+produit.getNomproduit()+ "&description=" + produit.getDescription()+"&prix="+produit.getPrix()+"&numero="+produit.getNum();// création de l'URL
+        con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
+
+        con.addResponseListener((e) -> {
+            String str = new String(con.getResponseData());//Récupération de la réponse du serveur
+            System.out.println(str);//Affichage de la réponse serveur sur la console
+
+        });
+        NetworkManager.getInstance().addToQueueAndWait(con);
+                
+                
+            }
+        });
         
+        
+        
+        
+                
+                
+                
       /*  int idd= Session.getInstance().getLoggedInUser().getId();
         ConnectionRequest con = new ConnectionRequest();
         con.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/afficherMesproduitMobile/"+idd);  
@@ -335,6 +391,7 @@ public class AjouterProduit extends BaseForm {
      private void addStringValue(String s, Component v) {
         add(BorderLayout.west(new Label(s, "PaddedLabel")).
                 add(BorderLayout.CENTER, v));
-        add(createLineSeparator(0xeeeeee));
+        add(createLineSeparator(0xF4BE1B));
+        
     }
 }

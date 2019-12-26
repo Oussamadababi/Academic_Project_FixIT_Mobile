@@ -73,10 +73,10 @@ public class Task {
         this.date_produit = date_produit;
     }
 
-    public Task(String nomproduit, int prix, String description, int num) {
+    public Task(String nomproduit, String description, int prix ,int num) {
         this.nomproduit = nomproduit;
+        this.description = description;  
         this.prix = prix;
-        this.description = description;
         this.num = num;
     }
 
