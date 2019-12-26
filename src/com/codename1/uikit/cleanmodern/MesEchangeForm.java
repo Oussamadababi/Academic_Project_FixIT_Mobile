@@ -5,10 +5,6 @@
  */
 package com.codename1.uikit.cleanmodern;
 
-/**
- *
- * @author Iheb
- */
 import Entites.Echange;
 import Service.Session;
 import com.codename1.components.ScaleImageLabel;
@@ -50,8 +46,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-public class EchangeForm extends BaseForm {
-    public EchangeForm(Resources res) {
+
+/**
+ *
+ * @author Iheb
+ */
+public class MesEchangeForm extends BaseForm{
+    public MesEchangeForm (Resources res) {
         super("Trocs", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
@@ -113,14 +114,14 @@ public class EchangeForm extends BaseForm {
         RadioButton featured = RadioButton.createToggle("Mes Trocs", barGroup);
         featured.setUIID("SelectBar");
         RadioButton popular = RadioButton.createToggle("Trocs", barGroup);
-       popular.setUIID("SelectBar");
-           featured .addActionListener(new ActionListener() {
+        popular.setUIID("SelectBar");
+        all.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
                         
                         {
                        
-                           new MesEchangeForm (res).show();
+                           new EchangeForm (res).show();
                           
                         }
                         }
@@ -150,9 +151,10 @@ public class EchangeForm extends BaseForm {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
             
         });
-     int id=Session.getInstance().getLoggedInUser().getId();
+       
+         int id=Session.getInstance().getLoggedInUser().getId();
         ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/Iheb/afficherEchangeMobile/"+id);  
+        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/Iheb/afficherEchange2Mobile/"+id);  
       
             con.addResponseListener((NetworkEvent evt) -> {
             ArrayList<Echange> listTasks = new ArrayList<>();
@@ -175,7 +177,6 @@ public class EchangeForm extends BaseForm {
        // addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15);
         //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);
 //               addButton2("propositionOfferte", obj.get("propositionOfferte").toString());
-
                
    
         
@@ -183,10 +184,12 @@ public class EchangeForm extends BaseForm {
            LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurfg") ;
            int pos = 1;
           e.setNom_posteur(obj1.get("username").toString());
-           addButton3(res.getImage("dog.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString(),obj1.get("nom").toString());
          
-
-              
+  
+                       
+                            addButton3(res.getImage("dog.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString());
+                          
+                      
 
                 listTasks.add(e);
             }} 
@@ -200,7 +203,7 @@ public class EchangeForm extends BaseForm {
        // addButton(res.getImage("news-item-1.jpg"), "Morbi per tincidunt tellus sit of amet eros laoreet.", false, 26, 32);
        // addButton(res.getImage("news-item-2.jpg"), "Fusce ornare cursus masspretium tortor integer placera.", true, 15, 21);
         //addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15);
-        //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);
+        //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);*/
       
     }
      
@@ -250,7 +253,7 @@ public class EchangeForm extends BaseForm {
         swipe.addTab("", page1);
     }
 
-private void addButton3(Image img, boolean liked, int likeCount, int commentCount,String Proff,String souh,String description,String nom) {
+private void addButton3(Image img, boolean liked, int likeCount, int commentCount,String Proff,String souh,String description) {
        int height = Display.getInstance().convertToPixels(11.5f);
        int width = Display.getInstance().convertToPixels(14f);
        Button image = new Button(img.fill(width, height));
@@ -274,14 +277,14 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
         
        Label comments = new Label( " Description : "+description , "NewsBottomLine"); 
      //  FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
-         Label user = new Label( "username  : "+nom , "NewsBottomLine"); 
+     
       // FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
        
        cnt.add(BorderLayout.CENTER, 
                BoxLayout.encloseY(
                       
                        BoxLayout.encloseX(likes1,num ),
-                       comments,user
+                       comments
                        
                ));
  
@@ -330,6 +333,5 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
             }
         });
     }
-    
     
 }
