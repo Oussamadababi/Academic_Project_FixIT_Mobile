@@ -73,25 +73,21 @@ public class Task {
         this.date_produit = date_produit;
     }
 
-    public Task(String nomproduit, String description, int prix ,int num) {
-        this.nomproduit = nomproduit;
-        this.description = description;  
-        this.prix = prix;
-        this.num = num;
-    }
 
-    public Task(int id, String nomproduit, int prix, String description, int num) {
-        this.id = id;
-        this.nomproduit = nomproduit;
-        this.prix = prix;
-        this.description = description;
-        this.num = num;
-    }
+
 
     public Task(int id, String nomproduit, String description) {
         this.id = id;
         this.nomproduit = nomproduit;
         this.description = description;
+    }
+
+    public Task(String nomproduit,String description, int prix , int num, int idposteur_fg) {
+        this.nomproduit = nomproduit;
+        this.prix = prix;
+        this.description = description;
+        this.num = num;
+        this.idposteur_fg = idposteur_fg;
     }
 
 
