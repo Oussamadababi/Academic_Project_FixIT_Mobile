@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package com.codename1.uikit.cleanmodern;
+
+
 import Entites.Task;
 import Service.Session;
 import com.codename1.components.ImageViewer;
@@ -32,6 +34,7 @@ import com.codename1.ui.Label;
 import com.codename1.ui.RadioButton;
 import com.codename1.ui.Tabs;
 import com.codename1.ui.TextArea;
+import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.URLImage;
 import com.codename1.ui.events.ActionEvent;
@@ -42,7 +45,6 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
-import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,15 +56,14 @@ import java.util.Map;
  *
  * @author waelb
  */
-public class Produit extends BaseForm  {
-    
-        Image imgg;
+public class AjouterProduit extends BaseForm {
+    Image imgg;
         EncodedImage enc ;
     
     
-    public Produit(Resources res) {
+    public AjouterProduit(Resources res) {
        
-        super("Produit", BoxLayout.y());
+        super("AjouterProduit", BoxLayout.y());
         ImageViewer img= new ImageViewer();
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
@@ -121,7 +122,7 @@ public class Produit extends BaseForm  {
         ButtonGroup barGroup = new ButtonGroup();
         RadioButton all = RadioButton.createToggle("All", barGroup);
         all.setUIID("SelectBar");
-        all.addActionListener(new ActionListener() {
+                all.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
                new Produit(res).show();
@@ -136,16 +137,8 @@ public class Produit extends BaseForm  {
                new MesProduits(res).show();
             }
         });
-        
-        
         RadioButton popular = RadioButton.createToggle("Add products", barGroup);
         popular.setUIID("SelectBar");
-        popular.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-               new AjouterProduit(res).show();
-            }
-        });
 
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         
@@ -158,7 +151,7 @@ public class Produit extends BaseForm  {
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
-            updateArrowPosition(all, arrow);
+            updateArrowPosition(popular, arrow);
         });
         bindButtonSelection(all, arrow);
         bindButtonSelection(featured, arrow);
@@ -171,9 +164,22 @@ public class Produit extends BaseForm  {
         });
         
         
-       int idd= Session.getInstance().getLoggedInUser().getId();
+        TextField username = new TextField();
+        username.setUIID("TextFieldBlack");
+        addStringValue("Produit",username);
+        TextField Prix = new TextField();
+        Prix.setUIID("TextFieldBlack");
+        addStringValue("Prix",Prix);
+        int tel=Session.getInstance().getLoggedInUser().getTel();
+        String tel2=Integer.toString(tel);
+        System.out.println(Session.getInstance().getLoggedInUser().getTel());
+        TextField Num = new TextField(tel2);
+        Num.setUIID("TextFieldBlack");
+        addStringValue("Portable",Num);
+        
+      /*  int idd= Session.getInstance().getLoggedInUser().getId();
         ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/afficherproduitMobile/"+idd);  
+        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/afficherMesproduitMobile/"+idd);  
         con.addResponseListener((NetworkEvent evt) -> {
             ArrayList<Task> listTasks = new ArrayList<>();
             try {
@@ -221,8 +227,7 @@ public class Produit extends BaseForm  {
             }
         });
         NetworkManager.getInstance().addToQueueAndWait(con);
-        
-  
+       */
     }
     
    
@@ -325,5 +330,11 @@ public class Produit extends BaseForm  {
                 updateArrowPosition(b, arrow);
             }
         });
+    }
+
+     private void addStringValue(String s, Component v) {
+        add(BorderLayout.west(new Label(s, "PaddedLabel")).
+                add(BorderLayout.CENTER, v));
+        add(createLineSeparator(0xeeeeee));
     }
 }
