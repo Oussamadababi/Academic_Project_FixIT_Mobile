@@ -5,6 +5,7 @@
  */
 package com.codename1.uikit.cleanmodern;
 import Entites.Task;
+import Service.Session;
 import com.codename1.components.ImageViewer;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
@@ -33,6 +34,8 @@ import com.codename1.ui.Tabs;
 import com.codename1.ui.TextArea;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.URLImage;
+import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
@@ -118,9 +121,23 @@ public class Produit extends BaseForm  {
         ButtonGroup barGroup = new ButtonGroup();
         RadioButton all = RadioButton.createToggle("All", barGroup);
         all.setUIID("SelectBar");
+        all.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+               new Produit(res).show();
+            }
+        });
        // all.setSelectedStyle(style);
         RadioButton featured = RadioButton.createToggle("My products", barGroup);
         featured.setUIID("SelectBar");
+        featured.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+               new MesProduits(res).show();
+            }
+        });
+        
+        
         RadioButton popular = RadioButton.createToggle("Add products", barGroup);
         popular.setUIID("SelectBar");
 
@@ -146,9 +163,11 @@ public class Produit extends BaseForm  {
         addOrientationListener(e -> {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
-
+        
+        
+       int idd= Session.getInstance().getLoggedInUser().getId();
         ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/afficherproduitMobile");  
+        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/afficherproduitMobile/"+idd);  
         con.addResponseListener((NetworkEvent evt) -> {
             ArrayList<Task> listTasks = new ArrayList<>();
             try {
