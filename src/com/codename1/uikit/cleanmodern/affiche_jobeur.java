@@ -8,6 +8,7 @@ package com.codename1.uikit.cleanmodern;
 import Entites.Echange;
 import Entites.User;
 import Service.Posteur_service;
+import Service.Session;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
 import com.codename1.components.ToastBar;
@@ -34,6 +35,8 @@ import com.codename1.ui.RadioButton;
 import com.codename1.ui.Tabs;
 import com.codename1.ui.TextArea;
 import com.codename1.ui.Toolbar;
+import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
@@ -57,6 +60,7 @@ public class affiche_jobeur extends BaseForm{
     
    
     public affiche_jobeur(Resources res) {
+        
 //         Form f ;
 //        Button p;
 //       Label label_nom;
@@ -82,12 +86,13 @@ public class affiche_jobeur extends BaseForm{
 //     
 //        //To change body of generated methods, choose Tools | Templates.
 //    }
-         super("Jobeurs", BoxLayout.y());
+         super("Jobeurs Electriciter", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
-        setTitle("Jobeurs");
+        setTitle("Jobeurs Electriciter");
         getContentPane().setScrollVisible(false);
+        
         
         super.addSideMenu(res);
         tb.addSearchCommand(e -> {});
@@ -96,7 +101,7 @@ public class affiche_jobeur extends BaseForm{
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("dog.jpg"), spacer1, "", "", " ");
+        addTab(swipe, res.getImage("electricte.JPG"), spacer1, "", "", " ");
         
                 
         swipe.setUIID("Container");
@@ -138,40 +143,91 @@ public class affiche_jobeur extends BaseForm{
         add(LayeredLayout.encloseIn(swipe, radioContainer));
         
         ButtonGroup barGroup = new ButtonGroup();
+        RadioButton all = RadioButton.createToggle("Liste Des Jobeurs", barGroup);
+        all.setUIID("SelectBar");
+        RadioButton featured = RadioButton.createToggle("Mes Offre", barGroup);
+        featured.setUIID("SelectBar");
        
+           featured .addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        
+                        {
+                       
+                           new MesEchangeForm (res).show();
+                          
+                        }
+                        }
+                });
+     
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         
-        Posteur_service  a = new Posteur_service();
-        User b=new User();
-        ArrayList<User> listJobeurs = new ArrayList<>();
-        listJobeurs=a.affich_jobeur("Electriciter");
-         b= listJobeurs.get(0);
-            System.out.println(b);
+        add(LayeredLayout.encloseIn(
+                GridLayout.encloseIn(4, all, featured),
+                FlowLayout.encloseBottom(arrow)
+        ));
         
-     
+        
+        all.setSelected(true);
+        arrow.setVisible(false);
+        addShowListener(e -> {
+            arrow.setVisible(true);
+            updateArrowPosition(all, arrow);
+        });
+        bindButtonSelection(all, arrow);
+        bindButtonSelection(featured, arrow);
+       
       
-        
-     
         
         // special case for rotation
         addOrientationListener(e -> {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
             
         });
-       
+     int id=Session.getInstance().getLoggedInUser().getId();
+        
+        ConnectionRequest con = new ConnectionRequest();
+         con.setUrl("http://localhost/fixitweb1/web/app_dev.php/oussama/affichemobile/Electriciter"); 
+      
+            con.addResponseListener((NetworkEvent evt) -> {
+            ArrayList<User> listJobeurs = new ArrayList<>();
+            try {
+                //(new String(con.getResponseData()));
+                String aff=new String(con.getResponseData());
+                JSONParser j = new JSONParser();// Instanciation d'un objet JSONParser permettant le parsing du résultat json
+                Map<String, Object> tasks = j.parseJSON(new CharArrayReader(aff.toCharArray()));
+                List<Map<String, Object>> list = (List<Map<String, Object>>) tasks.get("root");
+             for (Map<String, Object> obj : list) {
+                User U = new User();
+              
+           
         //addButton(res.getImage("news-item-1.jpg"), obj.get("propositionOfferte").toString(), false, 26, 32);
        // addButton(res.getImage("news-item-2.jpg"), ("propositionSouhaitee").toString(), true, 15, 21);
        // addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15);
         //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);
 //               addButton2("propositionOfferte", obj.get("propositionOfferte").toString());
+
                
    
         
         //add(obj.get("propositionOfferte").toString());
+           LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurfg") ;
+           int pos = 1;
           
-           
-          
-       
+           addButton3(res.getImage("electricte.JPG"),false,55,55,obj.get("nom").toString(),obj.get("prenom").toString(),obj.get("tel").toString(),obj.get("specialite").toString());
+         
+
+              
+
+                listJobeurs.add(U);
+            }} 
+            catch (IOException ex) {
+            }
+  
+            
+                });
+              
+        NetworkManager.getInstance().addToQueueAndWait(con);
        // addButton(res.getImage("news-item-1.jpg"), "Morbi per tincidunt tellus sit of amet eros laoreet.", false, 26, 32);
        // addButton(res.getImage("news-item-2.jpg"), "Fusce ornare cursus masspretium tortor integer placera.", true, 15, 21);
         //addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15);
@@ -241,15 +297,15 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
 
       
       
-       Label num = new Label("propositionOfferte  :  "+Proff , "NewsBottomLine"); 
+       Label num = new Label("Prenom:  "+Proff , "NewsBottomLine"); 
       // FontImage.setMaterialIcon(num, FontImage.MATERIAL_PHONE);
       
-       Label likes1 = new Label("propositionSouhaitee  :  " + souh  , "NewsBottomLine");
+       Label likes1 = new Label("Nom  :  " + souh  , "NewsBottomLine");
       // FontImage.setMaterialIcon(likes1, FontImage.MATERIAL_PAYMENT);
         
-       Label comments = new Label( " Description : "+description , "NewsBottomLine"); 
+       Label comments = new Label( " Tel : "+description , "NewsBottomLine"); 
      //  FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
-         Label user = new Label( "username  : "+nom , "NewsBottomLine"); 
+         Label user = new Label( "Spécialite  : "+nom , "NewsBottomLine"); 
       // FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
        
        cnt.add(BorderLayout.CENTER, 
