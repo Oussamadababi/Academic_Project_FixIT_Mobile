@@ -53,7 +53,6 @@ import com.codename1.ui.plaf.Style;
 import com.codename1.ui.spinner.Picker;
 import com.codename1.ui.util.Resources;
 import java.io.InputStream;
-import java.nio.file.StandardCopyOption;
 
 /**
  * The user profile form
