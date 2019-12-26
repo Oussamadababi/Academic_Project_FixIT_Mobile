@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package com.codename1.uikit.cleanmodern;
+
 import Entites.Task;
 import Service.Session;
 import com.codename1.components.ImageViewer;
@@ -42,7 +43,6 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
-import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,15 +54,14 @@ import java.util.Map;
  *
  * @author waelb
  */
-public class Produit extends BaseForm  {
-    
-        Image imgg;
+public class MesProduits  extends BaseForm {
+    Image imgg;
         EncodedImage enc ;
     
     
-    public Produit(Resources res) {
+    public MesProduits(Resources res) {
        
-        super("Produit", BoxLayout.y());
+        super("MesProduits", BoxLayout.y());
         ImageViewer img= new ImageViewer();
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
@@ -121,7 +120,7 @@ public class Produit extends BaseForm  {
         ButtonGroup barGroup = new ButtonGroup();
         RadioButton all = RadioButton.createToggle("All", barGroup);
         all.setUIID("SelectBar");
-        all.addActionListener(new ActionListener() {
+                all.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
                new Produit(res).show();
@@ -130,14 +129,6 @@ public class Produit extends BaseForm  {
        // all.setSelectedStyle(style);
         RadioButton featured = RadioButton.createToggle("My products", barGroup);
         featured.setUIID("SelectBar");
-        featured.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-               new MesProduits(res).show();
-            }
-        });
-        
-        
         RadioButton popular = RadioButton.createToggle("Add products", barGroup);
         popular.setUIID("SelectBar");
 
@@ -152,7 +143,7 @@ public class Produit extends BaseForm  {
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
-            updateArrowPosition(all, arrow);
+            updateArrowPosition(featured, arrow);
         });
         bindButtonSelection(all, arrow);
         bindButtonSelection(featured, arrow);
@@ -164,10 +155,9 @@ public class Produit extends BaseForm  {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
         
-        
-       int idd= Session.getInstance().getLoggedInUser().getId();
+        int idd= Session.getInstance().getLoggedInUser().getId();
         ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/afficherproduitMobile/"+idd);  
+        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/afficherMesproduitMobile/"+idd);  
         con.addResponseListener((NetworkEvent evt) -> {
             ArrayList<Task> listTasks = new ArrayList<>();
             try {
@@ -215,8 +205,7 @@ public class Produit extends BaseForm  {
             }
         });
         NetworkManager.getInstance().addToQueueAndWait(con);
-        
-  
+       
     }
     
    
@@ -321,3 +310,9 @@ public class Produit extends BaseForm  {
         });
     }
 }
+
+    
+    
+    
+    
+
