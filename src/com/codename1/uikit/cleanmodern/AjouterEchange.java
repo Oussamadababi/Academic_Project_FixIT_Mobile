@@ -49,6 +49,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  *
  * @author Iheb
@@ -178,10 +179,34 @@ public class AjouterEchange extends BaseForm {
         addStringValue("Description",  Des);
         Button bt = new Button("ajouter");
          addStringValue("",  bt);
-
-   
+     
+         bt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+           
+     
+                   int id=Session.getInstance().getLoggedInUser().getId();
+                   System.out.println(id);
       
-    }
+              Echange ec = new Echange(PROPf.getText(),PROPs.getText(),Des.getText(),id);
+               ConnectionRequest con = new ConnectionRequest();
+               String Url ="http://localhost/fixitweb1/web/app_dev.php/Iheb/ajouterMobile2Action?propositionOfferte="+ec.getPropositionofferte()+"&propositionsouhaitee="+ec.getPropositionsouhaitée()+ "&descriptionEchange="+ec.getDescription_echange()+"&idposteurfg="+ec.getId_posteurfg();
+                 con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
+                 
+
+        con.addResponseListener((e) -> {
+            String str = new String(con.getResponseData());//Récupération de la réponse du serveur
+            System.out.println(str);//Affichage de la réponse serveur sur la console
+      
+    });
+        NetworkManager.getInstance().addToQueueAndWait(con);
+            }
+            
+           
+        
+    });
+                 }
+         
        private void addStringValue(String s, Component v) {
         add(BorderLayout.west(new Label(s, "PaddedLabel")).
                 add(BorderLayout.CENTER, v));
