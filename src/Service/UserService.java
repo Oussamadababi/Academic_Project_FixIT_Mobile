@@ -93,10 +93,10 @@ public class UserService {
                 u.setEmail(obj.get("email").toString());
                 u.setPassword(obj.get("password").toString());
                 u.setRole(obj.get("roles").toString());
+                u.setTel((int) (double) obj.get("tel"));
                 u.setDate_naissance(new SimpleDateFormat("yyyy-MM-dd").parse(obj.get("dateNaissance").toString()));
 
                 listUsers.add(u);
-
 
             }
 
@@ -109,6 +109,22 @@ public class UserService {
         
         */
         return listUsers.get(0);
+    }
+     
+     public void update(User u) 
+    {
+        
+        ConnectionRequest con = new ConnectionRequest();// création d'une nouvelle demande de connexion
+
+        String Url = "http://localhost/fixitweb1/web/app_dev.php/updateprofile?id="+u.getId()+"&nom="+u.getNom()+"&prenom="+u.getPrenom()+"&username="+u.getCin()+"&email="+u.getEmail()+"&tel="+u.getTel()+"&birth="+u.getDate_naissance();// création de l'URL
+        con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
+
+        con.addResponseListener((e) -> {
+            String str = new String(con.getResponseData());//Récupération de la réponse du serveur
+            System.out.println(str);//Affichage de la réponse serveur sur la console
+
+        });
+        NetworkManager.getInstance().addToQueueAndWait(con);// Ajout de notre demande de connexion à la file d'attente du NetworkManager
     }
 
     
