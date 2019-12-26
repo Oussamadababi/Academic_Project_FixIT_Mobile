@@ -146,11 +146,7 @@ public class Produit extends BaseForm  {
         addOrientationListener(e -> {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
-        
-        
-      
-     
-        
+
         ConnectionRequest con = new ConnectionRequest();
         con.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/afficherproduitMobile");  
         con.addResponseListener((NetworkEvent evt) -> {
@@ -167,32 +163,24 @@ public class Produit extends BaseForm  {
                 float prix = Float.parseFloat(obj.get("prix").toString());
                 float num = Float.parseFloat(obj.get("num").toString());
                 e.setId((int) id);
-                //e.setPrix((int) prix);
-               // e.setNum((int) num);
-               int numero=(int) num;
+               int numero=(int) num-1;
                int prixx=(int) prix;
                String description= obj.get("description").toString();
                String nomproduit= obj.get("nomproduit").toString();
-                e.setNomproduit(obj.get("nomproduit").toString());
-                e.setDescription(obj.get("description").toString());
-                e.setEtat_vente(obj.get("etatVente").toString());
-                e.setEtat_validation(obj.get("etatValidation").toString());
-                e.setDate_produit(obj.get("dateProduit").toString());
-       
+
+ 
         try {
             enc = EncodedImage.create("/load.png");
         } catch (IOException ex) { 
         }
-      
-        String url="http://localhost/fixitweb1/web/upload/"+obj.get("imageProduit").toString();
-        String url2="http://localhost/fixitweb1/web/upload/aucune.jpg";
-                 System.out.println(obj.get("imageProduit"));
-        
-        if ((obj.get("imageProduit")).toString().equals(""))
+ 
+        if (obj.get("imageProduit")==null)
          {
+             String url2="http://localhost/fixitweb1/web/upload/aucune.jpg";
              imgg=URLImage.createToStorage(enc,url2,url2,URLImage.RESIZE_SCALE);
          }
          else{
+            String url="http://localhost/fixitweb1/web/upload/"+obj.get("imageProduit").toString();
              imgg=URLImage.createToStorage(enc,url,url,URLImage.RESIZE_SCALE);
          }
         
