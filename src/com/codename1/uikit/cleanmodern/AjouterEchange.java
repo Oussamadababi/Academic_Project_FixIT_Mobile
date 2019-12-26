@@ -5,10 +5,6 @@
  */
 package com.codename1.uikit.cleanmodern;
 
-/**
- *
- * @author Iheb
- */
 import Entites.Echange;
 import Service.Session;
 import com.codename1.components.ScaleImageLabel;
@@ -35,6 +31,7 @@ import com.codename1.ui.Label;
 import com.codename1.ui.RadioButton;
 import com.codename1.ui.Tabs;
 import com.codename1.ui.TextArea;
+import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
@@ -44,14 +41,20 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
+import com.codename1.ui.spinner.Picker;
 import com.codename1.ui.util.Resources;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-public class EchangeForm extends BaseForm {
-    public EchangeForm(Resources res) {
+
+/**
+ *
+ * @author Iheb
+ */
+public class AjouterEchange extends BaseForm {
+     public AjouterEchange(Resources res) {
         super("Trocs", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
@@ -114,17 +117,6 @@ public class EchangeForm extends BaseForm {
         featured.setUIID("SelectBar");
         RadioButton popular = RadioButton.createToggle("Trocs", barGroup);
        popular.setUIID("SelectBar");
-         popular.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        
-                        {
-                       
-                           new AjouterEchange (res).show();
-                          
-                        }
-                        }
-                });
            featured .addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
@@ -136,6 +128,18 @@ public class EchangeForm extends BaseForm {
                         }
                         }
                 });
+             all.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        
+                        {
+                       
+                           new EchangeForm (res).show();
+                          
+                        }
+                        }
+                });
+           
      
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         
@@ -161,59 +165,27 @@ public class EchangeForm extends BaseForm {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
             
         });
-     int id=Session.getInstance().getLoggedInUser().getId();
-        ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/Iheb/afficherEchangeMobile/"+id);  
-      
-            con.addResponseListener((NetworkEvent evt) -> {
-            ArrayList<Echange> listTasks = new ArrayList<>();
-            try {
-                //(new String(con.getResponseData()));
-                String aff=new String(con.getResponseData());
-                JSONParser j = new JSONParser();// Instanciation d'un objet JSONParser permettant le parsing du résultat json
-                Map<String, Object> tasks = j.parseJSON(new CharArrayReader(aff.toCharArray()));
-                List<Map<String, Object>> list = (List<Map<String, Object>>) tasks.get("root");
-             for (Map<String, Object> obj : list) {
-                Echange e = new Echange();
-              
-               e.setId(obj.get("id").toString());
-               e.setPropositionofferte(obj.get("propositionOfferte").toString());
-               e.setPropositionsouhaitée(obj.get("propositionSouhaitee").toString());
-               e.setDescription_echange(obj.get("descriptionEchange").toString());
-               e.setDate(obj.get("date").toString());
-        //addButton(res.getImage("news-item-1.jpg"), obj.get("propositionOfferte").toString(), false, 26, 32);
-       // addButton(res.getImage("news-item-2.jpg"), ("propositionSouhaitee").toString(), true, 15, 21);
-       // addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15);
-        //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);
-//               addButton2("propositionOfferte", obj.get("propositionOfferte").toString());
+  TextField PROPf = new TextField();
+        PROPf.setUIID("TextFieldBlack");
+        addStringValue("PropositionOfferte",  PROPf);
 
-               
-   
+        TextField PROPs = new TextField();
+        PROPs.setUIID("TextFieldBlack");
+        addStringValue("PropositionSouhaitee",PROPs);
         
-        //add(obj.get("propositionOfferte").toString());
-           LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurfg") ;
-           int pos = 1;
-          e.setNom_posteur(obj1.get("username").toString());
-          Button commander= new Button("commander");
-           addButton3(res.getImage("dog.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString(),obj1.get("nom").toString(),commander);
-         
+      TextArea Des = new TextArea();
+        //Des.setUIID("TextFieldBlack");
+        addStringValue("Description",  Des);
+        Button bt = new Button("ajouter");
+         addStringValue("",  bt);
 
-              
-
-                listTasks.add(e);
-            }} 
-            catch (IOException ex) {
-            }
-  
-            
-                });
-              
-        NetworkManager.getInstance().addToQueueAndWait(con);
-       // addButton(res.getImage("news-item-1.jpg"), "Morbi per tincidunt tellus sit of amet eros laoreet.", false, 26, 32);
-       // addButton(res.getImage("news-item-2.jpg"), "Fusce ornare cursus masspretium tortor integer placera.", true, 15, 21);
-        //addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15);
-        //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);
+   
       
+    }
+       private void addStringValue(String s, Component v) {
+        add(BorderLayout.west(new Label(s, "PaddedLabel")).
+                add(BorderLayout.CENTER, v));
+        add(createLineSeparator(0xeeeeee));
     }
      
     
@@ -262,7 +234,7 @@ public class EchangeForm extends BaseForm {
         swipe.addTab("", page1);
     }
 
-private void addButton3(Image img, boolean liked, int likeCount, int commentCount,String Proff,String souh,String description,String nom,Button commander) {
+private void addButton3(Image img, boolean liked, int likeCount, int commentCount,String Proff,String souh,String description,String nom) {
        int height = Display.getInstance().convertToPixels(11.5f);
        int width = Display.getInstance().convertToPixels(14f);
        Button image = new Button(img.fill(width, height));
@@ -288,13 +260,12 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
      //  FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
          Label user = new Label( "username  : "+nom , "NewsBottomLine"); 
       // FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
-    
        
        cnt.add(BorderLayout.CENTER, 
                BoxLayout.encloseY(
                       
                        BoxLayout.encloseX(likes1,num ),
-                       comments,user,commander
+                       comments,user
                        
                ));
  
@@ -343,6 +314,5 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
             }
         });
     }
-    
     
 }
