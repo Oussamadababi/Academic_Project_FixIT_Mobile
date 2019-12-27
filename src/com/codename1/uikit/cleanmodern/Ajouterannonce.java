@@ -3,6 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+
 package com.codename1.uikit.cleanmodern;
 
 import Entites.Annonce;
@@ -32,6 +34,7 @@ import com.codename1.ui.Label;
 import com.codename1.ui.RadioButton;
 import com.codename1.ui.Tabs;
 import com.codename1.ui.TextArea;
+import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
@@ -41,6 +44,7 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
+import com.codename1.ui.spinner.Picker;
 import com.codename1.ui.util.Resources;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,15 +52,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  *
- * @author DELL
+ * @author Iheb
  */
-public class AnnonceForm extends BaseForm{
-    
-    
-public AnnonceForm(Resources res) {
-        super("Trocs", BoxLayout.y());
+/*
+public class Ajouterannonce extends BaseForm {
+     public Ajouterannonce(Resources res) {
+        super("Annonce", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
@@ -114,38 +118,51 @@ public AnnonceForm(Resources res) {
         ButtonGroup barGroup = new ButtonGroup();
         RadioButton all = RadioButton.createToggle("All", barGroup);
         all.setUIID("SelectBar");
-        RadioButton featured = RadioButton.createToggle("Mes annonces", barGroup);
+        RadioButton featured = RadioButton.createToggle("Mes Trocs", barGroup);
         featured.setUIID("SelectBar");
-        RadioButton popular = RadioButton.createToggle("Annonce", barGroup);
+        RadioButton popular = RadioButton.createToggle("Trocs", barGroup);
        popular.setUIID("SelectBar");
-         popular.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        
-                        {
-                       
-                          
-                          
-                        }
-                        }
-                });
+         RadioButton acc = RadioButton.createToggle("commander", barGroup);
+       acc.setUIID("SelectBar");
            featured .addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
                         
                         {
                        
-                   
-                          
+                           new MesEchangeForm (res).show();
                           
                         }
                         }
                 });
+             featured .addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        
+                        {
+                       
+                           new MesEchangeForm (res).show();
+                          
+                        }
+                        }
+                });
+             acc.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        
+                        {
+                       
+                           new commanderform (res).show();
+                          
+                        }
+                        }
+                });
+           
      
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         
         add(LayeredLayout.encloseIn(
-                GridLayout.encloseIn(3, all, featured, popular),
+                GridLayout.encloseIn(4, all, featured, popular,acc),
                 FlowLayout.encloseBottom(arrow)
         ));
         
@@ -154,7 +171,7 @@ public AnnonceForm(Resources res) {
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
-            updateArrowPosition(all, arrow);
+            updateArrowPosition(popular, arrow);
         });
         bindButtonSelection(all, arrow);
         bindButtonSelection(featured, arrow);
@@ -166,45 +183,71 @@ public AnnonceForm(Resources res) {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
             
         });
-     int id=Session.getInstance().getLoggedInUser().getId();
-     ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/heni/afficherannonce");  
-      
-            con.addResponseListener((NetworkEvent evt) -> {
-            ArrayList<Annonce> listTasks = new ArrayList<>();
-            try {
-                //(new String(con.getResponseData()));
-                String aff=new String(con.getResponseData());
-                JSONParser j = new JSONParser();// Instanciation d'un objet JSONParser permettant le parsing du résultat json
-                Map<String, Object> tasks = j.parseJSON(new CharArrayReader(aff.toCharArray()));
-                List<Map<String, Object>> list = (List<Map<String, Object>>) tasks.get("root");
-             for (Map<String, Object> obj : list) {
-                Annonce a = new Annonce();   
-        
-        //add(obj.get("propositionOfferte").toString());
-           LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurFg") ;
-           int pos = 1;
-          //e.setNom_posteur(obj1.get("username").toString());
-          Button commander= new Button("commander");
-           addButton3(res.getImage("dog.jpg"),false,55,55,obj.get("nomAnnonce").toString(),obj.get("adress").toString(),obj.get("descriptionAnnonce").toString(),obj.get("tel").toString(),obj.get("prix").toString(),obj1.get("nom").toString(),commander);
-          
- 
+  TextField nom = new TextField();
+        nom.setUIID("TextFieldBlack");
+        addStringValue("Nom annonce",  nom);
 
-                listTasks.add(a);
-                   
-            }} 
-            catch (IOException ex) {
-            }
-  
-            
-                });
-              
-        NetworkManager.getInstance().addToQueueAndWait(con);
-       // addButton(res.getImage("news-item-1.jpg"), "Morbi per tincidunt tellus sit of amet eros laoreet.", false, 26, 32);
-       // addButton(res.getImage("news-item-2.jpg"), "Fusce ornare cursus masspretium tortor integer placera.", true, 15, 21);
-        //addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15);
-        //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);
+        TextField adress = new TextField();
+        adress.setUIID("TextFieldBlack");
+        addStringValue("Adresse",adress);
      
+        
+      TextArea date = new TextArea();
+        date.setUIID("TextFieldBlack");
+        addStringValue("Date",  date);
+        
+        TextArea des = new TextArea();
+        des.setUIID("TextFieldBlack");
+        addStringValue("Description",  des);
+        
+        TextArea tel = new TextArea();
+        tel.setUIID("TextFieldBlack");
+        addStringValue("Telephone",  tel);
+        
+        TextArea pr = new TextArea();
+        pr.setUIID("TextFieldBlack");
+        addStringValue("Prix",  pr);
+        
+        
+        
+        
+        
+        Button bt = new Button("ajouter");
+         addStringValue("",  bt);
+     
+         bt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+           
+     
+                   int id=Session.getInstance().getLoggedInUser().getId();
+                   System.out.println(id);
+      
+              Annonce a = new Annonce(nom.getText(),adress.getText(),date.getText(),des.getText(),tel,pr,id);
+               ConnectionRequest con = new ConnectionRequest();
+               String Url ="http://localhost/fixitweb1/web/app_dev.php/Iheb/ajouterMobile2Action?propositionOfferte="+ec.getPropositionofferte()+"&propositionsouhaitee="+ec.getPropositionsouhaitée()+ "&descriptionEchange="+ec.getDescription_echange()+"&idposteurfg="+ec.getId_posteurfg();
+                 con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
+                  Dialog.show("Ajout", "avec sucess", "OK", "Cancel");  
+                 new MesEchangeForm (res).show();
+                 
+
+        con.addResponseListener((e) -> {
+            String str = new String(con.getResponseData());//Récupération de la réponse du serveur
+            System.out.println(str);//Affichage de la réponse serveur sur la console
+      
+    });
+        NetworkManager.getInstance().addToQueueAndWait(con);
+            }
+            
+           
+        
+    });
+                 }
+         
+       private void addStringValue(String s, Component v) {
+        add(BorderLayout.west(new Label(s, "PaddedLabel")).
+                add(BorderLayout.CENTER, v));
+        add(createLineSeparator(0xeeeeee));
     }
      
     
@@ -253,7 +296,7 @@ public AnnonceForm(Resources res) {
         swipe.addTab("", page1);
     }
 
-private void addButton3(Image img, boolean liked, int likeCount, int commentCount,String Proff,String souh,String description,String tel,String prix,String nom,Button commander) {
+private void addButton3(Image img, boolean liked, int likeCount, int commentCount,String Proff,String souh,String description,String nom) {
        int height = Display.getInstance().convertToPixels(11.5f);
        int width = Display.getInstance().convertToPixels(14f);
        Button image = new Button(img.fill(width, height));
@@ -269,26 +312,22 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
 
       
       
-       Label num = new Label("Nom annonce  :  "+Proff , "NewsBottomLine"); 
+       Label num = new Label("propositionOfferte  :  "+Proff , "NewsBottomLine"); 
       // FontImage.setMaterialIcon(num, FontImage.MATERIAL_PHONE);
       
-       Label likes1 = new Label("Adresse :  " + souh  , "NewsBottomLine");
+       Label likes1 = new Label("propositionSouhaitee  :  " + souh  , "NewsBottomLine");
       // FontImage.setMaterialIcon(likes1, FontImage.MATERIAL_PAYMENT);
         
-       Label comments = new Label( "Description annonce : "+description , "NewsBottomLine"); 
-       Label comments1 = new Label( "Telephone : "+tel , "NewsBottomLine"); 
-       Label comments2 = new Label( "Prix : "+prix , "NewsBottomLine"); 
-       
+       Label comments = new Label( " Description : "+description , "NewsBottomLine"); 
      //  FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
          Label user = new Label( "username  : "+nom , "NewsBottomLine"); 
       // FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
-    
        
        cnt.add(BorderLayout.CENTER, 
                BoxLayout.encloseY(
                       
                        BoxLayout.encloseX(likes1,num ),
-                       comments,user,commander
+                       comments,user
                        
                ));
  
@@ -338,5 +377,5 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
         });
     }
     
-    
 }
+*/
