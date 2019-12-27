@@ -58,10 +58,12 @@ import java.util.Map;
  *
  * @author waelb
  */
-public class AjouterProduit extends BaseForm {
+
+public class AjouterProduit extends BaseForm { 
+    static int idd;
     Image imgg;
-        EncodedImage enc ;
-    
+    EncodedImage enc ;
+   
     
     public AjouterProduit(Resources res) {
        
@@ -197,6 +199,7 @@ public class AjouterProduit extends BaseForm {
                     
                     e.setNomcategorie(obj.get("categorie").toString()); 
                     cb.addItem(obj.get("categorie").toString());
+                   
                 }   
             }
             catch (IOException ex) {
@@ -206,85 +209,63 @@ public class AjouterProduit extends BaseForm {
         NetworkManager.getInstance().addToQueueAndWait(con);
         Button ajouter=new Button("Ajouter");
         addStringValue("",ajouter);
+        
+        
+        
+        
+        
+       
+         
+         
+         
         ajouter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                int prix2=Integer.parseInt(Prix.getText());
-                int num=Integer.parseInt(Num.getText());
-                Task produit = new Task(NomProduit.getText(),Description.getText(),prix2,num);
-                ConnectionRequest con = new ConnectionRequest();// création d'une nouvelle demande de connexion
-        String Url = "http://localhost/fixitweb1/web/app_dev.php/wael/ajouterproduitMobile?nomproduit="+produit.getNomproduit()+ "&description=" + produit.getDescription()+"&prix="+produit.getPrix()+"&numero="+produit.getNum();// création de l'URL
-        con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
+                 String a =(String) cb.getSelectedItem();
+                ConnectionRequest con1 = new ConnectionRequest();
+                con1.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/RechercheCategorieMobile/"+a);  
+                  con1.addResponseListener(new ActionListener<NetworkEvent>() {
+                     @Override
+                     public void actionPerformed(NetworkEvent evt) {
+                         try {
+                             String aff=new String(con1.getResponseData());
+                             JSONParser j = new JSONParser();// Instanciation d'un objet JSONParser permettant le parsing du résultat json
+                             Map<String, Object> categorie = j.parseJSON(new CharArrayReader(aff.toCharArray()));
+                             List<Map<String, Object>> list = (List<Map<String, Object>>) categorie.get("root");
+                             for (Map<String, Object> obj : list)
+                             {
+                                 Categorie e = new Categorie();
+                                 float id = Float.parseFloat(obj.get("id").toString());
+                                  idd=(int) id;
+                             }
+                             System.out.println(idd);
+                             System.out.println(idd);
+                             System.out.println(idd);
+                             int prix2=Integer.parseInt(Prix.getText());
+                             int num=Integer.parseInt(Num.getText());
+                             int idUser= Session.getInstance().getLoggedInUser().getId();
+                             Task produit = new Task(NomProduit.getText(),Description.getText(),prix2,num,idUser);
+                             ConnectionRequest con = new ConnectionRequest();// création d'une nouvelle demande de connexion
+                             String Url = "http://localhost/fixitweb1/web/app_dev.php/wael/ajouterproduitMobile?nomproduit="+produit.getNomproduit()+ "&description=" + produit.getDescription()+"&prix="+produit.getPrix()+"&numero="+produit.getNum()+"&idposteurFg="+produit.getIdposteur_fg()+"&categorie="+idd;// création de l'URL
+                             con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
+                        con.addResponseListener((e) -> {
+                         String str = new String(con.getResponseData());//Récupération de la réponse du serveur
+                         System.out.println(str);//Affichage de la réponse serveur sur la console
 
-        con.addResponseListener((e) -> {
-            String str = new String(con.getResponseData());//Récupération de la réponse du serveur
-            System.out.println(str);//Affichage de la réponse serveur sur la console
-
-        });
-        NetworkManager.getInstance().addToQueueAndWait(con);
-                
-                
+                          });
+                          NetworkManager.getInstance().addToQueueAndWait(con);
+                         }
+                         catch (IOException ex) {
+                         }        
+                     }
+                 });
+        NetworkManager.getInstance().addToQueueAndWait(con1);  
             }
         });
-        
-        
-        
-        
-                
-                
-                
-      /*  int idd= Session.getInstance().getLoggedInUser().getId();
-        ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/afficherMesproduitMobile/"+idd);  
-        con.addResponseListener((NetworkEvent evt) -> {
-            ArrayList<Task> listTasks = new ArrayList<>();
-            try {
-                //(new String(con.getResponseData()));
-                String aff=new String(con.getResponseData());
-                JSONParser j = new JSONParser();// Instanciation d'un objet JSONParser permettant le parsing du résultat json
-                Map<String, Object> tasks = j.parseJSON(new CharArrayReader(aff.toCharArray()));
-                List<Map<String, Object>> list = (List<Map<String, Object>>) tasks.get("root");
-             for (Map<String, Object> obj : list) {
-                Task e = new Task();
-                float id = Float.parseFloat(obj.get("id").toString());
-                float prix = Float.parseFloat(obj.get("prix").toString());
-                float num = Float.parseFloat(obj.get("num").toString());
-                e.setId((int) id);
-               int numero=(int) num-1;
-               int prixx=(int) prix;
-               String description= obj.get("description").toString();
-               String nomproduit= obj.get("nomproduit").toString();
-
- 
-        try {
-            enc = EncodedImage.create("/load.png");
-        } catch (IOException ex) { 
-        }
- 
-        if (obj.get("imageProduit")==null)
-         {
-             String url2="http://localhost/fixitweb1/web/upload/aucune.jpg";
-             imgg=URLImage.createToStorage(enc,url2,url2,URLImage.RESIZE_SCALE);
-         }
-         else{
-            String url="http://localhost/fixitweb1/web/upload/"+obj.get("imageProduit").toString();
-             imgg=URLImage.createToStorage(enc,url,url,URLImage.RESIZE_SCALE);
-         }
-        
-        
-        addButton(imgg, nomproduit, false, 26, 32, description,prixx,numero);
-
-           LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurFg") ;
-           int pos = 1;
-           e.setUsername(obj1.get("username").toString());
-                listTasks.add(e);
-            }} 
-            catch (IOException ex) {
-            }
-        });
-        NetworkManager.getInstance().addToQueueAndWait(con);
-       */
     }
+    
+ 
+    
     
    
     
