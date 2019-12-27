@@ -119,6 +119,8 @@ public class AjouterEchange extends BaseForm {
         featured.setUIID("SelectBar");
         RadioButton popular = RadioButton.createToggle("Trocs", barGroup);
        popular.setUIID("SelectBar");
+         RadioButton acc = RadioButton.createToggle("commander", barGroup);
+       acc.setUIID("SelectBar");
            featured .addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
@@ -130,13 +132,24 @@ public class AjouterEchange extends BaseForm {
                         }
                         }
                 });
-             all.addActionListener(new ActionListener() {
+             featured .addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
                         
                         {
                        
-                           new EchangeForm (res).show();
+                           new MesEchangeForm (res).show();
+                          
+                        }
+                        }
+                });
+             acc.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        
+                        {
+                       
+                           new commanderform (res).show();
                           
                         }
                         }
@@ -146,7 +159,7 @@ public class AjouterEchange extends BaseForm {
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         
         add(LayeredLayout.encloseIn(
-                GridLayout.encloseIn(3, all, featured, popular),
+                GridLayout.encloseIn(4, all, featured, popular,acc),
                 FlowLayout.encloseBottom(arrow)
         ));
         
