@@ -5,10 +5,6 @@
  */
 package com.codename1.uikit.cleanmodern;
 
-/**
- *
- * @author Iheb
- */
 import Entites.Echange;
 import Service.Session;
 import com.codename1.components.ScaleImageLabel;
@@ -27,7 +23,6 @@ import static com.codename1.ui.Component.CENTER;
 import static com.codename1.ui.Component.LEFT;
 import static com.codename1.ui.Component.RIGHT;
 import com.codename1.ui.Container;
-import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Graphics;
@@ -51,8 +46,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-public class EchangeForm extends BaseForm {
-    public EchangeForm(Resources res) {
+
+/**
+ *
+ * @author Iheb
+ */
+public class commanderform extends BaseForm {
+     public commanderform (Resources res) {
         super("Trocs", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
@@ -114,11 +114,21 @@ public class EchangeForm extends BaseForm {
         RadioButton featured = RadioButton.createToggle("Mes Trocs", barGroup);
         featured.setUIID("SelectBar");
         RadioButton popular = RadioButton.createToggle("Trocs", barGroup);
-       popular.setUIID("SelectBar");
+        popular.setUIID("SelectBar");
           RadioButton acc = RadioButton.createToggle("commander", barGroup);
        acc.setUIID("SelectBar");
-       
-         popular.addActionListener(new ActionListener() {
+        all.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        
+                        {
+                       
+                           new EchangeForm (res).show();
+                          
+                        }
+                        }
+                });
+          popular.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
                         
@@ -129,30 +139,7 @@ public class EchangeForm extends BaseForm {
                         }
                         }
                 });
-           featured .addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        
-                        {
-                       
-                    new MesEchangeForm (res).show();
-                          
-                          
-                        }
-                        }
-                });
-           acc.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        
-                        {
-                       
-                           new commanderform (res).show();
-                          
-                        }
-                        }
-                });
-           
+     
      
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         
@@ -166,7 +153,7 @@ public class EchangeForm extends BaseForm {
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
-            updateArrowPosition(all, arrow);
+            updateArrowPosition(featured, arrow);
         });
         bindButtonSelection(all, arrow);
         bindButtonSelection(featured, arrow);
@@ -178,9 +165,10 @@ public class EchangeForm extends BaseForm {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
             
         });
-     int id=Session.getInstance().getLoggedInUser().getId();
+       
+         int id=Session.getInstance().getLoggedInUser().getId();
         ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/Iheb/afficherEchangeMobile/"+id);  
+        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/Iheb/afficherEchangecommanderMobile/"+id);  
       
             con.addResponseListener((NetworkEvent evt) -> {
             ArrayList<Echange> listTasks = new ArrayList<>();
@@ -198,50 +186,26 @@ public class EchangeForm extends BaseForm {
                e.setPropositionsouhaitée(obj.get("propositionSouhaitee").toString());
                e.setDescription_echange(obj.get("descriptionEchange").toString());
                e.setDate(obj.get("date").toString());
-        
-
+        //addButton(res.getImage("news-item-1.jpg"), obj.get("propositionOfferte").toString(), false, 26, 32);
+       // addButton(res.getImage("news-item-2.jpg"), ("propositionSouhaitee").toString(), true, 15, 21);
+       // addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15);
+        //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);
+//               addButton2("propositionOfferte", obj.get("propositionOfferte").toString());
                
    
         
         //add(obj.get("propositionOfferte").toString());
-           LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurfg") ;
+           LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("id2") ;
            int pos = 1;
           e.setNom_posteur(obj1.get("username").toString());
-       Button commander =new Button("commander");
-               
-                 if(obj.get("etatValidation").toString().equals("noncommand"))
-                 {addButton3(res.getImage("dog.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString(),obj1.get("nom").toString(),commander);
-                   addStringValue("",commander);
-                 }
-         commander.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                         int id=Session.getInstance().getLoggedInUser().getId();
-                       Echange ec = new Echange();
-                    float idec = Float.parseFloat(obj.get("id").toString());
-                     ConnectionRequest con1 = new ConnectionRequest();
-               String Url1 ="http://localhost/fixitweb1/web/app_dev.php/Iheb/Accepter/"+idec+"?id2="+id;
-                 con1.setUrl(Url1);// Insertion de l'URL de notre demande de connexion
-                  Dialog.show("commande", "avec sucess", "OK", "Cancel");  
-                    con1.addResponseListener((e) -> {
-            String str = new String(con1.getResponseData());//Récupération de la réponse du serveur
-            System.out.println(str);//Affichage de la réponse serveur sur la console
+         
+  
                        
-      
-    });
-              NetworkManager.getInstance().addToQueueAndWait(con1);   
-                    
-     
-                    
-                    }
-                    
-                });
-          //
-
-              
+                            addButton3(res.getImage("dog.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString(),obj1.get("nom").toString());
+                          
+                      
 
                 listTasks.add(e);
-                   
             }} 
             catch (IOException ex) {
             }
@@ -253,14 +217,8 @@ public class EchangeForm extends BaseForm {
        // addButton(res.getImage("news-item-1.jpg"), "Morbi per tincidunt tellus sit of amet eros laoreet.", false, 26, 32);
        // addButton(res.getImage("news-item-2.jpg"), "Fusce ornare cursus masspretium tortor integer placera.", true, 15, 21);
         //addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15);
-        //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);
+        //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);*/
       
-    }
-          private void addStringValue(String s, Component v) {
-        add(BorderLayout.west(new Label(s, "PaddedLabel")).
-                add(BorderLayout.CENTER, v));
-        add(createLineSeparator(0xF4BE1B));
-        
     }
      
     
@@ -309,7 +267,7 @@ public class EchangeForm extends BaseForm {
         swipe.addTab("", page1);
     }
 
-private void addButton3(Image img, boolean liked, int likeCount, int commentCount,String Proff,String souh,String description,String nom,Button commander) {
+private void addButton3(Image img, boolean liked, int likeCount, int commentCount,String Proff,String souh,String description,String nom) {
        int height = Display.getInstance().convertToPixels(11.5f);
        int width = Display.getInstance().convertToPixels(14f);
        Button image = new Button(img.fill(width, height));
@@ -390,6 +348,7 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
             }
         });
     }
+    
     
     
 }

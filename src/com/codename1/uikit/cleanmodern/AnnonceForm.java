@@ -5,11 +5,7 @@
  */
 package com.codename1.uikit.cleanmodern;
 
-/**
- *
- * @author Iheb
- */
-import Entites.Echange;
+import Entites.Annonce;
 import Service.Session;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
@@ -51,8 +47,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-public class EchangeForm extends BaseForm {
-    public EchangeForm(Resources res) {
+
+/**
+ *
+ * @author DELL
+ */
+public class AnnonceForm extends BaseForm{
+    
+    
+public AnnonceForm(Resources res) {
         super("Trocs", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
@@ -111,20 +114,17 @@ public class EchangeForm extends BaseForm {
         ButtonGroup barGroup = new ButtonGroup();
         RadioButton all = RadioButton.createToggle("All", barGroup);
         all.setUIID("SelectBar");
-        RadioButton featured = RadioButton.createToggle("Mes Trocs", barGroup);
+        RadioButton featured = RadioButton.createToggle("Mes annonces", barGroup);
         featured.setUIID("SelectBar");
-        RadioButton popular = RadioButton.createToggle("Trocs", barGroup);
+        RadioButton popular = RadioButton.createToggle("Annonce", barGroup);
        popular.setUIID("SelectBar");
-          RadioButton acc = RadioButton.createToggle("commander", barGroup);
-       acc.setUIID("SelectBar");
-       
          popular.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
                         
                         {
                        
-                           new AjouterEchange (res).show();
+                          
                           
                         }
                         }
@@ -135,29 +135,17 @@ public class EchangeForm extends BaseForm {
                         
                         {
                        
-                    new MesEchangeForm (res).show();
+                   
                           
                           
                         }
                         }
                 });
-           acc.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        
-                        {
-                       
-                           new commanderform (res).show();
-                          
-                        }
-                        }
-                });
-           
      
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         
         add(LayeredLayout.encloseIn(
-                GridLayout.encloseIn(4, all, featured, popular,acc),
+                GridLayout.encloseIn(3, all, featured, popular),
                 FlowLayout.encloseBottom(arrow)
         ));
         
@@ -179,11 +167,11 @@ public class EchangeForm extends BaseForm {
             
         });
      int id=Session.getInstance().getLoggedInUser().getId();
-        ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/Iheb/afficherEchangeMobile/"+id);  
+     ConnectionRequest con = new ConnectionRequest();
+        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/heni/afficherannonce");  
       
             con.addResponseListener((NetworkEvent evt) -> {
-            ArrayList<Echange> listTasks = new ArrayList<>();
+            ArrayList<Annonce> listTasks = new ArrayList<>();
             try {
                 //(new String(con.getResponseData()));
                 String aff=new String(con.getResponseData());
@@ -191,56 +179,18 @@ public class EchangeForm extends BaseForm {
                 Map<String, Object> tasks = j.parseJSON(new CharArrayReader(aff.toCharArray()));
                 List<Map<String, Object>> list = (List<Map<String, Object>>) tasks.get("root");
              for (Map<String, Object> obj : list) {
-                Echange e = new Echange();
-              
-               e.setId(obj.get("id").toString());
-               e.setPropositionofferte(obj.get("propositionOfferte").toString());
-               e.setPropositionsouhaitée(obj.get("propositionSouhaitee").toString());
-               e.setDescription_echange(obj.get("descriptionEchange").toString());
-               e.setDate(obj.get("date").toString());
-        
-
-               
-   
+                Annonce a = new Annonce();   
         
         //add(obj.get("propositionOfferte").toString());
-           LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurfg") ;
+           LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurFg") ;
            int pos = 1;
-          e.setNom_posteur(obj1.get("username").toString());
-       Button commander =new Button("commander");
-               
-                 if(obj.get("etatValidation").toString().equals("noncommand"))
-                 {addButton3(res.getImage("dog.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString(),obj1.get("nom").toString(),commander);
-                   addStringValue("",commander);
-                 }
-         commander.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                         int id=Session.getInstance().getLoggedInUser().getId();
-                       Echange ec = new Echange();
-                    float idec = Float.parseFloat(obj.get("id").toString());
-                     ConnectionRequest con1 = new ConnectionRequest();
-               String Url1 ="http://localhost/fixitweb1/web/app_dev.php/Iheb/Accepter/"+idec+"?id2="+id;
-                 con1.setUrl(Url1);// Insertion de l'URL de notre demande de connexion
-                  Dialog.show("commande", "avec sucess", "OK", "Cancel");  
-                    con1.addResponseListener((e) -> {
-            String str = new String(con1.getResponseData());//Récupération de la réponse du serveur
-            System.out.println(str);//Affichage de la réponse serveur sur la console
-                       
-      
-    });
-              NetworkManager.getInstance().addToQueueAndWait(con1);   
-                    
-     
-                    
-                    }
-                    
-                });
-          //
+          //e.setNom_posteur(obj1.get("username").toString());
+          Button commander= new Button("commander");
+           addButton3(res.getImage("dog.jpg"),false,55,55,obj.get("nomAnnonce").toString(),obj.get("adress").toString(),obj.get("descriptionAnnonce").toString(),obj.get("tel").toString(),obj.get("prix").toString(),obj1.get("nom").toString(),commander);
+          
+ 
 
-              
-
-                listTasks.add(e);
+                listTasks.add(a);
                    
             }} 
             catch (IOException ex) {
@@ -254,13 +204,7 @@ public class EchangeForm extends BaseForm {
        // addButton(res.getImage("news-item-2.jpg"), "Fusce ornare cursus masspretium tortor integer placera.", true, 15, 21);
         //addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15);
         //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);
-      
-    }
-          private void addStringValue(String s, Component v) {
-        add(BorderLayout.west(new Label(s, "PaddedLabel")).
-                add(BorderLayout.CENTER, v));
-        add(createLineSeparator(0xF4BE1B));
-        
+     
     }
      
     
@@ -309,7 +253,7 @@ public class EchangeForm extends BaseForm {
         swipe.addTab("", page1);
     }
 
-private void addButton3(Image img, boolean liked, int likeCount, int commentCount,String Proff,String souh,String description,String nom,Button commander) {
+private void addButton3(Image img, boolean liked, int likeCount, int commentCount,String Proff,String souh,String description,String tel,String prix,String nom,Button commander) {
        int height = Display.getInstance().convertToPixels(11.5f);
        int width = Display.getInstance().convertToPixels(14f);
        Button image = new Button(img.fill(width, height));
@@ -325,13 +269,16 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
 
       
       
-       Label num = new Label("propositionOfferte  :  "+Proff , "NewsBottomLine"); 
+       Label num = new Label("Nom annonce  :  "+Proff , "NewsBottomLine"); 
       // FontImage.setMaterialIcon(num, FontImage.MATERIAL_PHONE);
       
-       Label likes1 = new Label("propositionSouhaitee  :  " + souh  , "NewsBottomLine");
+       Label likes1 = new Label("Adresse :  " + souh  , "NewsBottomLine");
       // FontImage.setMaterialIcon(likes1, FontImage.MATERIAL_PAYMENT);
         
-       Label comments = new Label( " Description : "+description , "NewsBottomLine"); 
+       Label comments = new Label( "Description annonce : "+description , "NewsBottomLine"); 
+       Label comments1 = new Label( "Telephone : "+tel , "NewsBottomLine"); 
+       Label comments2 = new Label( "Prix : "+prix , "NewsBottomLine"); 
+       
      //  FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
          Label user = new Label( "username  : "+nom , "NewsBottomLine"); 
       // FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
@@ -341,7 +288,7 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
                BoxLayout.encloseY(
                       
                        BoxLayout.encloseX(likes1,num ),
-                       comments,user
+                       comments,user,commander
                        
                ));
  
