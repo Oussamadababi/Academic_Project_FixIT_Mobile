@@ -18,6 +18,7 @@ public class Offre {
    private int tel;
    private String desciption;
    private int idpo;
+   private int idj;
    
  
     
@@ -76,6 +77,22 @@ public class Offre {
         this.tel = tel;
         this.desciption = desciption;
         this.idpo = idpo;
+    }
+
+    public Offre(String adress, int tel, String desciption, int idpo, int idj) {
+        this.adress = adress;
+        this.tel = tel;
+        this.desciption = desciption;
+        this.idpo = idpo;
+        this.idj = idj;
+    }
+
+    public int getIdj() {
+        return idj;
+    }
+
+    public void setIdj(int idj) {
+        this.idj = idj;
     }
 
   
