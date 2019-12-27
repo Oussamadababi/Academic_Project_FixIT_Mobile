@@ -27,6 +27,7 @@ import static com.codename1.ui.Component.CENTER;
 import static com.codename1.ui.Component.LEFT;
 import static com.codename1.ui.Component.RIGHT;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Graphics;
@@ -131,7 +132,8 @@ public class EchangeForm extends BaseForm {
                         
                         {
                        
-                           new MesEchangeForm (res).show();
+                    new MesEchangeForm (res).show();
+                          
                           
                         }
                         }
@@ -181,11 +183,7 @@ public class EchangeForm extends BaseForm {
                e.setPropositionsouhaitée(obj.get("propositionSouhaitee").toString());
                e.setDescription_echange(obj.get("descriptionEchange").toString());
                e.setDate(obj.get("date").toString());
-        //addButton(res.getImage("news-item-1.jpg"), obj.get("propositionOfferte").toString(), false, 26, 32);
-       // addButton(res.getImage("news-item-2.jpg"), ("propositionSouhaitee").toString(), true, 15, 21);
-       // addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15);
-        //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);
-//               addButton2("propositionOfferte", obj.get("propositionOfferte").toString());
+        
 
                
    
@@ -196,11 +194,34 @@ public class EchangeForm extends BaseForm {
           e.setNom_posteur(obj1.get("username").toString());
           Button commander= new Button("commander");
            addButton3(res.getImage("dog.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString(),obj1.get("nom").toString(),commander);
-         
+         commander.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                       Echange ec = new Echange();
+                    float id1 = Float.parseFloat(obj.get("id").toString());
+                     ConnectionRequest con1 = new ConnectionRequest();
+               String Url1 ="http://localhost/fixitweb1/web/app_dev.php/Iheb/Accepter/"+id1;
+                 con1.setUrl(Url1);// Insertion de l'URL de notre demande de connexion
+                  Dialog.show("Ajout", "avec sucess", "OK", "Cancel");  
+                    con1.addResponseListener((e) -> {
+            String str = new String(con1.getResponseData());//Récupération de la réponse du serveur
+            System.out.println(str);//Affichage de la réponse serveur sur la console
+                       
+      
+    });
+              NetworkManager.getInstance().addToQueueAndWait(con1);   
+                    
+     
+                    
+                    }
+                    
+                });
+          //
 
               
 
                 listTasks.add(e);
+                   
             }} 
             catch (IOException ex) {
             }
