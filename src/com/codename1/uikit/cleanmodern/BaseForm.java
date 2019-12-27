@@ -88,6 +88,8 @@ public class BaseForm extends Form {
         tb.addMaterialCommandToSideMenu("Demander Service", FontImage.MATERIAL_SHOP, e -> new Service(res).show());
           tb.addMaterialCommandToSideMenu("Trocs", FontImage.MATERIAL_SHOP, e -> new EchangeForm (res).show());
           tb.addMaterialCommandToSideMenu("Annonce", FontImage.MATERIAL_SHOP, e -> new AnnonceForm (res).show());
+        tb.addMaterialCommandToSideMenu("Mes Offres", FontImage.MATERIAL_ADD_TO_QUEUE, e -> new offresayed(res).show());
         tb.addMaterialCommandToSideMenu("Logout", FontImage.MATERIAL_EXIT_TO_APP, e -> new WalkthruForm(res).show());
+        
     }
 }
