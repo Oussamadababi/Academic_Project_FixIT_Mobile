@@ -28,6 +28,7 @@ import static com.codename1.ui.Component.CENTER;
 import static com.codename1.ui.Component.LEFT;
 import static com.codename1.ui.Component.RIGHT;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.FontImage;
@@ -84,8 +85,8 @@ public class OffreAjout extends BaseForm {
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("home1.jpg"), spacer1, "16 Likes  ", "85 Comments", "Integer ut placerat purued non dignissim neque. ");
-        addTab(swipe, res.getImage("home2.jpg"), spacer2, "100 Likes  ", "66 Comments", "Dogs are cute: story at 11");
+        addTab(swipe, res.getImage("home1.jpg"), spacer1, "16 Likes  ", "85 Comments", " ");
+        addTab(swipe, res.getImage("home2.jpg"), spacer2, "100 Likes  ", "66 Comments", "");
                 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -126,62 +127,62 @@ public class OffreAjout extends BaseForm {
         add(LayeredLayout.encloseIn(swipe, radioContainer));
         
         ButtonGroup barGroup = new ButtonGroup();
-        RadioButton all = RadioButton.createToggle("All", barGroup);
+        RadioButton all = RadioButton.createToggle("Remplir Notre Formulaire", barGroup);
         all.setUIID("SelectBar");
                 all.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-               new Produit(res).show();
+//               new Produit(res).show();
             }
         });
        // all.setSelectedStyle(style);
-        RadioButton featured = RadioButton.createToggle("My products", barGroup);
-        featured.setUIID("SelectBar");
-        featured.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-               new MesProduits(res).show();
-            }
-        });
-        RadioButton popular = RadioButton.createToggle("Add products", barGroup);
-        popular.setUIID("SelectBar");
+//        RadioButton featured = RadioButton.createToggle("My products", barGroup);
+//        featured.setUIID("SelectBar");
+//        featured.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent evt) {
+//               new MesProduits(res).show();
+//            }
+//        });
+//        RadioButton popular = RadioButton.createToggle("Add products", barGroup);
+//        popular.setUIID("SelectBar");
 
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         
         add(LayeredLayout.encloseIn(
-                GridLayout.encloseIn(3, all, featured, popular),
+                GridLayout.encloseIn(1, all),
                 FlowLayout.encloseBottom(arrow)
         ));
         
         all.setSelected(true);
-        arrow.setVisible(false);
-        addShowListener(e -> {
-            arrow.setVisible(true);
-            updateArrowPosition(popular, arrow);
-        });
-        bindButtonSelection(all, arrow);
-        bindButtonSelection(featured, arrow);
-        bindButtonSelection(popular, arrow);
+//        arrow.setVisible(false);
+//        addShowListener(e -> {
+//            arrow.setVisible(true);
+//            updateArrowPosition(arrow);
+//        });
+//        bindButtonSelection(all, arrow);
+//        bindButtonSelection(featured, arrow);
+//        bindButtonSelection(popular, arrow);
        // bindButtonSelection(myFavorite, arrow);
         
         // special case for rotation
-        addOrientationListener(e -> {
-            updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
-        });
+//        addOrientationListener(e -> {
+//            updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
+//        });
        
         TextField adress = new TextField();
         adress.setUIID("TextFieldBlack");
-        addStringValue("adress",adress);
+        addStringValue("Adress",adress);
         Picker date = new Picker();
-         addStringValue("date",date);
+         addStringValue("Date",date);
         int tel8=Session.getInstance().getLoggedInUser().getTel();
         String tel2=Integer.toString(tel8);
         TextField Num = new TextField(tel2);
         Num.setUIID("TextFieldBlack");
-        addStringValue("Portable",Num);
+        addStringValue("Num Tel",Num);
         TextArea Description = new TextArea();
         Description.setUIID("TextAreaBlack");
-        addStringValue("Description",Description);
+        addStringValue("Decrire vote besoin",Description);
         Button ajouter1=new Button("Ajouter");
         addStringValue("",ajouter1);
         int idd= Session.getInstance().getLoggedInUser().getId();
@@ -202,6 +203,7 @@ public class OffreAjout extends BaseForm {
         con.addResponseListener((e) -> {
             String str = new String(con.getResponseData());//Récupération de la réponse du serveur
             System.out.println(str);//Affichage de la réponse serveur sur la console
+            Dialog.show("Ajout", "avec sucess", "OK", "Cancel");
 
         });
         NetworkManager.getInstance().addToQueueAndWait(con);
@@ -273,12 +275,12 @@ public class OffreAjout extends BaseForm {
     
     
     
-    private void updateArrowPosition(Button b, Label arrow) {
-        arrow.getUnselectedStyle().setMargin(LEFT, b.getX() + b.getWidth() / 2 - arrow.getWidth() / 2);
-        arrow.getParent().repaint();
-        
-        
-    }
+//    private void updateArrowPosition( Label arrow) {
+//        arrow.getUnselectedStyle().setMargin(LEFT, b.getX() + b.getWidth() / 2 - arrow.getWidth() / 2);
+//        arrow.getParent().repaint();
+//        
+//        
+//    }
     
     private void addTab(Tabs swipe, Image img, Label spacer, String likesStr, String commentsStr, String text) {
         int size = Math.min(Display.getInstance().getDisplayWidth(), Display.getInstance().getDisplayHeight());
@@ -362,14 +364,14 @@ public class OffreAjout extends BaseForm {
        add(cnt);
        image.addActionListener(e -> ToastBar.showMessage(title, FontImage.MATERIAL_INFO));
    }
-    
-    private void bindButtonSelection(Button b, Label arrow) {
-        b.addActionListener(e -> {
-            if(b.isSelected()) {
-                updateArrowPosition(b, arrow);
-            }
-        });
-    }
+//    
+//    private void bindButtonSelection(Button b, Label arrow) {
+//        b.addActionListener(e -> {
+//            if(b.isSelected()) {
+//                updateArrowPosition(b, arrow);
+//            }
+//        });
+//    }
 
      private void addStringValue(String s, Component v) {
         add(BorderLayout.west(new Label(s, "PaddedLabel")).

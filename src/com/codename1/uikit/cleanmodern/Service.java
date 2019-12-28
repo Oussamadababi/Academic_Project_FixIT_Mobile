@@ -269,11 +269,11 @@ public class Service extends BaseForm {
             
        }
        if(Specialite.equals("Plombier")){
-       image.addActionListener(e -> new WalkthruForm(res).show());}
+       image.addActionListener(e -> new affiche_jobeur_plombier(res).show());}
        if(Specialite.equals("Menage")){
-       image.addActionListener(e -> new WalkthruForm(res).show());}
+       image.addActionListener(e -> new affiche_jobeur_jardinage(res).show());}
        if(Specialite.equals("Jardinage")){
-       image.addActionListener(e -> new WalkthruForm(res).show());}
+       image.addActionListener(e -> new affiche_jobeur_menage(res).show());}
        if(Specialite.equals("Peinture")){
        image.addActionListener(e -> new WalkthruForm(res).show());}
        if(Specialite.equals("Conciergerie")){
