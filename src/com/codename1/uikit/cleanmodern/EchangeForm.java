@@ -115,6 +115,9 @@ public class EchangeForm extends BaseForm {
         featured.setUIID("SelectBar");
         RadioButton popular = RadioButton.createToggle("Trocs", barGroup);
        popular.setUIID("SelectBar");
+          RadioButton acc = RadioButton.createToggle("commander", barGroup);
+       acc.setUIID("SelectBar");
+       
          popular.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
@@ -138,11 +141,23 @@ public class EchangeForm extends BaseForm {
                         }
                         }
                 });
+           acc.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        
+                        {
+                       
+                           new commanderform (res).show();
+                          
+                        }
+                        }
+                });
+           
      
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         
         add(LayeredLayout.encloseIn(
-                GridLayout.encloseIn(3, all, featured, popular),
+                GridLayout.encloseIn(4, all, featured, popular,acc),
                 FlowLayout.encloseBottom(arrow)
         ));
         
@@ -192,22 +207,27 @@ public class EchangeForm extends BaseForm {
            LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurfg") ;
            int pos = 1;
           e.setNom_posteur(obj1.get("username").toString());
-          Button commander= new Button("commander");
-           addButton3(res.getImage("dog.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString(),obj1.get("nom").toString(),commander);
+       Button commander =new Button("commander");
+               
+                 if(obj.get("etatValidation").toString().equals("noncommand"))
+                 {addButton3(res.getImage("dog.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString(),obj1.get("nom").toString(),commander);
+                   addStringValue("",commander);
+                 }
          commander.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
+                         int id=Session.getInstance().getLoggedInUser().getId();
                        Echange ec = new Echange();
-                    float id1 = Float.parseFloat(obj.get("id").toString());
+                    float idec = Float.parseFloat(obj.get("id").toString());
                      ConnectionRequest con1 = new ConnectionRequest();
-               String Url1 ="http://localhost/fixitweb1/web/app_dev.php/Iheb/Accepter/"+id1;
+               String Url1 ="http://localhost/fixitweb1/web/app_dev.php/Iheb/Accepter/"+idec+"?id2="+id;
                  con1.setUrl(Url1);// Insertion de l'URL de notre demande de connexion
-                  Dialog.show("Ajout", "avec sucess", "OK", "Cancel");  
+                  Dialog.show("commande", "avec sucess", "OK", "Cancel");  
                     con1.addResponseListener((e) -> {
             String str = new String(con1.getResponseData());//Récupération de la réponse du serveur
             System.out.println(str);//Affichage de la réponse serveur sur la console
                        
-      
+   
     });
               NetworkManager.getInstance().addToQueueAndWait(con1);   
                     
@@ -235,6 +255,12 @@ public class EchangeForm extends BaseForm {
         //addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15);
         //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);
       
+    }
+          private void addStringValue(String s, Component v) {
+        add(BorderLayout.west(new Label(s, "PaddedLabel")).
+                add(BorderLayout.CENTER, v));
+        add(createLineSeparator(0xF4BE1B));
+        
     }
      
     
@@ -315,7 +341,7 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
                BoxLayout.encloseY(
                       
                        BoxLayout.encloseX(likes1,num ),
-                       comments,user,commander
+                       comments,user
                        
                ));
  

@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+
 package com.codename1.uikit.cleanmodern;
 
-import Entites.Echange;
+import Entites.Annonce;
 import Service.Session;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
@@ -55,9 +57,10 @@ import java.util.Map;
  *
  * @author Iheb
  */
-public class AjouterEchange extends BaseForm {
-     public AjouterEchange(Resources res) {
-        super("Trocs", BoxLayout.y());
+/*
+public class Ajouterannonce extends BaseForm {
+     public Ajouterannonce(Resources res) {
+        super("Annonce", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
@@ -180,18 +183,35 @@ public class AjouterEchange extends BaseForm {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
             
         });
-  TextField PROPf = new TextField();
-        PROPf.setUIID("TextFieldBlack");
-        addStringValue("PropositionOfferte",  PROPf);
+  TextField nom = new TextField();
+        nom.setUIID("TextFieldBlack");
+        addStringValue("Nom annonce",  nom);
 
-        TextField PROPs = new TextField();
-        PROPs.setUIID("TextFieldBlack");
-        addStringValue("PropositionSouhaitee",PROPs);
+        TextField adress = new TextField();
+        adress.setUIID("TextFieldBlack");
+        addStringValue("Adresse",adress);
      
         
-      TextArea Des = new TextArea();
-        //Des.setUIID("TextFieldBlack");
-        addStringValue("Description",  Des);
+      TextArea date = new TextArea();
+        date.setUIID("TextFieldBlack");
+        addStringValue("Date",  date);
+        
+        TextArea des = new TextArea();
+        des.setUIID("TextFieldBlack");
+        addStringValue("Description",  des);
+        
+        TextArea tel = new TextArea();
+        tel.setUIID("TextFieldBlack");
+        addStringValue("Telephone",  tel);
+        
+        TextArea pr = new TextArea();
+        pr.setUIID("TextFieldBlack");
+        addStringValue("Prix",  pr);
+        
+        
+        
+        
+        
         Button bt = new Button("ajouter");
          addStringValue("",  bt);
      
@@ -203,7 +223,7 @@ public class AjouterEchange extends BaseForm {
                    int id=Session.getInstance().getLoggedInUser().getId();
                    System.out.println(id);
       
-              Echange ec = new Echange(PROPf.getText(),PROPs.getText(),Des.getText(),id);
+              Annonce a = new Annonce(nom.getText(),adress.getText(),date.getText(),des.getText(),tel,pr,id);
                ConnectionRequest con = new ConnectionRequest();
                String Url ="http://localhost/fixitweb1/web/app_dev.php/Iheb/ajouterMobile2Action?propositionOfferte="+ec.getPropositionofferte()+"&propositionsouhaitee="+ec.getPropositionsouhaitée()+ "&descriptionEchange="+ec.getDescription_echange()+"&idposteurfg="+ec.getId_posteurfg();
                  con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
@@ -358,3 +378,4 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
     }
     
 }
+*/
