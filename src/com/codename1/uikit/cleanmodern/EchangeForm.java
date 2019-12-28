@@ -227,7 +227,7 @@ public class EchangeForm extends BaseForm {
             String str = new String(con1.getResponseData());//Récupération de la réponse du serveur
             System.out.println(str);//Affichage de la réponse serveur sur la console
                        
-      
+   
     });
               NetworkManager.getInstance().addToQueueAndWait(con1);   
                     
