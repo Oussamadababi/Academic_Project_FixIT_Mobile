@@ -25,6 +25,7 @@ import Service.UserService;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
 import com.codename1.ext.filechooser.FileChooser;
+import com.codename1.io.File;
 import com.codename1.io.FileSystemStorage;
 import com.codename1.io.Log;
 import com.codename1.io.MultipartRequest;
@@ -51,8 +52,14 @@ import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.spinner.Picker;
+import com.codename1.ui.util.ImageIO;
 import com.codename1.ui.util.Resources;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * The user profile form
@@ -136,63 +143,64 @@ public class ProfileForm extends BaseForm {
         
                 CheckBox multiSelect = new CheckBox("Multi-select");
 
-        Button update = new Button("Browse Images");
-        update.addActionListener(e->{
-            if (FileChooser.isAvailable()) {
-                
-                FileChooser.showOpenDialog(multiSelect.isSelected(), ".pdf,application/pdf,.gif,image/gif,.png,image/png,.jpg,image/jpg,.tif,image/tif,.jpeg,.bmp", e2-> {
-                    if (multiSelect.isSelected()) {
-                        String[] paths = (String[])e2.getSource();
-                        for (String path : paths) {
-                            System.out.println("path  :"+path);
-                            try {
-                                Image img1 = Image.createImage(path);
-                                hi.add(new Label(img1));
-                            } catch (Exception ex) {
-                                Log.e(ex);
-                            }
-                            
-                        }
-                        return;
-                       
+        final String[] jobPic = new String[1];
+    Label jobIcon = new Label();
+
+    Button image = new Button("Ajouter une image ");
+    final String[] image_name = {""};
+    final String[] pathToBeStored={""};
+
+    /////////////////////Upload Image
+    image.addActionListener((ActionEvent actionEvent) -> {
+    Display.getInstance().openGallery(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent ev) {
+            if (ev != null && ev.getSource() != null) {
+                String filePath = (String) ev.getSource();
+                int fileNameIndex = filePath.lastIndexOf("/") + 1;
+                String fileName = filePath.substring(fileNameIndex);
+                Image img = null;
+                try {
+                    img = Image.createImage(FileSystemStorage.getInstance().openInputStream(filePath));
+    		
+    	    } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                image_name[0] = System.currentTimeMillis() + ".jpg";
+                jobIcon.setIcon(img);
+                System.out.println(filePath);
+                System.out.println(image_name[0]);
+            
+
+                try {
+                         pathToBeStored[0] = FileSystemStorage.getInstance().getAppHomePath()+ image_name[0];
+                        OutputStream os = FileSystemStorage.getInstance().openOutputStream(pathToBeStored[0]);
+                        ImageIO.getImageIO().save(img, os, ImageIO.FORMAT_JPEG, 0.9f);
+                        os.close();
+                        System.out.println(pathToBeStored);
                     }
-                    if(e2!=null && e2.getSource()!=null) {
-
-                        String file = (String)e2.getSource();
-                        try {
-                            Image img1 = Image.createImage(file);
-                            
-
-                            System.out.println("img  :"+img1);
-                            System.out.println("file  :"+file);
-
-                            
-                            if (true) return;
-                        } catch (Exception ex) {
-                            Log.e(ex);
-                        }
-
-                        String filestack = "http://solutions.weblite.ca/testupload.php";
-
-                        MultipartRequest request = new MultipartRequest();
-
-                        request.setUrl(filestack);
-
-                        request.setPost(true);
-                        try {
-                            request.addData("fileUpload", file, "/");
-
-                            request.setFilename("fileUpload", "myfile.png");
-
-                            request.setReadResponseForErrors(true); 
-                            NetworkManager.getInstance().addToQueueAndWait(request);
-                        } catch (Throwable t) {
-                            Log.e(t);
-                        }
+                    catch (Exception e) {
+                        e.printStackTrace();
                     }
-               });
             }
-        });
+        }
+    }, Display.GALLERY_IMAGE);});
+
+
+
+            ////////////Copied with URL Symfony
+            Button myButton = new Button("Valider");
+            myButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    
+                    String path = "C:\\wamp64\\www\\fixitweb1\\web\\upload\\"+image_name[0];
+                   File file = new File(path);
+                    System.out.println(file);
+
+                }
+            });
+
        
         
     
@@ -215,11 +223,17 @@ public class ProfileForm extends BaseForm {
       
         
          Container content = BoxLayout.encloseY(
-                update
+                image
+                 
+        );
+         Container content1 = BoxLayout.encloseY(
+                myButton
+                 
         );
      
         content.setScrollableY(true);
         add(content);
+        add(content1);
     }
     
     
