@@ -91,6 +91,23 @@ public class Echange {
     public void setId_jobeurfg(int id_jobeurfg) {
         this.id_jobeurfg = id_jobeurfg;
     }
+
+    public Echange(String propositionofferte, String propositionsouhaitée, String description_echange) {
+        this.propositionofferte = propositionofferte;
+        this.propositionsouhaitée = propositionsouhaitée;
+        this.description_echange = description_echange;
+    }
+
+    public Echange(String propositionofferte, String propositionsouhaitée, String description_echange, int id_posteurfg) {
+        this.propositionofferte = propositionofferte;
+        this.propositionsouhaitée = propositionsouhaitée;
+        this.description_echange = description_echange;
+        this.id_posteurfg = id_posteurfg;
+    }
+    
+
+    public Echange() {
+    }
      
     
 }

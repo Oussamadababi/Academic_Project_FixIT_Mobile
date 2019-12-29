@@ -115,6 +115,8 @@ public class MesEchangeForm extends BaseForm{
         featured.setUIID("SelectBar");
         RadioButton popular = RadioButton.createToggle("Trocs", barGroup);
         popular.setUIID("SelectBar");
+          RadioButton acc = RadioButton.createToggle("commander", barGroup);
+       acc.setUIID("SelectBar");
         all.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
@@ -126,11 +128,34 @@ public class MesEchangeForm extends BaseForm{
                         }
                         }
                 });
+          popular.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        
+                        {
+                       
+                           new AjouterEchange (res).show();
+                          
+                        }
+                        }
+                });
+     acc.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        
+                        {
+                       
+                           new commanderform (res).show();
+                          
+                        }
+                        }
+                });
+           
      
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         
         add(LayeredLayout.encloseIn(
-                GridLayout.encloseIn(4, all, featured, popular),
+                GridLayout.encloseIn(4, all, featured, popular,acc),
                 FlowLayout.encloseBottom(arrow)
         ));
         
@@ -139,7 +164,7 @@ public class MesEchangeForm extends BaseForm{
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
-            updateArrowPosition(all, arrow);
+            updateArrowPosition(featured, arrow);
         });
         bindButtonSelection(all, arrow);
         bindButtonSelection(featured, arrow);

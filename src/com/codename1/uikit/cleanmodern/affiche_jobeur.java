@@ -57,7 +57,7 @@ import java.util.Map;
  * @author Asus
  */
 public class affiche_jobeur extends BaseForm{
-    
+      static int idj;
    
     public affiche_jobeur(Resources res) {
         
@@ -86,6 +86,8 @@ public class affiche_jobeur extends BaseForm{
 //     
 //        //To change body of generated methods, choose Tools | Templates.
 //    }
+      
+        
          super("Jobeurs Electriciter", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
@@ -143,11 +145,11 @@ public class affiche_jobeur extends BaseForm{
         add(LayeredLayout.encloseIn(swipe, radioContainer));
         
         ButtonGroup barGroup = new ButtonGroup();
-        RadioButton all = RadioButton.createToggle("Liste Des Jobeurs", barGroup);
+        RadioButton all = RadioButton.createToggle("Liste Jobeurs", barGroup);
         all.setUIID("SelectBar");
-        RadioButton featured = RadioButton.createToggle("Mes Offre", barGroup);
+        RadioButton featured = RadioButton.createToggle("Mes offres ", barGroup);
         featured.setUIID("SelectBar");
-       
+        
            featured .addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
@@ -163,7 +165,7 @@ public class affiche_jobeur extends BaseForm{
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         
         add(LayeredLayout.encloseIn(
-                GridLayout.encloseIn(4, all, featured),
+                GridLayout.encloseIn(2, all, featured),
                 FlowLayout.encloseBottom(arrow)
         ));
         
@@ -176,7 +178,7 @@ public class affiche_jobeur extends BaseForm{
         });
         bindButtonSelection(all, arrow);
         bindButtonSelection(featured, arrow);
-       
+        
       
         
         // special case for rotation
@@ -188,9 +190,8 @@ public class affiche_jobeur extends BaseForm{
         
         ConnectionRequest con = new ConnectionRequest();
          con.setUrl("http://localhost/fixitweb1/web/app_dev.php/oussama/affichemobile/Electriciter"); 
-      
+      ArrayList<User> listJobeurs = new ArrayList<>();
             con.addResponseListener((NetworkEvent evt) -> {
-            ArrayList<User> listJobeurs = new ArrayList<>();
             try {
                 //(new String(con.getResponseData()));
                 String aff=new String(con.getResponseData());
@@ -199,32 +200,23 @@ public class affiche_jobeur extends BaseForm{
                 List<Map<String, Object>> list = (List<Map<String, Object>>) tasks.get("root");
              for (Map<String, Object> obj : list) {
                 User U = new User();
-              
-           
-        //addButton(res.getImage("news-item-1.jpg"), obj.get("propositionOfferte").toString(), false, 26, 32);
-       // addButton(res.getImage("news-item-2.jpg"), ("propositionSouhaitee").toString(), true, 15, 21);
-       // addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15);
-        //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);
-//               addButton2("propositionOfferte", obj.get("propositionOfferte").toString());
-
-               
-   
-        
-        //add(obj.get("propositionOfferte").toString());
-           LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurfg") ;
-           int pos = 1;
-          
-           addButton3(res.getImage("electricte.JPG"),false,55,55,obj.get("nom").toString(),obj.get("prenom").toString(),obj.get("tel").toString(),obj.get("specialite").toString());
-         
-
-              
-
+           addButton3(res.getImage("electricte.JPG"),false,55,55,obj.get("nom").toString(),obj.get("prenom").toString(),obj.get("tel").toString(),obj.get("specialite").toString(),res);
+                 Button b =new Button("commander");
+                 addStringValue("",b);
+                 b.addActionListener(new ActionListener() {
+                @Override
+                    public void actionPerformed(ActionEvent evt) {
+                       new OffreAjout(res).show();
+                       float id1 = Float.parseFloat(obj.get("id").toString());
+                        idj=(int)id1;
+                       
+                    }
+                });
+                 
                 listJobeurs.add(U);
             }} 
             catch (IOException ex) {
             }
-  
-            
                 });
               
         NetworkManager.getInstance().addToQueueAndWait(con);
@@ -281,14 +273,14 @@ public class affiche_jobeur extends BaseForm{
         swipe.addTab("", page1);
     }
 
-private void addButton3(Image img, boolean liked, int likeCount, int commentCount,String Proff,String souh,String description,String nom) {
+private void addButton3(Image img, boolean liked, int likeCount, int commentCount,String Proff,String souh,String description,String nom,Resources res) {
        int height = Display.getInstance().convertToPixels(11.5f);
        int width = Display.getInstance().convertToPixels(14f);
        Button image = new Button(img.fill(width, height));
        image.setUIID("Label");
        Container cnt = BorderLayout.west(image);
        cnt.setLeadComponent(image);
-     
+      
      
 
        Label likes = new Label(likeCount + " Likes  ", "NewsBottomLine");
@@ -306,8 +298,6 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
        Label comments = new Label( " Tel : "+description , "NewsBottomLine"); 
      //  FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
          Label user = new Label( "Spécialite  : "+nom , "NewsBottomLine"); 
-      // FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
-       
        cnt.add(BorderLayout.CENTER, 
                BoxLayout.encloseY(
                       
@@ -317,6 +307,7 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
                ));
  
        add(cnt);
+         
      
    }
     
@@ -362,7 +353,12 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
         });
     }
     
-    
+       private void addStringValue(String s, Component v) {
+        add(BorderLayout.west(new Label(s, "PaddedLabel")).
+                add(BorderLayout.CENTER, v));
+        add(createLineSeparator(0xF4BE1B));
+        
+    }
 }
             
     
