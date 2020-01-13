@@ -85,8 +85,18 @@ signIn.addActionListener(new ActionListener()
                     UserService us = new UserService();
                     if(us.Authentification(username.getText(), password.getText())!= null)
                     {
+                        if(Session.getInstance().getLoggedInUser().getRole().contains("POSTEUR"))
+                        {
                        new ProfileForm(res).show();
                        Session.getInstance().getLoggedInUser().ShowUserDebug();
+                        }
+                        
+                        else if(Session.getInstance().getLoggedInUser().getRole().contains("JOBEUR"))
+                        {
+                            new ProfileFormJobeur(res).show();
+                       Session.getInstance().getLoggedInUser().ShowUserDebug();
+                        }
+                        
                     }
                     else
                     {
