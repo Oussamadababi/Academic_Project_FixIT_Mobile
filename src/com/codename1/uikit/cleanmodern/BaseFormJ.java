@@ -38,16 +38,16 @@ import com.codename1.ui.util.Resources;
  *
  * @author Shai Almog
  */
-public class BaseForm extends Form {
+public class BaseFormJ extends Form {
 
-    public BaseForm() {
+    public BaseFormJ() {
     }
 
-    public BaseForm(Layout contentPaneLayout) {
+    public BaseFormJ(Layout contentPaneLayout) {
         super(contentPaneLayout);
     }
 
-    public BaseForm(String title, Layout contentPaneLayout) {
+    public BaseFormJ(String title, Layout contentPaneLayout) {
         super(title, contentPaneLayout);
     }
     
@@ -85,7 +85,7 @@ public class BaseForm extends Form {
        
         tb.addMaterialCommandToSideMenu("Profile", FontImage.MATERIAL_SETTINGS, e -> new ProfileForm(res).show());
         tb.addMaterialCommandToSideMenu("Produits", FontImage.MATERIAL_ADD_SHOPPING_CART, e -> new Produit(res).show());
-        tb.addMaterialCommandToSideMenu("Demander Service", FontImage.MATERIAL_SHOP, e -> new Service(res).show());
+   
           tb.addMaterialCommandToSideMenu("Trocs", FontImage.MATERIAL_SHOP, e -> new EchangeForm (res).show());
           tb.addMaterialCommandToSideMenu("Annonce", FontImage.MATERIAL_SHOP, e -> new AnnonceForm (res).show());
         tb.addMaterialCommandToSideMenu("Mes Offres", FontImage.MATERIAL_ADD_TO_QUEUE, e -> new offresayed(res).show());
