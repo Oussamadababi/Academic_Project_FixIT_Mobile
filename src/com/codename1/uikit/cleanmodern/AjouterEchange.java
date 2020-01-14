@@ -202,6 +202,24 @@ public class AjouterEchange extends BaseForm {
      
                    int id=Session.getInstance().getLoggedInUser().getId();
                    System.out.println(id);
+                     boolean test= true;
+                       if( PROPf.getText().isEmpty()){
+         
+            test = false;
+             Dialog.show("champs", "vide", "OK", "Cancel");  
+        }
+                       else if( PROPs.getText().isEmpty()){
+         
+            test = false;
+             Dialog.show("champs", "vide", "OK", "Cancel");  
+        }
+                       else if( Des.getText().isEmpty()){
+         
+            test = false;
+             Dialog.show("champs", "vide", "OK", "Cancel");  
+        }
+       if(test)
+       {
       
               Echange ec = new Echange(PROPf.getText(),PROPs.getText(),Des.getText(),id);
                ConnectionRequest con = new ConnectionRequest();
@@ -210,19 +228,22 @@ public class AjouterEchange extends BaseForm {
                   Dialog.show("Ajout", "avec sucess", "OK", "Cancel");  
                  new MesEchangeForm (res).show();
                  
-
+       
         con.addResponseListener((e) -> {
             String str = new String(con.getResponseData());//Récupération de la réponse du serveur
             System.out.println(str);//Affichage de la réponse serveur sur la console
       
-    });
-        NetworkManager.getInstance().addToQueueAndWait(con);
+    });    NetworkManager.getInstance().addToQueueAndWait(con);
+       }
+    
             }
             
            
         
     });
+         
                  }
+                 
          
        private void addStringValue(String s, Component v) {
         add(BorderLayout.west(new Label(s, "PaddedLabel")).

@@ -140,6 +140,18 @@ public class commanderform extends BaseForm {
                         }
                         }
                 });
+          featured.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        
+                        {
+                       
+                           new MesEchangeForm (res).show();
+                          
+                        }
+                        }
+                });
+          
      
      
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
@@ -154,7 +166,7 @@ public class commanderform extends BaseForm {
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
-            updateArrowPosition(featured, arrow);
+            updateArrowPosition(acc, arrow);
         });
         bindButtonSelection(all, arrow);
         bindButtonSelection(featured, arrow);
