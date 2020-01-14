@@ -27,6 +27,7 @@ import static com.codename1.ui.Component.CENTER;
 import static com.codename1.ui.Component.LEFT;
 import static com.codename1.ui.Component.RIGHT;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.FontImage;
@@ -77,13 +78,17 @@ public class AjouterProduit extends BaseForm {
         
         super.addSideMenu(res);
         tb.addSearchCommand(e -> {});
-        
+   
+        ScaleImageLabel sl = new ScaleImageLabel();
+           sl.setUIID("BottomPad");
+        sl.setBackgroundType(Style.BACKGROUND_IMAGE_SCALED_FILL);
+
         Tabs swipe = new Tabs();
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("home1.jpg"), spacer1, "16 Likes  ", "85 Comments", "Integer ut placerat purued non dignissim neque. ");
-        addTab(swipe, res.getImage("home2.jpg"), spacer2, "100 Likes  ", "66 Comments", "Dogs are cute: story at 11");
+        addTab(swipe, res.getImage("home1.jpg"), spacer1, "  ", "", " ");
+        addTab(swipe, res.getImage("home2.jpg"), spacer2, " ", "", "");
                 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -167,6 +172,17 @@ public class AjouterProduit extends BaseForm {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
         
+        
+            add(LayeredLayout.encloseIn(
+                sl,
+                BorderLayout.south(
+                    GridLayout.encloseIn(1, 
+                            FlowLayout.encloseCenter(
+                                new Label(res.getImage("profile-pic.jpg"), "PictureWhiteBackgrond"))
+                            
+                    )
+                )
+        ));
          ComboBox cb = new ComboBox();
         addStringValue("Categorie",cb);
         TextField NomProduit = new TextField();
@@ -238,9 +254,7 @@ public class AjouterProduit extends BaseForm {
                                  float id = Float.parseFloat(obj.get("id").toString());
                                   idd=(int) id;
                              }
-                             System.out.println(idd);
-                             System.out.println(idd);
-                             System.out.println(idd);
+
                              int prix2=Integer.parseInt(Prix.getText());
                              int num=Integer.parseInt(Num.getText());
                              int idUser= Session.getInstance().getLoggedInUser().getId();
@@ -253,6 +267,13 @@ public class AjouterProduit extends BaseForm {
                          System.out.println(str);//Affichage de la réponse serveur sur la console
 
                           });
+                       
+                        
+                      
+                            Dialog.show("Ajouté ", "Produit ajouté avec succés " , "OK", null);
+                            
+                       
+                            
                           NetworkManager.getInstance().addToQueueAndWait(con);
                          }
                          catch (IOException ex) {
