@@ -19,19 +19,29 @@
 
 package com.codename1.uikit.cleanmodern;
 
+import Entites.User;
 import com.codename1.components.FloatingHint;
 import com.codename1.components.SpanLabel;
+import com.codename1.io.CharArrayReader;
+import com.codename1.io.JSONParser;
+import com.codename1.l10n.SimpleDateFormat;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
 import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
+import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.util.Resources;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Account activation UI
@@ -79,7 +89,13 @@ public class ActivateForm extends BaseForm {
         content.setScrollableY(true);
         add(BorderLayout.SOUTH, content);
         signUp.requestFocus();
-        signUp.addActionListener(e -> new NewsfeedForm(res).show());
+        signUp.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                Dialog.show("Verfication Successful","Welcome to fix'it !\n Your account now is full confirmed","ok",null);
+               
+            }
+        });
     }
     
 }
