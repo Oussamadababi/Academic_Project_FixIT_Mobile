@@ -61,7 +61,70 @@ public class EchangeForm extends BaseForm {
         getContentPane().setScrollVisible(false);
         
         super.addSideMenu(res);
-        tb.addSearchCommand(e -> {});
+        tb.addSearchCommand(e5 -> {
+         
+            int idd= Session.getInstance().getLoggedInUser().getId();
+              String a= (String)e5.getSource();
+        ConnectionRequest con3 = new ConnectionRequest();
+        con3.setUrl("http://localhost/fixitweb1/web/app_dev.php/Iheb/rechercheMobile/"+idd+"/"+a);
+         con3.addResponseListener((NetworkEvent evt) -> {
+           ArrayList<Echange> listTasks = new ArrayList<>();
+             try {
+                //(new String(con.getResponseData()));
+                String aff=new String(con3.getResponseData());
+                JSONParser j = new JSONParser();// Instanciation d'un objet JSONParser permettant le parsing du résultat json
+                Map<String, Object> tasks2 = j.parseJSON(new CharArrayReader(aff.toCharArray()));
+                List<Map<String, Object>> list = (List<Map<String, Object>>) tasks2.get("root");
+                for (Map<String, Object> obj : list) {
+                Echange e1 = new Echange();
+             
+               e1.setId(obj.get("id").toString());
+               e1.setPropositionofferte(obj.get("propositionOfferte").toString());
+               e1.setPropositionsouhaitée(obj.get("propositionSouhaitee").toString());
+               e1.setDescription_echange(obj.get("descriptionEchange").toString());
+               e1.setDate(obj.get("date").toString());
+                  LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurfg") ;
+           int pos = 1;
+          e1.setNom_posteur(obj1.get("nom").toString());
+       Button commander =new Button("commander");
+               
+                 if(obj.get("etatValidation").toString().equals("noncommand"))
+                 {addButton3(res.getImage("dog.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString(),obj1.get("nom").toString(),commander);
+                   addStringValue("",commander);
+                 }
+        
+
+               
+   
+        
+           LinkedHashMap<String,Object> obj2 =  (LinkedHashMap<String,Object>) obj.get("idposteurfg") ;
+           int pos1 = 1;
+          e1.setNom_posteur(obj1.get("nom").toString());
+       Button commander2 =new Button("commander");
+               
+                 if(obj.get("etatValidation").toString().equals("noncommand"))
+                 {addButton3(res.getImage("dog.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString(),obj1.get("nom").toString(),commander);
+                  // addStringValue("",commander);
+                 }
+                  LinkedHashMap<String,Object> obj12 =  (LinkedHashMap<String,Object>) obj.get("idposteurfg") ;
+           int pos12 = 1;
+          e1.setNom_posteur(obj12.get("nom").toString());
+      
+                 
+      
+           listTasks.add(e1);
+                   
+            }} 
+            catch (IOException ex) {
+            }
+  
+              
+                });
+              
+               NetworkManager.getInstance().addToQueueAndWait(con3);
+        });
+    
+        
         
         Tabs swipe = new Tabs();
 
@@ -178,6 +241,7 @@ public class EchangeForm extends BaseForm {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
             
         });
+    
      int id=Session.getInstance().getLoggedInUser().getId();
         ConnectionRequest con = new ConnectionRequest();
         con.setUrl("http://localhost/fixitweb1/web/app_dev.php/Iheb/afficherEchangeMobile/"+id);  
@@ -207,6 +271,7 @@ public class EchangeForm extends BaseForm {
            LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurfg") ;
            int pos = 1;
           e.setNom_posteur(obj1.get("nom").toString());
+             
        Button commander =new Button("commander");
                
                  if(obj.get("etatValidation").toString().equals("noncommand"))
@@ -256,6 +321,7 @@ public class EchangeForm extends BaseForm {
         //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);
       
     }
+
           private void addStringValue(String s, Component v) {
         add(BorderLayout.west(new Label(s, "PaddedLabel")).
                 add(BorderLayout.CENTER, v));
