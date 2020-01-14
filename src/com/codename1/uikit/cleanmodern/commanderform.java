@@ -23,6 +23,7 @@ import static com.codename1.ui.Component.CENTER;
 import static com.codename1.ui.Component.LEFT;
 import static com.codename1.ui.Component.RIGHT;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Graphics;
@@ -197,13 +198,38 @@ public class commanderform extends BaseForm {
         //add(obj.get("propositionOfferte").toString());
            LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("id2") ;
            int pos = 1;
-          e.setNom_posteur(obj1.get("username").toString());
+          e.setNom_posteur(obj1.get("nom").toString());
          
   
                        
                             addButton3(res.getImage("dog.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString(),obj1.get("nom").toString());
                           
-                      
+                      Button supprimer =new Button("supprimer ");
+                       addStringValue("",supprimer );
+                          supprimer.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                         int id=Session.getInstance().getLoggedInUser().getId();
+                       Echange ec = new Echange();
+                    float idec = Float.parseFloat(obj.get("id").toString());
+                     ConnectionRequest con1 = new ConnectionRequest();
+               String Url1 ="http://localhost/fixitweb1/web/app_dev.php/Iheb/suppEchangecommanderMobile/"+idec;
+                 con1.setUrl(Url1);// Insertion de l'URL de notre demande de connexion
+                  Dialog.show("supp", "avec sucess", "OK", "Cancel");  
+                  // commanderform.r
+                    con1.addResponseListener((e) -> {
+            String str = new String(con1.getResponseData());//Récupération de la réponse du serveur
+            System.out.println(str);//Affichage de la réponse serveur sur la console
+                       
+   
+    });
+              NetworkManager.getInstance().addToQueueAndWait(con1);   
+                    
+     
+                    
+                    }
+                    
+                });
 
                 listTasks.add(e);
             }} 
@@ -220,7 +246,12 @@ public class commanderform extends BaseForm {
         //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);*/
       
     }
-     
+           private void addStringValue(String s, Component v) {
+        add(BorderLayout.west(new Label(s, "PaddedLabel")).
+                add(BorderLayout.CENTER, v));
+        add(createLineSeparator(0xF4BE1B));
+        
+    }
     
     private void updateArrowPosition(Button b, Label arrow) {
         arrow.getUnselectedStyle().setMargin(LEFT, b.getX() + b.getWidth() / 2 - arrow.getWidth() / 2);
@@ -291,7 +322,7 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
         
        Label comments = new Label( " Description : "+description , "NewsBottomLine"); 
      //  FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
-         Label user = new Label( "username  : "+nom , "NewsBottomLine"); 
+         Label user = new Label( "commander par : "+nom , "NewsBottomLine"); 
       // FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
     
        

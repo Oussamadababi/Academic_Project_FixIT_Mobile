@@ -56,10 +56,10 @@ import java.util.Map;
  *
  * @author Asus
  */
-public class affiche_jobeur extends BaseForm{
+public class affiche_jobeur_plombier extends BaseForm{
       static int idj;
    
-    public affiche_jobeur(Resources res) {
+    public affiche_jobeur_plombier(Resources res) {
         
 //         Form f ;
 //        Button p;
@@ -88,11 +88,11 @@ public class affiche_jobeur extends BaseForm{
 //    }
       
         
-         super("Jobeurs Electriciter", BoxLayout.y());
+         super("Jobeurs Plomberie", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
-        setTitle("Jobeurs Electriciter");
+        setTitle("Jobeurs Plomberie");
         getContentPane().setScrollVisible(false);
         
         
@@ -103,7 +103,7 @@ public class affiche_jobeur extends BaseForm{
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("electricte.JPG"), spacer1, "", "", " ");
+        addTab(swipe, res.getImage("Plomberie.JPG"), spacer1, "", "", " ");
         
                 
         swipe.setUIID("Container");
@@ -156,7 +156,7 @@ public class affiche_jobeur extends BaseForm{
                         
                         {
                        
-                           new MesOffrePosteur (res).show();
+                           new MesEchangeForm (res).show();
                           
                         }
                         }
@@ -189,7 +189,7 @@ public class affiche_jobeur extends BaseForm{
      int id=Session.getInstance().getLoggedInUser().getId();
         
         ConnectionRequest con = new ConnectionRequest();
-         con.setUrl("http://localhost/fixitweb1/web/app_dev.php/oussama/affichemobile/Electriciter"); 
+         con.setUrl("http://localhost/fixitweb1/web/app_dev.php/oussama/affichemobile/Plombier"); 
       ArrayList<User> listJobeurs = new ArrayList<>();
             con.addResponseListener((NetworkEvent evt) -> {
             try {
@@ -200,7 +200,7 @@ public class affiche_jobeur extends BaseForm{
                 List<Map<String, Object>> list = (List<Map<String, Object>>) tasks.get("root");
              for (Map<String, Object> obj : list) {
                 User U = new User();
-           addButton3(res.getImage("electricte.JPG"),false,55,55,obj.get("nom").toString(),obj.get("prenom").toString(),obj.get("tel").toString(),obj.get("specialite").toString(),res);
+           addButton3(res.getImage("Plomberie.JPG"),false,55,55,obj.get("nom").toString(),obj.get("prenom").toString(),obj.get("tel").toString(),obj.get("specialite").toString(),res);
                  Button b =new Button("commander");
                  addStringValue("",b);
                  b.addActionListener(new ActionListener() {

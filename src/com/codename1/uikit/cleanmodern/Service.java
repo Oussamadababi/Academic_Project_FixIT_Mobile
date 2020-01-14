@@ -179,9 +179,9 @@ public class Service extends BaseForm {
          addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9,res,"Conciergerie");
     }
 
-   /* Service() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
+//    Service() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
     
     private void updateArrowPosition(Button b, Label arrow) {
         arrow.getUnselectedStyle().setMargin(LEFT, b.getX() + b.getWidth() / 2 - arrow.getWidth() / 2);
@@ -269,11 +269,11 @@ public class Service extends BaseForm {
             
        }
        if(Specialite.equals("Plombier")){
-       image.addActionListener(e -> new WalkthruForm(res).show());}
+       image.addActionListener(e -> new affiche_jobeur_plombier(res).show());}
        if(Specialite.equals("Menage")){
-       image.addActionListener(e -> new WalkthruForm(res).show());}
+       image.addActionListener(e -> new affiche_jobeur_jardinage(res).show());}
        if(Specialite.equals("Jardinage")){
-       image.addActionListener(e -> new WalkthruForm(res).show());}
+       image.addActionListener(e -> new affiche_jobeur_menage(res).show());}
        if(Specialite.equals("Peinture")){
        image.addActionListener(e -> new WalkthruForm(res).show());}
        if(Specialite.equals("Conciergerie")){

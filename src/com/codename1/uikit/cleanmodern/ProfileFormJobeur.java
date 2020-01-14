@@ -64,15 +64,15 @@ import java.io.OutputStream;
  *
  * @author Shai Almog
  */
-public class ProfileForm extends BaseForm {
+public class ProfileFormJobeur extends BaseFormJ {
     private Form hi;
 
-    public ProfileForm(Resources res) {
+    public ProfileFormJobeur(Resources res) {
         super("Newsfeed", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
-        setTitle("Profile Posteur");
+        setTitle("Profile Jobeur");
         getContentPane().setScrollVisible(false);
         
         super.addSideMenu(res);
