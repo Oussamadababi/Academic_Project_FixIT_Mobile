@@ -206,7 +206,7 @@ public class EchangeForm extends BaseForm {
         //add(obj.get("propositionOfferte").toString());
            LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurfg") ;
            int pos = 1;
-          e.setNom_posteur(obj1.get("username").toString());
+          e.setNom_posteur(obj1.get("nom").toString());
        Button commander =new Button("commander");
                
                  if(obj.get("etatValidation").toString().equals("noncommand"))
@@ -333,7 +333,7 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
         
        Label comments = new Label( " Description : "+description , "NewsBottomLine"); 
      //  FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
-         Label user = new Label( "username  : "+nom , "NewsBottomLine"); 
+         Label user = new Label( "Pubiler par  : "+nom , "NewsBottomLine"); 
       // FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
     
        
