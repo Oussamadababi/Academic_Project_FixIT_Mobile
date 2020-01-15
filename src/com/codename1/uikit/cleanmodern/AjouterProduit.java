@@ -278,13 +278,9 @@ public class AjouterProduit extends BaseForm {
         con.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/afficherCategorieMobile");  
         ArrayList<Categorie> listTasks = new ArrayList<>();
         con.addResponseListener((NetworkEvent evt) -> {
-       ControleSaisie C= new ControleSaisie();            
-            if(Prix.getText().isEmpty())
-        {controlepayment = false;}
-        else if(!Prix.getText().isEmpty()&&C.isInt(Prix.getText())) controlepayment = false;
-            
-            
-            if(controlepayment){
+                 
+          
+         
             try {
                 String aff=new String(con.getResponseData());
                 JSONParser j = new JSONParser();// Instanciation d'un objet JSONParser permettant le parsing du résultat json
@@ -302,10 +298,8 @@ public class AjouterProduit extends BaseForm {
             catch (IOException ex) {
                 
             }
-            }
-            else{
-                Dialog.show("Erreur de saisie ", "veuillez verifier vos coordonnées " , "OK", null);
-            }
+            
+          
         });
         NetworkManager.getInstance().addToQueueAndWait(con); 
         addStringValue("",image);
@@ -342,9 +336,19 @@ public class AjouterProduit extends BaseForm {
                                   idd=(int) id;
                              }
 
-                             int prix2=Integer.parseInt(Prix.getText());
+                            
+                             
+                             ControleSaisie C= new ControleSaisie();
+                             if(Prix.getText().isEmpty())
+                                {controlepayment = false;}
+                                 else if(!Prix.getText().isEmpty()&&C.isInt(Prix.getText())) controlepayment = true;
+            
+            
+                                if(controlepayment){
+                              int prix2=Integer.parseInt(Prix.getText());
                              int num=Integer.parseInt(Num.getText());
                              int idUser= Session.getInstance().getLoggedInUser().getId();
+                             
                              Task produit = new Task(NomProduit.getText(),Description.getText(),prix2,num,idUser);
                              ConnectionRequest con = new ConnectionRequest();// création d'une nouvelle demande de connexion
                              String Url = "http://localhost/fixitweb1/web/app_dev.php/wael/ajouterproduitMobile?nomproduit="+produit.getNomproduit()+ "&description=" + produit.getDescription()+"&prix="+produit.getPrix()+"&numero="+produit.getNum()+"&idposteurFg="+produit.getIdposteur_fg()+"&categorie="+idd;// création de l'URL
@@ -352,16 +356,16 @@ public class AjouterProduit extends BaseForm {
                         con.addResponseListener((e) -> {
                          String str = new String(con.getResponseData());//Récupération de la réponse du serveur
                          System.out.println(str);//Affichage de la réponse serveur sur la console
-
-                          });
-                       
                         
-                      
+                          });
+                           NetworkManager.getInstance().addToQueueAndWait(con);
                             Dialog.show("Ajouté ", "Produit ajouté avec succés " , "OK", null);
+                            }
+                         else{
+                Dialog.show("Erreur de saisie ", "veuillez verifier vos coordonnées " , "OK", null);
+                           }
                             
-                       
-                            
-                          NetworkManager.getInstance().addToQueueAndWait(con);
+                          
                          }
                          catch (IOException ex) {
                          }        
