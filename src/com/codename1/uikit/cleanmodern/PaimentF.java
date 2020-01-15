@@ -4,8 +4,12 @@
  * and open the template in the editor.
  */
 package com.codename1.uikit.cleanmodern;
+import Entites.Categorie;
 import Entites.Task;
+import Service.ControleSaisie;
+import Service.ServicePaiement;
 import Service.Session;
+import com.codename1.charts.views.DialChart;
 import com.codename1.components.ImageViewer;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
@@ -23,6 +27,7 @@ import static com.codename1.ui.Component.CENTER;
 import static com.codename1.ui.Component.LEFT;
 import static com.codename1.ui.Component.RIGHT;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.FontImage;
@@ -47,6 +52,9 @@ import com.codename1.ui.layouts.Layout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
+import com.stripe.exception.CardException;
+import com.stripe.exception.InvalidRequestException;
+import com.stripe.exception.StripeException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -57,16 +65,16 @@ import java.util.Map;
  *
  * @author waelb
  */
-public class Produit extends BaseForm  {
+public class PaimentF extends BaseForm  {
     
         Image imgg;
         EncodedImage enc ;
      Container cnt = new Container();
      Container cnt0 = new Container();
-     
-    public Produit(Resources res) {
+     public boolean controlepayment=true;
+    public PaimentF(Resources res,Image imgg, String title,String description,int Prix,int Num,int id) {
        
-        super("Produit", BoxLayout.y());
+        super("Paiment", BoxLayout.y());
         ImageViewer img= new ImageViewer();
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
@@ -77,30 +85,13 @@ public class Produit extends BaseForm  {
         
         super.addSideMenu(res);
 
-        
-        tb.addSearchCommand((ActionListener) (ActionEvent e) -> {
-           String a= (String)e.getSource();
-            if (a==null || a.equals("")){
-                cnt0.removeAll();
-                affichage(res);
-                
-            }
-            else{
-                cnt0.removeAll();
-                Recherche(a,res);
-            }
-           
-       });
-           
-     
- 
-        
+    
         Tabs swipe = new Tabs();
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-         addTab(swipe, res.getImage("home1.jpg"), spacer1, "  ", "", " ");
-        addTab(swipe, res.getImage("home2.jpg"), spacer2, " ", "", "");
+         addTab(swipe,imgg, spacer1, "  ", "", " ");
+        addTab(swipe, imgg, spacer2, " ", "", "");
                 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -140,177 +131,102 @@ public class Produit extends BaseForm  {
         Component.setSameSize(radioContainer, spacer1, spacer2);
         add(LayeredLayout.encloseIn(swipe, radioContainer));
         
-        ButtonGroup barGroup = new ButtonGroup();
-        RadioButton all = RadioButton.createToggle("All", barGroup);
-        all.setUIID("SelectBar");
-        all.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-               new Produit(res).show();
-            }
-        });
-       // all.setSelectedStyle(style);
-        RadioButton featured = RadioButton.createToggle("My products", barGroup);
-        featured.setUIID("SelectBar");
-        featured.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-               new MesProduits(res).show();
-            }
-        });
         
-        
-        RadioButton popular = RadioButton.createToggle("Add products", barGroup);
-        popular.setUIID("SelectBar");
-        popular.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-               new AjouterProduit(res).show();
-            }
-        });
-
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         
-        add(LayeredLayout.encloseIn(
-                GridLayout.encloseIn(3, all, featured, popular),
-                FlowLayout.encloseBottom(arrow)
-        ));
         
-        all.setSelected(true);
-        arrow.setVisible(false);
-        addShowListener(e -> {
-            arrow.setVisible(true);
-            updateArrowPosition(all, arrow);
-        });
-        bindButtonSelection(all, arrow);
-        bindButtonSelection(featured, arrow);
-        bindButtonSelection(popular, arrow);
-       // bindButtonSelection(myFavorite, arrow);
-        // special case for rotation
-        addOrientationListener(e -> {
-            updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
-        });
         add(cnt0);
-        affichage(res);
+        addButton(imgg, title, focusScrolling, LEFT, CENTER, description, Prix, Num);
         
+        TextField Card = new TextField();
+        Card.setUIID("TextFieldBlack");
+        addStringValue("Card N°",Card);
+        TextField mois = new TextField();
+        mois.setUIID("TextFieldBlack");
+        addStringValue("MM",mois);
+        TextField year = new TextField();
+        year.setUIID("TextFieldBlack");
+        addStringValue("YY",year);
+        TextField cvc = new TextField(TextField.PASSWORD);
+        cvc.setUIID("TextFieldBlack");
+        addStringValue("CVC",cvc);
+        Button payer=new Button("Payer");
+        addStringValue("",payer);
+        
+        
+        payer.addActionListener((evt) -> {
+                 
+                ControleSaisie C= new ControleSaisie();
+                 if(year.getText().isEmpty())
+            {controlepayment = false; }
+          else if(!C.anneeisValid(year.getText()) )
+        {controlepayment = false; } 
+          else if(!year.getText().isEmpty()&&C.anneeisValid(year.getText())){controlepayment = true; }
+     
+           if(mois.getText().isEmpty())
+        {controlepayment = false; }
+           else if(!C.moisisValid(mois.getText()) )
+        {controlepayment = false; } 
+          else if(!mois.getText().isEmpty()&&C.moisisValid(mois.getText())){ controlepayment = true;}
+       
+       if(cvc.getText().isEmpty())
+        {controlepayment = false; }
+       else if(!C.cvcisValid(cvc.getText()) )
+        {controlepayment = false; } 
+          else if(!cvc.getText().isEmpty()&&C.cvcisValid(cvc.getText())) {controlepayment = true;}
+   
+        if(Card.getText().isEmpty())
+        {controlepayment = false;  }
+        else if(!C.cardisValid(Card.getText()) )
+        {controlepayment = false; } 
+          else if(!Card.getText().isEmpty()&&C.cardisValid(Card.getText())) {controlepayment = true;}
+                
+          
+                if(controlepayment){
+                ServicePaiement aa=new ServicePaiement();
+                String card=Card.getText();
+                String Cvc=cvc.getText();
+                int Mois=Integer.parseInt(mois.getText());
+                int Year=Integer.parseInt(year.getText());
+                    ConnectionRequest con = new ConnectionRequest();
+                    con.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/delete/"+id);   
+                    NetworkManager.getInstance().addToQueueAndWait(con); 
+                    try {
+                    aa.payer(card,Year,Mois, Cvc, Prix);   
+                
+                    Dialog.show("Paiemment ", "Paiemment effectué avec succés " , "OK", null);
+                    new Produit(res).show();
+                    
+                  
+                    
+                    
+                    
+                    
+                } catch (InvalidRequestException ex) {
+                   Dialog.show("Paiemment ", "Erreur de Paiement " , "OK", null);
+                } catch (CardException ex) {
+                    Dialog.show("Paiemment ", "Erreur de Paiement " , "OK", null);
+                } catch (StripeException ex) {
+                    Dialog.show("Paiemment ", "Erreur de Paiement " , "OK", null);
+                }
+                }
+                else{
+                    Dialog.show("Erreur de saisie ", "veuillez verifier vos coordonnées " , "OK", null);
+                }
+      
+        });
+  
+  
   
     }
     
-   
+       
     
-    
-    
-    public void Recherche(String a,Resources res){
         
-        int idd= Session.getInstance().getLoggedInUser().getId();
-        ConnectionRequest con3 = new ConnectionRequest();
-        con3.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/RechercheProduitMobile/"+idd+"/"+a);
-          con3.addResponseListener((NetworkEvent evt) -> {
-           ArrayList<Task> listTasks = new ArrayList<>();
-            try {
-                //(new String(con.getResponseData()));
-                String aff=new String(con3.getResponseData());
-                JSONParser j = new JSONParser();// Instanciation d'un objet JSONParser permettant le parsing du résultat json
-                Map<String, Object> tasks = j.parseJSON(new CharArrayReader(aff.toCharArray()));
-                List<Map<String, Object>> list = (List<Map<String, Object>>) tasks.get("root");
-             for (Map<String, Object> obj : list) {
-                Task b = new Task();
-                float id = Float.parseFloat(obj.get("id").toString());
-                float prix = Float.parseFloat(obj.get("prix").toString());
-                float num = Float.parseFloat(obj.get("num").toString());
-                b.setId((int) id);
-               int numero=(int) num-1;
-               int prixx=(int) prix;
-               String description= obj.get("description").toString();
-               String nomproduit= obj.get("nomproduit").toString();
-
- 
-        try {
-            enc = EncodedImage.create("/load.png");
-        } catch (IOException ex) { 
-        }
- 
-        if (obj.get("imageProduit")==null)
-         {
-             String url2="http://localhost/fixitweb1/web/upload/aucune.jpg";
-             imgg=URLImage.createToStorage(enc,url2,url2,URLImage.RESIZE_SCALE);
-         }
-         else{
-            String url="http://localhost/fixitweb1/web/upload/"+obj.get("imageProduit").toString();
-             imgg=URLImage.createToStorage(enc,url,url,URLImage.RESIZE_SCALE);
-         }
-        addButton(imgg, nomproduit, false, 26, 32, description,prixx,numero,res,(int) id);
-           LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurFg") ;
-           int pos = 1;
-           b.setUsername(obj1.get("username").toString());
-                listTasks.add(b);
-            }} 
-            catch (IOException ex) {
-            }
-        });
-        NetworkManager.getInstance().addToQueueAndWait(con3);
-             
-    }
-    
-    
-    
-    
-    
-   public void affichage(Resources res ){
-       int idd= Session.getInstance().getLoggedInUser().getId();
-        ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/afficherproduitMobile/"+idd);  
-        con.addResponseListener((NetworkEvent evt) -> {
-            ArrayList<Task> listTasks = new ArrayList<>();
-            try {
-                //(new String(con.getResponseData()));
-                String aff=new String(con.getResponseData());
-                JSONParser j = new JSONParser();// Instanciation d'un objet JSONParser permettant le parsing du résultat json
-                Map<String, Object> tasks = j.parseJSON(new CharArrayReader(aff.toCharArray()));
-                List<Map<String, Object>> list = (List<Map<String, Object>>) tasks.get("root");
-             for (Map<String, Object> obj : list) {
-                Task e = new Task();
-                float id = Float.parseFloat(obj.get("id").toString());
-                float prix = Float.parseFloat(obj.get("prix").toString());
-                float num = Float.parseFloat(obj.get("num").toString());
-                e.setId((int) id);
-               int numero=(int) num-1;
-               int prixx=(int) prix;
-               String description= obj.get("description").toString();
-               String nomproduit= obj.get("nomproduit").toString();
-
- 
-        try {
-            enc = EncodedImage.create("/load.png");
-        } catch (IOException ex) { 
-        }
- 
-        if (obj.get("imageProduit")==null)
-         {
-             String url2="http://localhost/fixitweb1/web/upload/aucune.jpg";
-             imgg=URLImage.createToStorage(enc,url2,url2,URLImage.RESIZE_SCALE);
-         }
-         else{
-            String url="http://localhost/fixitweb1/web/upload/"+obj.get("imageProduit").toString();
-             imgg=URLImage.createToStorage(enc,url,url,URLImage.RESIZE_SCALE);
-         }
-        
-        
-        addButton(imgg, nomproduit, false, 26, 32, description,prixx,numero,res,(int)id);
-
-           LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurFg") ;
-           int pos = 1;
-           e.setUsername(obj1.get("username").toString());
-                listTasks.add(e);
-            }} 
-            catch (IOException ex) {
-            }
-        });
-        NetworkManager.getInstance().addToQueueAndWait(con);  
-
-   }
-    
-    
+      private void addStringValue(String s, Component v) {
+        add(BorderLayout.west(new Label(s, "PaddedLabel")).
+                add(BorderLayout.CENTER, v));
+        add(createLineSeparator(0xF4BE1B));}
     
     private void updateArrowPosition(Button b, Label arrow) {
         arrow.getUnselectedStyle().setMargin(LEFT, b.getX() + b.getWidth() / 2 - arrow.getWidth() / 2);
@@ -357,7 +273,7 @@ public class Produit extends BaseForm  {
         swipe.addTab("", page1);
     }
    
-   private void addButton(Image img, String title, boolean liked, int likeCount, int commentCount,String description,int Prix,int Num,Resources res,int id) {
+   private void addButton(Image img, String title, boolean liked, int likeCount, int commentCount,String description,int Prix,int Num) {
        int height = Display.getInstance().convertToPixels(11.5f);
        int width = Display.getInstance().convertToPixels(14f);
        Button image = new Button(img.fill(width, height));
@@ -389,11 +305,22 @@ public class Produit extends BaseForm  {
                        comments
                        
                ));
-
+       
+       
+       
+       
+       
+       
+       
        cnt0.add(cnt);
-   
+       
+       
+       
+      cnt.addPointerPressedListener((evt) -> {
+          cnt0.removeAll();
+      });
        image.addActionListener((evt) -> {
-            new PaimentF(res,img,title,description,Prix,Num,id).show();
+            
        });
        
    }

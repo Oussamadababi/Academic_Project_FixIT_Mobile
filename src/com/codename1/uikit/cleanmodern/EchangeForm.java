@@ -115,11 +115,36 @@ public class EchangeForm extends BaseForm {
         all.setUIID("SelectBar");
         RadioButton featured = RadioButton.createToggle("Mes Trocs", barGroup);
         featured.setUIID("SelectBar");
-        RadioButton popular = RadioButton.createToggle("Trocs", barGroup);
+        RadioButton popular = RadioButton.createToggle("Ajouter Trocs", barGroup);
        popular.setUIID("SelectBar");
-          RadioButton acc = RadioButton.createToggle("commander", barGroup);
+          RadioButton acc = RadioButton.createToggle("Trocs commandée", barGroup);
        acc.setUIID("SelectBar");
+       /*  RadioButton pdf = RadioButton.createToggle("pdf", barGroup);
+       acc.setUIID("SelectBar");*/
        
+     /*   pdf.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        
+                        {
+                       
+                         ConnectionRequest conp = new ConnectionRequest();
+               String Url ="http://localhost/fixitweb1/web/app_dev.php/Iheb/indexpdf";
+                 conp.setUrl(Url);// Insertion de l'URL de notre demande de connexion
+  
+                 // Dialog.show("Ajout", "avec sucess", "OK", "Cancel");  
+                 //new MesEchangeForm (res).show();
+                 
+       
+        conp.addResponseListener((e) -> {
+            String str = new String(conp.getResponseData());//Récupération de la réponse du serveur
+            System.out.println(str);//Affichage de la réponse serveur sur la console
+      
+    });   
+                     NetworkManager.getInstance().addToQueueAndWait(conp);      
+                        }
+                        }
+                });*/
          popular.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
