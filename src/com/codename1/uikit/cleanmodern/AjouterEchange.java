@@ -7,6 +7,8 @@ package com.codename1.uikit.cleanmodern;
 
 import Entites.Echange;
 import Service.Session;
+import com.codename1.capture.Capture;
+import com.codename1.components.MultiButton;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.ShareButton;
 import com.codename1.components.SpanLabel;
@@ -14,9 +16,15 @@ import com.codename1.components.ToastBar;
 import com.codename1.io.AccessToken;
 import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
+import com.codename1.io.FileSystemStorage;
 import com.codename1.io.JSONParser;
+import com.codename1.io.Log;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
+import com.codename1.io.Util;
+import com.codename1.l10n.SimpleDateFormat;
+import com.codename1.media.Media;
+import com.codename1.media.MediaManager;
 import com.codename1.ui.Button;
 import com.codename1.ui.ButtonGroup;
 import com.codename1.ui.Component;
@@ -55,6 +63,9 @@ import java.util.Map;
 import com.codename1.ui.Command;
 import com.codename1.share.ShareService;
 import com.codename1.share.FacebookShare;
+import com.codename1.ui.Form;
+import com.codename1.ui.plaf.UIManager;
+import java.util.Date;
 
 
 /**
@@ -199,12 +210,97 @@ public class AjouterEchange extends BaseForm {
         //Des.setUIID("TextFieldBlack");
         addStringValue("Description",  Des);
         Button bt = new Button("ajouter");
+          Button bt1= new Button("vocal");
            /* ShareButton s = new ShareButton();
         s.setText("Share");
         s.setTextToShare("Codename One is so COOL!!!");
-         addStringValue("",  bt);
+       
            addStringValue("",  s);*/
-     
+       addStringValue("",  bt);
+         addStringValue("",  bt1);
+         
+        bt1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+         Form hi = new Form("Capture", BoxLayout.y());
+hi.setToolbar(new Toolbar());
+Style s = UIManager.getInstance().getComponentStyle("Title");
+FontImage icon = FontImage.createMaterial(FontImage.MATERIAL_MIC, s);
+
+FileSystemStorage fs = FileSystemStorage.getInstance();
+String recordingsDir = fs.getAppHomePath() + "recordings/";
+fs.mkdir(recordingsDir);
+try {
+    for(String file : fs.listFiles(recordingsDir)) {
+        hi.removeAll();
+        MultiButton mb = new MultiButton(file.substring(file.lastIndexOf("/") + 1));
+        mb.addActionListener((e) -> {
+            try {
+                Media m = MediaManager.createMedia(recordingsDir + file, false);
+                m.play();
+            } catch(IOException err) {
+                Log.e(err);
+            }
+        });
+        hi.add(mb);
+    }
+
+    hi.getToolbar().addCommandToRightBar("", icon, (ev1) -> {
+        try {
+            String file = Capture.captureAudio();
+           
+            if(file != null) {
+                
+                SimpleDateFormat sd = new SimpleDateFormat("yyyy-MMM-dd-kk-mm");
+                String fileName =sd.format(new Date());
+                String filePath = recordingsDir + fileName;
+                Util.copy(fs.openInputStream(file), fs.openOutputStream(filePath));
+                MultiButton mb = new MultiButton(fileName);
+                  
+                mb.addActionListener((e) -> {
+                    try {
+                        Media m = MediaManager.createMedia(filePath, false);
+                        m.play();
+                    } catch(IOException err) {
+                        Log.e(err);
+                    }
+                });
+                hi.add(mb);
+                hi.revalidate();
+             
+            }
+        } catch(IOException err) {
+            Log.e(err);
+        }
+    });
+} catch(IOException err) {
+    Log.e(err);
+}
+  hi.getToolbar().addCommandToLeftBar("Back",
+                    null, e -> {
+                      
+                          new MesEchangeForm (res).show();
+                    });
+hi.show();
+
+            }
+        });
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
          bt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
