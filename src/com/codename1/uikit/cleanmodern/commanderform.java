@@ -68,8 +68,8 @@ public class commanderform extends BaseForm {
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("dog.jpg"), spacer1, "", "", " ");
-        addTab(swipe, res.getImage("dog.jpg"), spacer2, "", "", "");
+        addTab(swipe, res.getImage("troc.jpg"), spacer1, "", "", " ");
+        addTab(swipe, res.getImage("troc.jpg"), spacer2, "", "", "");
                 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -214,7 +214,7 @@ public class commanderform extends BaseForm {
          
   
                        
-                            addButton3(res.getImage("dog.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString(),obj1.get("nom").toString());
+                            addButton3(res.getImage("troc.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString(),obj1.get("nom").toString());
                           
                       Button supprimer =new Button("supprimer ");
                        addStringValue("",supprimer );

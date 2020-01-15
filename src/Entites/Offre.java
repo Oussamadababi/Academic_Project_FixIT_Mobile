@@ -95,6 +95,15 @@ public class Offre {
         this.idj = idj;
     }
 
+    public Offre(String adress, Date date, int tel, String desciption, int idpo, int idj) {
+        this.adress = adress;
+        this.date = date;
+        this.tel = tel;
+        this.desciption = desciption;
+        this.idpo = idpo;
+        this.idj = idj;
+    }
+
   
      
     

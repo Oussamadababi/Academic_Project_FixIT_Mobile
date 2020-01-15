@@ -88,8 +88,8 @@ public class AjouterEchange extends BaseForm {
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("dog.jpg"), spacer1, "", "", " ");
-        addTab(swipe, res.getImage("dog.jpg"), spacer2, "", "", "");
+        addTab(swipe, res.getImage("troc.jpg"), spacer1, "", "", " ");
+        addTab(swipe, res.getImage("troc.jpg"), spacer2, "", "", "");
                 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
