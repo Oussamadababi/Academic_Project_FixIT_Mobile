@@ -239,7 +239,7 @@ public class Produit extends BaseForm  {
             String url="http://localhost/fixitweb1/web/upload/"+obj.get("imageProduit").toString();
              imgg=URLImage.createToStorage(enc,url,url,URLImage.RESIZE_SCALE);
          }
-        addButton(imgg, nomproduit, false, 26, 32, description,prixx,numero,res);
+        addButton(imgg, nomproduit, false, 26, 32, description,prixx,numero,res,(int) id);
            LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurFg") ;
            int pos = 1;
            b.setUsername(obj1.get("username").toString());
@@ -296,7 +296,7 @@ public class Produit extends BaseForm  {
          }
         
         
-        addButton(imgg, nomproduit, false, 26, 32, description,prixx,numero,res);
+        addButton(imgg, nomproduit, false, 26, 32, description,prixx,numero,res,(int)id);
 
            LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurFg") ;
            int pos = 1;
@@ -357,7 +357,7 @@ public class Produit extends BaseForm  {
         swipe.addTab("", page1);
     }
    
-   private void addButton(Image img, String title, boolean liked, int likeCount, int commentCount,String description,int Prix,int Num,Resources res) {
+   private void addButton(Image img, String title, boolean liked, int likeCount, int commentCount,String description,int Prix,int Num,Resources res,int id) {
        int height = Display.getInstance().convertToPixels(11.5f);
        int width = Display.getInstance().convertToPixels(14f);
        Button image = new Button(img.fill(width, height));
@@ -393,7 +393,7 @@ public class Produit extends BaseForm  {
        cnt0.add(cnt);
    
        image.addActionListener((evt) -> {
-            new PaimentF(res,img,title,description,Prix,Num).show();
+            new PaimentF(res,img,title,description,Prix,Num,id).show();
        });
        
    }
