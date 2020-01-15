@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package com.codename1.uikit.cleanmodern;
+import Entites.Categorie;
 import Entites.Task;
 import Service.ControleSaisie;
 import Service.ServicePaiement;
@@ -71,7 +72,7 @@ public class PaimentF extends BaseForm  {
      Container cnt = new Container();
      Container cnt0 = new Container();
      public boolean controlepayment=true;
-    public PaimentF(Resources res,Image imgg, String title,String description,int Prix,int Num) {
+    public PaimentF(Resources res,Image imgg, String title,String description,int Prix,int Num,int id) {
        
         super("Paiment", BoxLayout.y());
         ImageViewer img= new ImageViewer();
@@ -154,11 +155,7 @@ public class PaimentF extends BaseForm  {
         
         
         payer.addActionListener((evt) -> {
-                 ServicePaiement aa=new ServicePaiement();
-                String card=Card.getText();
-                String Cvc=cvc.getText();
-                int Mois=Integer.parseInt(mois.getText());
-                int Year=Integer.parseInt(year.getText());
+                 
                 ControleSaisie C= new ControleSaisie();
                  if(year.getText().isEmpty())
             {controlepayment = false; }
@@ -186,11 +183,23 @@ public class PaimentF extends BaseForm  {
                 
           
                 if(controlepayment){
-                try {
-                    
-                    aa.payer(card,Year,Mois, Cvc, Prix);
+                ServicePaiement aa=new ServicePaiement();
+                String card=Card.getText();
+                String Cvc=cvc.getText();
+                int Mois=Integer.parseInt(mois.getText());
+                int Year=Integer.parseInt(year.getText());
+                    ConnectionRequest con = new ConnectionRequest();
+                    con.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/delete/"+id);   
+                    NetworkManager.getInstance().addToQueueAndWait(con); 
+                    try {
+                    aa.payer(card,Year,Mois, Cvc, Prix);   
+                
                     Dialog.show("Paiemment ", "Paiemment effectué avec succés " , "OK", null);
                     new Produit(res).show();
+                    
+                  
+                    
+                    
                     
                     
                 } catch (InvalidRequestException ex) {
