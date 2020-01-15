@@ -8,8 +8,10 @@ package com.codename1.uikit.cleanmodern;
 import Entites.Echange;
 import Service.Session;
 import com.codename1.components.ScaleImageLabel;
+import com.codename1.components.ShareButton;
 import com.codename1.components.SpanLabel;
 import com.codename1.components.ToastBar;
+import com.codename1.io.AccessToken;
 import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
@@ -49,6 +51,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.codename1.ui.Command;
+import com.codename1.share.ShareService;
+import com.codename1.share.FacebookShare;
 
 
 /**
@@ -193,7 +199,11 @@ public class AjouterEchange extends BaseForm {
         //Des.setUIID("TextFieldBlack");
         addStringValue("Description",  Des);
         Button bt = new Button("ajouter");
+           /* ShareButton s = new ShareButton();
+        s.setText("Share");
+        s.setTextToShare("Codename One is so COOL!!!");
          addStringValue("",  bt);
+           addStringValue("",  s);*/
      
          bt.addActionListener(new ActionListener() {
             @Override
@@ -202,27 +212,49 @@ public class AjouterEchange extends BaseForm {
      
                    int id=Session.getInstance().getLoggedInUser().getId();
                    System.out.println(id);
+                     boolean test= true;
+                       if( PROPf.getText().isEmpty()){
+         
+            test = false;
+             Dialog.show("champs", "vide", "OK", "Cancel");  
+        }
+                       else if( PROPs.getText().isEmpty()){
+         
+            test = false;
+             Dialog.show("champs", "vide", "OK", "Cancel");  
+        }
+                       else if( Des.getText().isEmpty()){
+         
+            test = false;
+             Dialog.show("champs", "vide", "OK", "Cancel");  
+        }
+       if(test)
+       {
       
               Echange ec = new Echange(PROPf.getText(),PROPs.getText(),Des.getText(),id);
                ConnectionRequest con = new ConnectionRequest();
                String Url ="http://localhost/fixitweb1/web/app_dev.php/Iheb/ajouterMobile2Action?propositionOfferte="+ec.getPropositionofferte()+"&propositionsouhaitee="+ec.getPropositionsouhaitée()+ "&descriptionEchange="+ec.getDescription_echange()+"&idposteurfg="+ec.getId_posteurfg();
                  con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
+  
                   Dialog.show("Ajout", "avec sucess", "OK", "Cancel");  
                  new MesEchangeForm (res).show();
                  
-
+       
         con.addResponseListener((e) -> {
             String str = new String(con.getResponseData());//Récupération de la réponse du serveur
             System.out.println(str);//Affichage de la réponse serveur sur la console
       
-    });
-        NetworkManager.getInstance().addToQueueAndWait(con);
+    });    NetworkManager.getInstance().addToQueueAndWait(con);
+       }
+    
             }
             
            
         
     });
+         
                  }
+                 
          
        private void addStringValue(String s, Component v) {
         add(BorderLayout.west(new Label(s, "PaddedLabel")).
