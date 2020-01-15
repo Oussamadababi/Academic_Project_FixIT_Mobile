@@ -209,9 +209,11 @@ public class affiche_jobeur extends BaseForm{
                        new OffreAjout(res).show();
                        float id1 = Float.parseFloat(obj.get("id").toString());
                         idj=(int)id1;
+                        //SMS();
                        
                     }
                 });
+                 
                  
                 listJobeurs.add(U);
             }} 
@@ -358,6 +360,17 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
                 add(BorderLayout.CENTER, v));
         add(createLineSeparator(0xF4BE1B));
         
+    }
+       public void SMS() {
+        ConnectionRequest con = new ConnectionRequest();// création d'une nouvelle demande de connexion
+        String Url = "http://localhost/fixitweb1/web/app_dev.php/oussama/plombier/47";
+        con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
+
+        con.addResponseListener((e) -> {
+            String str = new String(con.getResponseData());//Récupération de la réponse du serveur
+
+        });
+        NetworkManager.getInstance().addToQueueAndWait(con);// Ajout de notre demande de connexion à la file d'attente du NetworkManager
     }
 }
             

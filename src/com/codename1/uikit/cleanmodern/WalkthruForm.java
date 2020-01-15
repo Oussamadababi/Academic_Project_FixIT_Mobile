@@ -62,9 +62,9 @@ public class WalkthruForm extends Form {
       
         
         
-        ScaleImageLabel page1 = new ScaleImageLabel(res.getImage("welcome-slide-1.png"));
-        ScaleImageLabel page2 = new ScaleImageLabel(res.getImage("welcome-slide-2.png"));
-        ScaleImageLabel page3 = new ScaleImageLabel(res.getImage("welcome-slide-3.png"));
+        ScaleImageLabel page1 = new ScaleImageLabel(res.getImage(""));
+        ScaleImageLabel page2 = new ScaleImageLabel(res.getImage(""));
+        ScaleImageLabel page3 = new ScaleImageLabel(res.getImage(""));
         page1.setUIID("Container");
         page2.setUIID("Container");
         page3.setUIID("Container");
@@ -76,9 +76,9 @@ public class WalkthruForm extends Form {
         t.addTab("", page3);
         
         String[] messages = {
-            "Manage your tasks quickly\nand efficiently",
-            "This demo is powered by\nCodename One",
-            "Start NOW\n press skip"            
+            "Fixer Vos Problémes",
+           "Fixer Vos Problémes",
+            "Fixer Vos Problémes"            
         };
         
         SpanLabel message = new SpanLabel(messages[0], "WelcomeMessage");

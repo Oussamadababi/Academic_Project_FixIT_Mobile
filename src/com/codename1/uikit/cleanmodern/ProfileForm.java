@@ -59,7 +59,6 @@ import com.codename1.ui.util.Resources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import javax.mail.MessagingException;
 
 
 /**
@@ -102,7 +101,7 @@ public class ProfileForm extends BaseForm {
                     GridLayout.encloseIn(3, 
                             facebook,
                             FlowLayout.encloseCenter(
-                                new Label(res.getImage("profile-pic.jpg"), "PictureWhiteBackgrond")),
+                                new Label(res.getImage("avatar5.png"), "PictureWhiteBackgrond")),
                             twitter
                     )
                 )

@@ -8,6 +8,8 @@ package com.codename1.uikit.cleanmodern;
 
 import Entites.Categorie;
 import Entites.Task;
+import Service.ControleSaisie;
+import Service.ServicePaiement;
 import Service.Session;
 import com.codename1.components.ImageViewer;
 import com.codename1.components.ScaleImageLabel;
@@ -15,6 +17,7 @@ import com.codename1.components.SpanLabel;
 import com.codename1.components.ToastBar;
 import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
+import com.codename1.io.FileSystemStorage;
 import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
@@ -48,12 +51,18 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
+import com.codename1.ui.util.ImageIO;
 import com.codename1.ui.util.Resources;
+import com.stripe.exception.CardException;
+import com.stripe.exception.InvalidRequestException;
+import com.stripe.exception.StripeException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  *
@@ -64,8 +73,10 @@ public class AjouterProduit extends BaseForm {
     static int idd;
     Image imgg;
     EncodedImage enc ;
-   
-    
+    //private String fis2;
+    // FileInputStream fis22;
+    //private File file2;
+    public boolean controlepayment=true;
     public AjouterProduit(Resources res) {
        
         super("AjouterProduit", BoxLayout.y());
@@ -82,7 +93,7 @@ public class AjouterProduit extends BaseForm {
         ScaleImageLabel sl = new ScaleImageLabel();
            sl.setUIID("BottomPad");
         sl.setBackgroundType(Style.BACKGROUND_IMAGE_SCALED_FILL);
-
+       
         Tabs swipe = new Tabs();
 
         Label spacer1 = new Label();
@@ -173,16 +184,79 @@ public class AjouterProduit extends BaseForm {
         });
         
         
-            add(LayeredLayout.encloseIn(
-                sl,
-                BorderLayout.south(
-                    GridLayout.encloseIn(1, 
-                            FlowLayout.encloseCenter(
-                                new Label(res.getImage("profile-pic.jpg"), "PictureWhiteBackgrond"))
-                            
-                    )
-                )
-        ));
+     
+            
+        Button image = new Button("Ajouter une image ");
+        final String[] image_name = {""};
+        final String[] pathToBeStored={""};
+        
+        Label jobIcon = new Label();
+        
+        image.addActionListener((ActionEvent actionEvent) -> {
+        Display.getInstance().openGallery(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent ev) {
+            if (ev != null && ev.getSource() != null) {
+                String filePath = (String) ev.getSource();
+                int fileNameIndex = filePath.lastIndexOf("/") + 1;
+                String fileName = filePath.substring(fileNameIndex);
+                Image img = null;
+                try {
+                    img = Image.createImage(FileSystemStorage.getInstance().openInputStream(filePath));
+    		
+    	    } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                image_name[0] = System.currentTimeMillis() + ".jpg";
+                jobIcon.setIcon(img);
+                System.out.println(filePath);
+                System.out.println(image_name[0]);
+                
+                
+                
+                /*Stage stage = new Stage();    
+                stage.setTitle("File Chooser ");   
+                FileChooser fileChooser2 = new FileChooser();
+                fileChooser2.setTitle("Open image File");
+                file2 = fileChooser2.showOpenDialog(stage);*/
+               
+                    
+              
+                try {
+                    
+                        String url2="C:\\wamp64\\www\\fixitweb1\\web\\upload";
+                        //final String[] pathToBeStored2={"C:\\wamp64\\www\\fixitweb1\\web\\upload\\"+image_name};
+                        pathToBeStored[0] = FileSystemStorage.getInstance().getAppHomePath()+image_name[0];
+                        OutputStream os = FileSystemStorage.getInstance().openOutputStream(pathToBeStored[0]);
+                        ImageIO.getImageIO().save(img, os, ImageIO.FORMAT_JPEG, 0.9f);
+                        os.close();
+                        System.out.println(pathToBeStored);
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                
+                
+                
+                
+                
+                //FileInputStream fis22 = new FileInputStream(pathToBeStored);
+                
+                
+                
+                
+            }
+        }
+    }, Display.GALLERY_IMAGE);});
+
+        
+        
+        
+        
+        
+        
+            
+            
          ComboBox cb = new ComboBox();
         addStringValue("Categorie",cb);
         TextField NomProduit = new TextField();
@@ -204,6 +278,9 @@ public class AjouterProduit extends BaseForm {
         con.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/afficherCategorieMobile");  
         ArrayList<Categorie> listTasks = new ArrayList<>();
         con.addResponseListener((NetworkEvent evt) -> {
+                 
+          
+         
             try {
                 String aff=new String(con.getResponseData());
                 JSONParser j = new JSONParser();// Instanciation d'un objet JSONParser permettant le parsing du résultat json
@@ -221,12 +298,14 @@ public class AjouterProduit extends BaseForm {
             catch (IOException ex) {
                 
             }
+            
+          
         });
-        NetworkManager.getInstance().addToQueueAndWait(con);
+        NetworkManager.getInstance().addToQueueAndWait(con); 
+        addStringValue("",image);
         Button ajouter=new Button("Ajouter");
         addStringValue("",ajouter);
-        
-        
+       
         
         
         
@@ -237,6 +316,8 @@ public class AjouterProduit extends BaseForm {
         ajouter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
+                
+                
                  String a =(String) cb.getSelectedItem();
                 ConnectionRequest con1 = new ConnectionRequest();
                 con1.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/RechercheCategorieMobile/"+a);  
@@ -255,9 +336,19 @@ public class AjouterProduit extends BaseForm {
                                   idd=(int) id;
                              }
 
-                             int prix2=Integer.parseInt(Prix.getText());
+                            
+                             
+                             ControleSaisie C= new ControleSaisie();
+                             if(Prix.getText().isEmpty())
+                                {controlepayment = false;}
+                                 else if(!Prix.getText().isEmpty()&&C.isInt(Prix.getText())) controlepayment = true;
+            
+            
+                                if(controlepayment){
+                              int prix2=Integer.parseInt(Prix.getText());
                              int num=Integer.parseInt(Num.getText());
                              int idUser= Session.getInstance().getLoggedInUser().getId();
+                             
                              Task produit = new Task(NomProduit.getText(),Description.getText(),prix2,num,idUser);
                              ConnectionRequest con = new ConnectionRequest();// création d'une nouvelle demande de connexion
                              String Url = "http://localhost/fixitweb1/web/app_dev.php/wael/ajouterproduitMobile?nomproduit="+produit.getNomproduit()+ "&description=" + produit.getDescription()+"&prix="+produit.getPrix()+"&numero="+produit.getNum()+"&idposteurFg="+produit.getIdposteur_fg()+"&categorie="+idd;// création de l'URL
@@ -265,16 +356,16 @@ public class AjouterProduit extends BaseForm {
                         con.addResponseListener((e) -> {
                          String str = new String(con.getResponseData());//Récupération de la réponse du serveur
                          System.out.println(str);//Affichage de la réponse serveur sur la console
-
-                          });
-                       
                         
-                      
+                          });
+                           NetworkManager.getInstance().addToQueueAndWait(con);
                             Dialog.show("Ajouté ", "Produit ajouté avec succés " , "OK", null);
+                            }
+                         else{
+                Dialog.show("Erreur de saisie ", "veuillez verifier vos coordonnées " , "OK", null);
+                           }
                             
-                       
-                            
-                          NetworkManager.getInstance().addToQueueAndWait(con);
+                          
                          }
                          catch (IOException ex) {
                          }        
@@ -286,7 +377,7 @@ public class AjouterProduit extends BaseForm {
     }
     
  
-    
+   
     
    
     

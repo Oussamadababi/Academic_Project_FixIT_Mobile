@@ -6,25 +6,17 @@
 package com.codename1.uikit.cleanmodern;
 
 import Entites.Echange;
+import Entites.User;
+import Service.Posteur_service;
 import Service.Session;
-import com.codename1.capture.Capture;
-import com.codename1.components.MultiButton;
 import com.codename1.components.ScaleImageLabel;
-import com.codename1.components.ShareButton;
 import com.codename1.components.SpanLabel;
 import com.codename1.components.ToastBar;
-import com.codename1.io.AccessToken;
 import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
-import com.codename1.io.FileSystemStorage;
 import com.codename1.io.JSONParser;
-import com.codename1.io.Log;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
-import com.codename1.io.Util;
-import com.codename1.l10n.SimpleDateFormat;
-import com.codename1.media.Media;
-import com.codename1.media.MediaManager;
 import com.codename1.ui.Button;
 import com.codename1.ui.ButtonGroup;
 import com.codename1.ui.Component;
@@ -33,16 +25,15 @@ import static com.codename1.ui.Component.CENTER;
 import static com.codename1.ui.Component.LEFT;
 import static com.codename1.ui.Component.RIGHT;
 import com.codename1.ui.Container;
-import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.FontImage;
+import com.codename1.ui.Form;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
 import com.codename1.ui.RadioButton;
 import com.codename1.ui.Tabs;
 import com.codename1.ui.TextArea;
-import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
@@ -52,34 +43,58 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
-import com.codename1.ui.spinner.Picker;
+import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
+import com.codename1.ui.util.UIBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.codename1.ui.Command;
-import com.codename1.share.ShareService;
-import com.codename1.share.FacebookShare;
-import com.codename1.ui.Form;
-import com.codename1.ui.plaf.UIManager;
-import java.util.Date;
-
-
 /**
  *
- * @author Iheb
+ * @author Asus
  */
-public class AjouterEchange extends BaseForm {
-     public AjouterEchange(Resources res) {
-        super("Trocs", BoxLayout.y());
+public class affiche_jobeur_peinture extends BaseForm{
+      static int idj;
+   
+    public affiche_jobeur_peinture(Resources res) {
+        
+//         Form f ;
+//        Button p;
+//       Label label_nom;
+//         label_nom = new Label();
+//          f = new Form();
+//      f.add(label_nom);
+//     
+//      p= new Button("bachoul");
+//      f.add(p);
+//      label_nom.setText("aaasba");
+//        Posteur_service  a = new Posteur_service();
+//       User b=new User();
+//       ArrayList<User> listJobeurs = new ArrayList<>();
+//           listJobeurs=a.affich_jobeur("Electriciter");
+//            b= listJobeurs.get(0);
+//            System.out.println(b);
+//            
+//            for(User u:listJobeurs)
+//            {
+//             
+//               
+//                
+//     
+//        //To change body of generated methods, choose Tools | Templates.
+//    }
+      
+        
+         super("Jobeurs Peinture", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
-        setTitle("Trocs");
+        setTitle("Jobeurs Peinture");
         getContentPane().setScrollVisible(false);
+        
         
         super.addSideMenu(res);
         tb.addSearchCommand(e -> {});
@@ -88,8 +103,8 @@ public class AjouterEchange extends BaseForm {
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("dog.jpg"), spacer1, "", "", " ");
-        addTab(swipe, res.getImage("dog.jpg"), spacer2, "", "", "");
+        addTab(swipe, res.getImage("Peinture.jpg"), spacer1, "", "", " ");
+        
                 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -130,14 +145,11 @@ public class AjouterEchange extends BaseForm {
         add(LayeredLayout.encloseIn(swipe, radioContainer));
         
         ButtonGroup barGroup = new ButtonGroup();
-        RadioButton all = RadioButton.createToggle("All ", barGroup);
+        RadioButton all = RadioButton.createToggle("Liste Jobeurs", barGroup);
         all.setUIID("SelectBar");
-        RadioButton featured = RadioButton.createToggle("Mes Trocs", barGroup);
+        RadioButton featured = RadioButton.createToggle("Mes offres ", barGroup);
         featured.setUIID("SelectBar");
-        RadioButton popular = RadioButton.createToggle(" Ajouter Trocs", barGroup);
-       popular.setUIID("SelectBar");
-         RadioButton acc = RadioButton.createToggle("Trocs commandée", barGroup);
-       acc.setUIID("SelectBar");
+        
            featured .addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
@@ -149,34 +161,11 @@ public class AjouterEchange extends BaseForm {
                         }
                         }
                 });
-             featured .addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        
-                        {
-                       
-                           new MesEchangeForm (res).show();
-                          
-                        }
-                        }
-                });
-             acc.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        
-                        {
-                       
-                           new commanderform (res).show();
-                          
-                        }
-                        }
-                });
-           
      
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         
         add(LayeredLayout.encloseIn(
-                GridLayout.encloseIn(4, all, featured, popular,acc),
+                GridLayout.encloseIn(2, all, featured),
                 FlowLayout.encloseBottom(arrow)
         ));
         
@@ -185,11 +174,11 @@ public class AjouterEchange extends BaseForm {
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
-            updateArrowPosition(popular, arrow);
+            updateArrowPosition(all, arrow);
         });
         bindButtonSelection(all, arrow);
         bindButtonSelection(featured, arrow);
-        bindButtonSelection(popular, arrow);
+        
       
         
         // special case for rotation
@@ -197,165 +186,45 @@ public class AjouterEchange extends BaseForm {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
             
         });
-  TextField PROPf = new TextField();
-        PROPf.setUIID("TextFieldBlack");
-        addStringValue("PropositionOfferte",  PROPf);
-
-        TextField PROPs = new TextField();
-        PROPs.setUIID("TextFieldBlack");
-        addStringValue("PropositionSouhaitee",PROPs);
-     
+     int id=Session.getInstance().getLoggedInUser().getId();
         
-      TextArea Des = new TextArea();
-        //Des.setUIID("TextFieldBlack");
-        addStringValue("Description",  Des);
-        Button bt = new Button("ajouter");
-          Button bt1= new Button("vocal");
-           /* ShareButton s = new ShareButton();
-        s.setText("Share");
-        s.setTextToShare("Codename One is so COOL!!!");
-       
-           addStringValue("",  s);*/
-       addStringValue("",  bt);
-         addStringValue("",  bt1);
-         
-        bt1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-         Form hi = new Form("Capture", BoxLayout.y());
-hi.setToolbar(new Toolbar());
-Style s = UIManager.getInstance().getComponentStyle("Title");
-FontImage icon = FontImage.createMaterial(FontImage.MATERIAL_MIC, s);
-
-FileSystemStorage fs = FileSystemStorage.getInstance();
-String recordingsDir = fs.getAppHomePath() + "recordings/";
-fs.mkdir(recordingsDir);
-try {
-    for(String file : fs.listFiles(recordingsDir)) {
-        hi.removeAll();
-        MultiButton mb = new MultiButton(file.substring(file.lastIndexOf("/") + 1));
-        mb.addActionListener((e) -> {
+        ConnectionRequest con = new ConnectionRequest();
+         con.setUrl("http://localhost/fixitweb1/web/app_dev.php/oussama/affichemobile/Renovation"); 
+      ArrayList<User> listJobeurs = new ArrayList<>();
+            con.addResponseListener((NetworkEvent evt) -> {
             try {
-                Media m = MediaManager.createMedia(recordingsDir + file, false);
-                m.play();
-            } catch(IOException err) {
-                Log.e(err);
-            }
-        });
-        hi.add(mb);
-    }
-
-    hi.getToolbar().addCommandToRightBar("", icon, (ev1) -> {
-        try {
-            String file = Capture.captureAudio();
-           
-            if(file != null) {
-                
-                SimpleDateFormat sd = new SimpleDateFormat("yyyy-MMM-dd-kk-mm");
-                String fileName =sd.format(new Date());
-                String filePath = recordingsDir + fileName;
-                Util.copy(fs.openInputStream(file), fs.openOutputStream(filePath));
-                MultiButton mb = new MultiButton(fileName);
-                  
-                mb.addActionListener((e) -> {
-                    try {
-                        Media m = MediaManager.createMedia(filePath, false);
-                        m.play();
-                    } catch(IOException err) {
-                        Log.e(err);
+                //(new String(con.getResponseData()));
+                String aff=new String(con.getResponseData());
+                JSONParser j = new JSONParser();// Instanciation d'un objet JSONParser permettant le parsing du résultat json
+                Map<String, Object> tasks = j.parseJSON(new CharArrayReader(aff.toCharArray()));
+                List<Map<String, Object>> list = (List<Map<String, Object>>) tasks.get("root");
+             for (Map<String, Object> obj : list) {
+                User U = new User();
+           addButton3(res.getImage("Peinture.jpg"),false,55,55,obj.get("nom").toString(),obj.get("prenom").toString(),obj.get("tel").toString(),obj.get("specialite").toString(),res);
+                 Button b =new Button("commander");
+                 addStringValue("",b);
+                 b.addActionListener(new ActionListener() {
+                @Override
+                    public void actionPerformed(ActionEvent evt) {
+                       new OffreAjout(res).show();
+                       float id1 = Float.parseFloat(obj.get("id").toString());
+                        idj=(int)id1;
+                       
                     }
                 });
-                hi.add(mb);
-                hi.revalidate();
-             
-            }
-        } catch(IOException err) {
-            Log.e(err);
-        }
-    });
-} catch(IOException err) {
-    Log.e(err);
-}
-  hi.getToolbar().addCommandToLeftBar("Back",
-                    null, e -> {
-                      
-                          new MesEchangeForm (res).show();
-                    });
-hi.show();
-
-            }
-        });
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         bt.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-           
-     
-                   int id=Session.getInstance().getLoggedInUser().getId();
-                   System.out.println(id);
-                     boolean test= true;
-                       if( PROPf.getText().isEmpty()){
-         
-            test = false;
-             Dialog.show("champs", "vide", "OK", "Cancel");  
-        }
-                       else if( PROPs.getText().isEmpty()){
-         
-            test = false;
-             Dialog.show("champs", "vide", "OK", "Cancel");  
-        }
-                       else if( Des.getText().isEmpty()){
-         
-            test = false;
-             Dialog.show("champs", "vide", "OK", "Cancel");  
-        }
-       if(test)
-       {
-      
-              Echange ec = new Echange(PROPf.getText(),PROPs.getText(),Des.getText(),id);
-               ConnectionRequest con = new ConnectionRequest();
-               String Url ="http://localhost/fixitweb1/web/app_dev.php/Iheb/ajouterMobile2Action?propositionOfferte="+ec.getPropositionofferte()+"&propositionsouhaitee="+ec.getPropositionsouhaitée()+ "&descriptionEchange="+ec.getDescription_echange()+"&idposteurfg="+ec.getId_posteurfg();
-                 con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
-  
-                  Dialog.show("Ajout", "avec sucess", "OK", "Cancel");  
-                 new MesEchangeForm (res).show();
                  
-       
-        con.addResponseListener((e) -> {
-            String str = new String(con.getResponseData());//Récupération de la réponse du serveur
-            System.out.println(str);//Affichage de la réponse serveur sur la console
-      
-    });    NetworkManager.getInstance().addToQueueAndWait(con);
-       }
-    
+                listJobeurs.add(U);
+            }} 
+            catch (IOException ex) {
             }
-            
-           
-        
-    });
-         
-                 }
-                 
-         
-       private void addStringValue(String s, Component v) {
-        add(BorderLayout.west(new Label(s, "PaddedLabel")).
-                add(BorderLayout.CENTER, v));
-        add(createLineSeparator(0xeeeeee));
+                });
+              
+        NetworkManager.getInstance().addToQueueAndWait(con);
+       // addButton(res.getImage("news-item-1.jpg"), "Morbi per tincidunt tellus sit of amet eros laoreet.", false, 26, 32);
+       // addButton(res.getImage("news-item-2.jpg"), "Fusce ornare cursus masspretium tortor integer placera.", true, 15, 21);
+        //addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15);
+        //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);
+      
     }
      
     
@@ -404,14 +273,14 @@ hi.show();
         swipe.addTab("", page1);
     }
 
-private void addButton3(Image img, boolean liked, int likeCount, int commentCount,String Proff,String souh,String description,String nom) {
+private void addButton3(Image img, boolean liked, int likeCount, int commentCount,String Proff,String souh,String description,String nom,Resources res) {
        int height = Display.getInstance().convertToPixels(11.5f);
        int width = Display.getInstance().convertToPixels(14f);
        Button image = new Button(img.fill(width, height));
        image.setUIID("Label");
        Container cnt = BorderLayout.west(image);
        cnt.setLeadComponent(image);
-     
+      
      
 
        Label likes = new Label(likeCount + " Likes  ", "NewsBottomLine");
@@ -420,17 +289,15 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
 
       
       
-       Label num = new Label("propositionOfferte  :  "+Proff , "NewsBottomLine"); 
+       Label num = new Label("Prenom:  "+Proff , "NewsBottomLine"); 
       // FontImage.setMaterialIcon(num, FontImage.MATERIAL_PHONE);
       
-       Label likes1 = new Label("propositionSouhaitee  :  " + souh  , "NewsBottomLine");
+       Label likes1 = new Label("Nom  :  " + souh  , "NewsBottomLine");
       // FontImage.setMaterialIcon(likes1, FontImage.MATERIAL_PAYMENT);
         
-       Label comments = new Label( " Description : "+description , "NewsBottomLine"); 
+       Label comments = new Label( " Tel : "+description , "NewsBottomLine"); 
      //  FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
-         Label user = new Label( "username  : "+nom , "NewsBottomLine"); 
-      // FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
-       
+         Label user = new Label( "Spécialite  : "+nom , "NewsBottomLine"); 
        cnt.add(BorderLayout.CENTER, 
                BoxLayout.encloseY(
                       
@@ -440,6 +307,7 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
                ));
  
        add(cnt);
+         
      
    }
     
@@ -485,4 +353,14 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
         });
     }
     
+       private void addStringValue(String s, Component v) {
+        add(BorderLayout.west(new Label(s, "PaddedLabel")).
+                add(BorderLayout.CENTER, v));
+        add(createLineSeparator(0xF4BE1B));
+        
+    }
 }
+            
+    
+    
+
