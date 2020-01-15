@@ -25,6 +25,7 @@ import com.codename1.components.FloatingHint;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.NetworkManager;
 import com.codename1.messaging.Message;
+import com.codename1.notifications.LocalNotification;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
@@ -56,7 +57,7 @@ public class SignInForm extends BaseForm {
         getTitleArea().setUIID("Container");
         setUIID("SignIn");
         
-        add(BorderLayout.NORTH, new Label(res.getImage("Logo.png"), "LogoLabel"));
+        add(BorderLayout.NORTH, new Label(res.getImage("fixitnoir.png"), "LogoLabel"));
         
         TextField username = new TextField("", "Username", 20, TextField.ANY);
         TextField password = new TextField("", "Password", 20, TextField.PASSWORD);
@@ -82,14 +83,14 @@ public class SignInForm extends BaseForm {
         content.setScrollableY(true);
         add(BorderLayout.SOUTH, content);
         signIn.requestFocus();
+        
 signIn.addActionListener(new ActionListener() 
         {
             
             @Override
             public void actionPerformed(ActionEvent evt) {
-                
-                           
-                           //////////////////////////////////
+       
+       
                if(!username.getText().equals("") && !password.getText().equals("") )
                {
                     ConnectionRequest con = new ConnectionRequest();// création d'une nouvelle demande de connexion
@@ -134,6 +135,7 @@ signIn.addActionListener(new ActionListener()
                else
                     Dialog.show("Missing info","You must provide both username and password","ok",null);
             }
+            
         });    }
-    
+  
 }

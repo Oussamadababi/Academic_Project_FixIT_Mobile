@@ -26,12 +26,14 @@ import com.codename1.ui.Container;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.FontImage;
+import com.codename1.ui.Form;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
 import com.codename1.ui.RadioButton;
 import com.codename1.ui.Tabs;
 import com.codename1.ui.TextArea;
+import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.URLImage;
 import com.codename1.ui.events.ActionEvent;
@@ -41,6 +43,7 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
+import com.codename1.ui.layouts.Layout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
@@ -58,8 +61,9 @@ public class Produit extends BaseForm  {
     
         Image imgg;
         EncodedImage enc ;
-    
-    
+     Container cnt = new Container();
+     Container cnt0 = new Container();
+     
     public Produit(Resources res) {
        
         super("Produit", BoxLayout.y());
@@ -69,16 +73,34 @@ public class Produit extends BaseForm  {
         getTitleArea().setUIID("Container");
         setTitle("Produits");
         getContentPane().setScrollVisible(false);
+  
         
         super.addSideMenu(res);
-        tb.addSearchCommand(e -> {});
+
+        
+        tb.addSearchCommand((ActionListener) (ActionEvent e) -> {
+           String a= (String)e.getSource();
+            if (a==null || a.equals("")){
+                cnt0.removeAll();
+                affichage(res);
+                
+            }
+            else{
+                cnt0.removeAll();
+                Recherche(a,res);
+            }
+           
+       });
+           
+     
+ 
         
         Tabs swipe = new Tabs();
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("home1.jpg"), spacer1, "16 Likes  ", "85 Comments", "Integer ut placerat purued non dignissim neque. ");
-        addTab(swipe, res.getImage("home2.jpg"), spacer2, "100 Likes  ", "66 Comments", "Dogs are cute: story at 11");
+         addTab(swipe, res.getImage("home1.jpg"), spacer1, "  ", "", " ");
+        addTab(swipe, res.getImage("home2.jpg"), spacer2, " ", "", "");
                 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -164,13 +186,77 @@ public class Produit extends BaseForm  {
         bindButtonSelection(featured, arrow);
         bindButtonSelection(popular, arrow);
        // bindButtonSelection(myFavorite, arrow);
-        
         // special case for rotation
         addOrientationListener(e -> {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
+        add(cnt0);
+        affichage(res);
         
+  
+    }
+    
+   
+    
+    
+    
+    public void Recherche(String a,Resources res){
         
+        int idd= Session.getInstance().getLoggedInUser().getId();
+        ConnectionRequest con3 = new ConnectionRequest();
+        con3.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/RechercheProduitMobile/"+idd+"/"+a);
+          con3.addResponseListener((NetworkEvent evt) -> {
+           ArrayList<Task> listTasks = new ArrayList<>();
+            try {
+                //(new String(con.getResponseData()));
+                String aff=new String(con3.getResponseData());
+                JSONParser j = new JSONParser();// Instanciation d'un objet JSONParser permettant le parsing du résultat json
+                Map<String, Object> tasks = j.parseJSON(new CharArrayReader(aff.toCharArray()));
+                List<Map<String, Object>> list = (List<Map<String, Object>>) tasks.get("root");
+             for (Map<String, Object> obj : list) {
+                Task b = new Task();
+                float id = Float.parseFloat(obj.get("id").toString());
+                float prix = Float.parseFloat(obj.get("prix").toString());
+                float num = Float.parseFloat(obj.get("num").toString());
+                b.setId((int) id);
+               int numero=(int) num-1;
+               int prixx=(int) prix;
+               String description= obj.get("description").toString();
+               String nomproduit= obj.get("nomproduit").toString();
+
+ 
+        try {
+            enc = EncodedImage.create("/load.png");
+        } catch (IOException ex) { 
+        }
+ 
+        if (obj.get("imageProduit")==null)
+         {
+             String url2="http://localhost/fixitweb1/web/upload/aucune.jpg";
+             imgg=URLImage.createToStorage(enc,url2,url2,URLImage.RESIZE_SCALE);
+         }
+         else{
+            String url="http://localhost/fixitweb1/web/upload/"+obj.get("imageProduit").toString();
+             imgg=URLImage.createToStorage(enc,url,url,URLImage.RESIZE_SCALE);
+         }
+        addButton(imgg, nomproduit, false, 26, 32, description,prixx,numero,res,(int) id);
+           LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurFg") ;
+           int pos = 1;
+           b.setUsername(obj1.get("username").toString());
+                listTasks.add(b);
+            }} 
+            catch (IOException ex) {
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(con3);
+             
+    }
+    
+    
+    
+    
+    
+   public void affichage(Resources res ){
        int idd= Session.getInstance().getLoggedInUser().getId();
         ConnectionRequest con = new ConnectionRequest();
         con.setUrl("http://localhost/fixitweb1/web/app_dev.php/wael/afficherproduitMobile/"+idd);  
@@ -210,7 +296,7 @@ public class Produit extends BaseForm  {
          }
         
         
-        addButton(imgg, nomproduit, false, 26, 32, description,prixx,numero);
+        addButton(imgg, nomproduit, false, 26, 32, description,prixx,numero,res,(int)id);
 
            LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurFg") ;
            int pos = 1;
@@ -220,12 +306,9 @@ public class Produit extends BaseForm  {
             catch (IOException ex) {
             }
         });
-        NetworkManager.getInstance().addToQueueAndWait(con);
-        
-  
-    }
-    
-   
+        NetworkManager.getInstance().addToQueueAndWait(con);  
+
+   }
     
     
     
@@ -273,29 +356,21 @@ public class Produit extends BaseForm  {
 
         swipe.addTab("", page1);
     }
-    
-   private void addButton(Image img, String title, boolean liked, int likeCount, int commentCount,String description,int Prix,int Num) {
+   
+   private void addButton(Image img, String title, boolean liked, int likeCount, int commentCount,String description,int Prix,int Num,Resources res,int id) {
        int height = Display.getInstance().convertToPixels(11.5f);
        int width = Display.getInstance().convertToPixels(14f);
        Button image = new Button(img.fill(width, height));
-       image.setUIID("Label");
-       Container cnt = BorderLayout.west(image);
+       image.setUIID("Label"); 
        cnt.setLeadComponent(image);
        TextArea ta = new TextArea(title);
        ta.setUIID("NewsTopLine");
        ta.setEditable(false);
-
+      cnt = BorderLayout.west(image);
        Label likes = new Label(likeCount + " Likes  ", "NewsBottomLine");
       // Label likes1 = new Label("asazd" + " Likes  ", "NewsBottomLine");
        likes.setTextPosition(RIGHT);
-      /* if(!liked) {
-           FontImage.setMaterialIcon(likes, FontImage.MATERIAL_FAVORITE);
-       } else {
-           Style s = new Style(likes.getUnselectedStyle());
-           s.setFgColor(0xF4BE1B);
-           FontImage heartImage = FontImage.createMaterial(FontImage.MATERIAL_FAVORITE, s);
-           likes.setIcon(heartImage);
-       }*/
+
       
       
        Label num = new Label(" Phone: "+ Num , "NewsBottomLine"); 
@@ -314,9 +389,13 @@ public class Produit extends BaseForm  {
                        comments
                        
                ));
- 
-       add(cnt);
-       image.addActionListener(e -> ToastBar.showMessage(title, FontImage.MATERIAL_INFO));
+
+       cnt0.add(cnt);
+   
+       image.addActionListener((evt) -> {
+            new PaimentF(res,img,title,description,Prix,Num,id).show();
+       });
+       
    }
     
     private void bindButtonSelection(Button b, Label arrow) {

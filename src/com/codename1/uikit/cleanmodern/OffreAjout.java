@@ -195,11 +195,11 @@ public class OffreAjout extends BaseForm {
             public void actionPerformed(ActionEvent evt) {
                 System.out.println(idj);
                 int num=Integer.parseInt(Num.getText());
-                Offre of= new Offre(adress.getText(),num,Description.getText(),idd,idj);
+                Offre of= new Offre(adress.getText(),date.getDate(),num,Description.getText(),idd,idj);
                 ConnectionRequest con = new ConnectionRequest();// création d'une nouvelle demande de connexion
-        String Url = "http://localhost/fixitweb1/web/app_dev.php/oussama/ajoutoffre?adress="+of.getAdress()+"&description_offre="+of.getDesciption()+"&tel="+of.getTel()+"&idposteurFg="+of.getIdpo()+"&idjobeurFg="+of.getIdj();
+        String Url = "http://localhost/fixitweb1/web/app_dev.php/oussama/ajoutoffre?adress="+of.getAdress()+"&date="+of.getDate()+"&description_offre="+of.getDesciption()+"&tel="+of.getTel()+"&idposteurFg="+of.getIdpo()+"&idjobeurFg="+of.getIdj();
         con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
-
+                System.out.println(Url);
         con.addResponseListener((e) -> {
             String str = new String(con.getResponseData());//Récupération de la réponse du serveur
             System.out.println(str);//Affichage de la réponse serveur sur la console

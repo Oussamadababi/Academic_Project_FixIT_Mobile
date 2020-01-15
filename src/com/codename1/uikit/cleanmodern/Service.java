@@ -171,12 +171,12 @@ public class Service extends BaseForm {
       
         
         /****************/
-        addButton(res.getImage("news-item-1.jpg"), "Morbi per tincidunt tellus sit of amet eros laoreet.", false, 26, 32,res,"Electriciter");
-        addButton(res.getImage("news-item-2.jpg"), "Fusce ornare cursus masspretium tortor integer placera.", true, 15, 21,res,"Plombier");
-        addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15,res,"Menage");
-        addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9,res,"Jardinage");
-         addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9,res,"Peinture");
-         addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9,res,"Conciergerie");
+        addButton(res.getImage("electricte.JPG"), "Selectionner un Electricien", false, 26, 32,res,"Electriciter");
+        addButton(res.getImage("Plomberie.JPG"), "Selectrionner un Plombier", true, 15, 21,res,"Plombier");
+        addButton(res.getImage("Grand-ménage.jpg"), "Selectionner une personne pour menage", false, 36, 15,res,"Menage");
+        addButton(res.getImage("jardinage1.png"), "Selectionner un jardinier", false, 11, 9,res,"Jardinage");
+         addButton(res.getImage("Peinture.jpg"), "Selectionner une personne pour renovation", false, 11, 9,res,"Peinture");
+         addButton(res.getImage("Conciergerie.JPG"), "Selectionner un concierge", false, 11, 9,res,"Conciergerie");
     }
 
 //    Service() {
@@ -271,13 +271,13 @@ public class Service extends BaseForm {
        if(Specialite.equals("Plombier")){
        image.addActionListener(e -> new affiche_jobeur_plombier(res).show());}
        if(Specialite.equals("Menage")){
-       image.addActionListener(e -> new affiche_jobeur_jardinage(res).show());}
-       if(Specialite.equals("Jardinage")){
        image.addActionListener(e -> new affiche_jobeur_menage(res).show());}
+       if(Specialite.equals("Jardinage")){
+       image.addActionListener(e -> new affiche_jobeur_jardinage(res).show());}
        if(Specialite.equals("Peinture")){
-       image.addActionListener(e -> new WalkthruForm(res).show());}
+       image.addActionListener(e -> new affiche_jobeur_peinture(res).show());}
        if(Specialite.equals("Conciergerie")){
-       image.addActionListener(e -> new WalkthruForm(res).show());}
+       image.addActionListener(e -> new affiche_jobeur_menage(res).show());}
         
         
        

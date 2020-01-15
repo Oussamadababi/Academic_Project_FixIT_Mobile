@@ -19,10 +19,14 @@
 
 package com.codename1.uikit.cleanmodern;
 
+import com.codename1.components.MediaPlayer;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
+import com.codename1.media.Media;
+import com.codename1.media.MediaManager;
 import com.codename1.ui.Button;
 import com.codename1.ui.ButtonGroup;
+import com.codename1.ui.Component;
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
@@ -35,6 +39,7 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.util.Resources;
+import java.io.IOException;
 
 /**
  * Swiping thru tutorial
@@ -52,10 +57,14 @@ public class WalkthruForm extends Form {
         t.setUIID("Container");
         t.getContentPane().setUIID("Container");
         add(BorderLayout.CENTER, t);
+       
+       
+      
         
-        ScaleImageLabel page1 = new ScaleImageLabel(res.getImage("welcome-slide-1.png"));
-        ScaleImageLabel page2 = new ScaleImageLabel(res.getImage("welcome-slide-2.png"));
-        ScaleImageLabel page3 = new ScaleImageLabel(res.getImage("welcome-slide-3.png"));
+        
+        ScaleImageLabel page1 = new ScaleImageLabel(res.getImage(""));
+        ScaleImageLabel page2 = new ScaleImageLabel(res.getImage(""));
+        ScaleImageLabel page3 = new ScaleImageLabel(res.getImage(""));
         page1.setUIID("Container");
         page2.setUIID("Container");
         page3.setUIID("Container");
@@ -67,9 +76,9 @@ public class WalkthruForm extends Form {
         t.addTab("", page3);
         
         String[] messages = {
-            "Manage your tasks quickly\nand efficiently",
-            "This demo is powered by\nCodename One",
-            "Start NOW\n press skip"            
+            "Fixer Vos Problémes",
+           "Fixer Vos Problémes",
+            "Fixer Vos Problémes"            
         };
         
         SpanLabel message = new SpanLabel(messages[0], "WelcomeMessage");

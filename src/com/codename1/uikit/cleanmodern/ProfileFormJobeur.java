@@ -64,7 +64,7 @@ import java.io.OutputStream;
  *
  * @author Shai Almog
  */
-public class ProfileFormJobeur extends BaseForm {
+public class ProfileFormJobeur extends BaseFormJ {
     private Form hi;
 
     public ProfileFormJobeur(Resources res) {

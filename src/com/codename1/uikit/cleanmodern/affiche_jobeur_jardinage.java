@@ -92,7 +92,7 @@ public class affiche_jobeur_jardinage extends BaseForm{
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
-        setTitle("Jobeurs Electriciter");
+        setTitle("Jobeurs Jardiniers");
         getContentPane().setScrollVisible(false);
         
         

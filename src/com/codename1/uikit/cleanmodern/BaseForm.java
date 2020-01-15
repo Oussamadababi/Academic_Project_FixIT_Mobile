@@ -89,7 +89,7 @@ public class BaseForm extends Form {
               img1 =URLImage.createToStorage(enc,url,url,URLImage.RESIZE_SCALE);
          }
         Toolbar tb = getToolbar();
-        Image img = res.getImage("profile-background.jpg");
+        Image img = res.getImage("home2.jpg");
         if(img.getHeight() > Display.getInstance().getDisplayHeight() / 3) {
             img = img.scaledHeight(Display.getInstance().getDisplayHeight() / 3);
         }
@@ -109,7 +109,7 @@ public class BaseForm extends Form {
         tb.addMaterialCommandToSideMenu("Demander Service", FontImage.MATERIAL_SHOP, e -> new Service(res).show());
           tb.addMaterialCommandToSideMenu("Trocs", FontImage.MATERIAL_SHOP, e -> new EchangeForm (res).show());
           tb.addMaterialCommandToSideMenu("Annonce", FontImage.MATERIAL_SHOP, e -> new AnnonceForm (res).show());
-        tb.addMaterialCommandToSideMenu("Mes Offres", FontImage.MATERIAL_ADD_TO_QUEUE, e -> new offresayed(res).show());
+       // tb.addMaterialCommandToSideMenu("Mes Offres", FontImage.MATERIAL_ADD_TO_QUEUE, e -> new offresayed(res).show());
         tb.addMaterialCommandToSideMenu("Logout", FontImage.MATERIAL_EXIT_TO_APP, e -> new WalkthruForm(res).show());
         
     }

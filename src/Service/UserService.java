@@ -23,6 +23,7 @@ import java.util.Map;
  */
 public class UserService {
      private User loggedUser= new User();
+     private User loggedUser1= new User();
      
      public User Authentification(String username, String password) 
     {
@@ -196,5 +197,34 @@ public class UserService {
 
         });
         NetworkManager.getInstance().addToQueueAndWait(con);// Ajout de notre demande de connexion à la file d'attente du NetworkManager
+    }
+    
+    /////////////////////////////////////ayed///
+     public User GetUserdata(String id) 
+    {
+        ConnectionRequest con = new ConnectionRequest();// création d'une nouvelle demande de connexion
+        String Url = "http://localhost/fixitweb1/web/app_dev.php/getuserdata/" + id;// création de l'URL
+        con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
+
+        con.addResponseListener((e) -> {
+            String str = new String(con.getResponseData());//Récupération de la réponse du serveur
+        if(str.equals("false"))
+        {
+            loggedUser1 = null;
+        }
+        else
+        {
+            UserService ser = new UserService();
+                try {
+                    loggedUser1 = ser.parseUserJson(new String(con.getResponseData()));
+                } catch (ParseException ex) {
+                    
+                }
+            Session1.getInstance().setLoggedInUser1(loggedUser1);
+        }
+        
+        });
+        NetworkManager.getInstance().addToQueueAndWait(con);// Ajout de notre demande de connexion à la file d'attente du NetworkManager
+        return loggedUser; 
     }
 }

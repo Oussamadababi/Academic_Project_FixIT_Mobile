@@ -61,14 +61,16 @@ public class EchangeForm extends BaseForm {
         getContentPane().setScrollVisible(false);
         
         super.addSideMenu(res);
-        tb.addSearchCommand(e -> {});
+        tb.addSearchCommand(e -> {
+        });
+        
         
         Tabs swipe = new Tabs();
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("dog.jpg"), spacer1, "", "", " ");
-        addTab(swipe, res.getImage("dog.jpg"), spacer2, "", "", "");
+        addTab(swipe, res.getImage("troc.jpg"), spacer1, "", "", " ");
+        addTab(swipe, res.getImage("troc.jpg"), spacer2, "", "", "");
                 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -113,11 +115,36 @@ public class EchangeForm extends BaseForm {
         all.setUIID("SelectBar");
         RadioButton featured = RadioButton.createToggle("Mes Trocs", barGroup);
         featured.setUIID("SelectBar");
-        RadioButton popular = RadioButton.createToggle("Trocs", barGroup);
+        RadioButton popular = RadioButton.createToggle("Ajouter Trocs", barGroup);
        popular.setUIID("SelectBar");
-          RadioButton acc = RadioButton.createToggle("commander", barGroup);
+          RadioButton acc = RadioButton.createToggle("Trocs commandée", barGroup);
        acc.setUIID("SelectBar");
+       /*  RadioButton pdf = RadioButton.createToggle("pdf", barGroup);
+       acc.setUIID("SelectBar");*/
        
+     /*   pdf.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        
+                        {
+                       
+                         ConnectionRequest conp = new ConnectionRequest();
+               String Url ="http://localhost/fixitweb1/web/app_dev.php/Iheb/indexpdf";
+                 conp.setUrl(Url);// Insertion de l'URL de notre demande de connexion
+  
+                 // Dialog.show("Ajout", "avec sucess", "OK", "Cancel");  
+                 //new MesEchangeForm (res).show();
+                 
+       
+        conp.addResponseListener((e) -> {
+            String str = new String(conp.getResponseData());//Récupération de la réponse du serveur
+            System.out.println(str);//Affichage de la réponse serveur sur la console
+      
+    });   
+                     NetworkManager.getInstance().addToQueueAndWait(conp);      
+                        }
+                        }
+                });*/
          popular.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
@@ -206,11 +233,11 @@ public class EchangeForm extends BaseForm {
         //add(obj.get("propositionOfferte").toString());
            LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurfg") ;
            int pos = 1;
-          e.setNom_posteur(obj1.get("username").toString());
+          e.setNom_posteur(obj1.get("nom").toString());
        Button commander =new Button("commander");
                
                  if(obj.get("etatValidation").toString().equals("noncommand"))
-                 {addButton3(res.getImage("dog.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString(),obj1.get("nom").toString(),commander);
+                 {addButton3(res.getImage("troc.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString(),obj1.get("nom").toString(),commander);
                    addStringValue("",commander);
                  }
          commander.addActionListener(new ActionListener() {
@@ -333,7 +360,7 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
         
        Label comments = new Label( " Description : "+description , "NewsBottomLine"); 
      //  FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
-         Label user = new Label( "username  : "+nom , "NewsBottomLine"); 
+         Label user = new Label( "Pubiler par  : "+nom , "NewsBottomLine"); 
       // FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
     
        

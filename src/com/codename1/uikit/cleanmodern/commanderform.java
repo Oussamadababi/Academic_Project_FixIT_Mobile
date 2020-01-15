@@ -68,8 +68,8 @@ public class commanderform extends BaseForm {
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("dog.jpg"), spacer1, "", "", " ");
-        addTab(swipe, res.getImage("dog.jpg"), spacer2, "", "", "");
+        addTab(swipe, res.getImage("troc.jpg"), spacer1, "", "", " ");
+        addTab(swipe, res.getImage("troc.jpg"), spacer2, "", "", "");
                 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -114,9 +114,9 @@ public class commanderform extends BaseForm {
         all.setUIID("SelectBar");
         RadioButton featured = RadioButton.createToggle("Mes Trocs", barGroup);
         featured.setUIID("SelectBar");
-        RadioButton popular = RadioButton.createToggle("Trocs", barGroup);
+        RadioButton popular = RadioButton.createToggle("Ajouter Trocs", barGroup);
         popular.setUIID("SelectBar");
-          RadioButton acc = RadioButton.createToggle("commander", barGroup);
+          RadioButton acc = RadioButton.createToggle("Trocs commandée", barGroup);
        acc.setUIID("SelectBar");
         all.addActionListener(new ActionListener() {
                     @Override
@@ -140,6 +140,18 @@ public class commanderform extends BaseForm {
                         }
                         }
                 });
+          featured.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        
+                        {
+                       
+                           new MesEchangeForm (res).show();
+                          
+                        }
+                        }
+                });
+          
      
      
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
@@ -154,7 +166,7 @@ public class commanderform extends BaseForm {
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
-            updateArrowPosition(featured, arrow);
+            updateArrowPosition(acc, arrow);
         });
         bindButtonSelection(all, arrow);
         bindButtonSelection(featured, arrow);
@@ -198,11 +210,11 @@ public class commanderform extends BaseForm {
         //add(obj.get("propositionOfferte").toString());
            LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("id2") ;
            int pos = 1;
-          e.setNom_posteur(obj1.get("username").toString());
+          e.setNom_posteur(obj1.get("nom").toString());
          
   
                        
-                            addButton3(res.getImage("dog.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString(),obj1.get("nom").toString());
+                            addButton3(res.getImage("troc.jpg"),false,55,55,obj.get("propositionOfferte").toString(),obj.get("propositionSouhaitee").toString(),obj.get("descriptionEchange").toString(),obj1.get("nom").toString());
                           
                       Button supprimer =new Button("supprimer ");
                        addStringValue("",supprimer );
@@ -322,7 +334,7 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
         
        Label comments = new Label( " Description : "+description , "NewsBottomLine"); 
      //  FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
-         Label user = new Label( "username  : "+nom , "NewsBottomLine"); 
+         Label user = new Label( "commander par : "+nom , "NewsBottomLine"); 
       // FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
     
        

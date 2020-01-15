@@ -7,14 +7,24 @@ package com.codename1.uikit.cleanmodern;
 
 import Entites.Echange;
 import Service.Session;
+import com.codename1.capture.Capture;
+import com.codename1.components.MultiButton;
 import com.codename1.components.ScaleImageLabel;
+import com.codename1.components.ShareButton;
 import com.codename1.components.SpanLabel;
 import com.codename1.components.ToastBar;
+import com.codename1.io.AccessToken;
 import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
+import com.codename1.io.FileSystemStorage;
 import com.codename1.io.JSONParser;
+import com.codename1.io.Log;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
+import com.codename1.io.Util;
+import com.codename1.l10n.SimpleDateFormat;
+import com.codename1.media.Media;
+import com.codename1.media.MediaManager;
 import com.codename1.ui.Button;
 import com.codename1.ui.ButtonGroup;
 import com.codename1.ui.Component;
@@ -50,6 +60,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.codename1.ui.Command;
+import com.codename1.share.ShareService;
+import com.codename1.share.FacebookShare;
+import com.codename1.ui.Form;
+import com.codename1.ui.plaf.UIManager;
+import java.util.Date;
+
 
 /**
  *
@@ -71,8 +88,8 @@ public class AjouterEchange extends BaseForm {
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("dog.jpg"), spacer1, "", "", " ");
-        addTab(swipe, res.getImage("dog.jpg"), spacer2, "", "", "");
+        addTab(swipe, res.getImage("troc.jpg"), spacer1, "", "", " ");
+        addTab(swipe, res.getImage("troc.jpg"), spacer2, "", "", "");
                 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -113,13 +130,13 @@ public class AjouterEchange extends BaseForm {
         add(LayeredLayout.encloseIn(swipe, radioContainer));
         
         ButtonGroup barGroup = new ButtonGroup();
-        RadioButton all = RadioButton.createToggle("All", barGroup);
+        RadioButton all = RadioButton.createToggle("All ", barGroup);
         all.setUIID("SelectBar");
         RadioButton featured = RadioButton.createToggle("Mes Trocs", barGroup);
         featured.setUIID("SelectBar");
-        RadioButton popular = RadioButton.createToggle("Trocs", barGroup);
+        RadioButton popular = RadioButton.createToggle(" Ajouter Trocs", barGroup);
        popular.setUIID("SelectBar");
-         RadioButton acc = RadioButton.createToggle("commander", barGroup);
+         RadioButton acc = RadioButton.createToggle("Trocs commandée", barGroup);
        acc.setUIID("SelectBar");
            featured .addActionListener(new ActionListener() {
                     @Override
@@ -193,8 +210,97 @@ public class AjouterEchange extends BaseForm {
         //Des.setUIID("TextFieldBlack");
         addStringValue("Description",  Des);
         Button bt = new Button("ajouter");
-         addStringValue("",  bt);
-     
+          Button bt1= new Button("vocal");
+           /* ShareButton s = new ShareButton();
+        s.setText("Share");
+        s.setTextToShare("Codename One is so COOL!!!");
+       
+           addStringValue("",  s);*/
+       addStringValue("",  bt);
+         addStringValue("",  bt1);
+         
+        bt1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+         Form hi = new Form("Capture", BoxLayout.y());
+hi.setToolbar(new Toolbar());
+Style s = UIManager.getInstance().getComponentStyle("Title");
+FontImage icon = FontImage.createMaterial(FontImage.MATERIAL_MIC, s);
+
+FileSystemStorage fs = FileSystemStorage.getInstance();
+String recordingsDir = fs.getAppHomePath() + "recordings/";
+fs.mkdir(recordingsDir);
+try {
+    for(String file : fs.listFiles(recordingsDir)) {
+        hi.removeAll();
+        MultiButton mb = new MultiButton(file.substring(file.lastIndexOf("/") + 1));
+        mb.addActionListener((e) -> {
+            try {
+                Media m = MediaManager.createMedia(recordingsDir + file, false);
+                m.play();
+            } catch(IOException err) {
+                Log.e(err);
+            }
+        });
+        hi.add(mb);
+    }
+
+    hi.getToolbar().addCommandToRightBar("", icon, (ev1) -> {
+        try {
+            String file = Capture.captureAudio();
+           
+            if(file != null) {
+                
+                SimpleDateFormat sd = new SimpleDateFormat("yyyy-MMM-dd-kk-mm");
+                String fileName =sd.format(new Date());
+                String filePath = recordingsDir + fileName;
+                Util.copy(fs.openInputStream(file), fs.openOutputStream(filePath));
+                MultiButton mb = new MultiButton(fileName);
+                  
+                mb.addActionListener((e) -> {
+                    try {
+                        Media m = MediaManager.createMedia(filePath, false);
+                        m.play();
+                    } catch(IOException err) {
+                        Log.e(err);
+                    }
+                });
+                hi.add(mb);
+                hi.revalidate();
+             
+            }
+        } catch(IOException err) {
+            Log.e(err);
+        }
+    });
+} catch(IOException err) {
+    Log.e(err);
+}
+  hi.getToolbar().addCommandToLeftBar("Back",
+                    null, e -> {
+                      
+                          new MesEchangeForm (res).show();
+                    });
+hi.show();
+
+            }
+        });
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
          bt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -202,27 +308,49 @@ public class AjouterEchange extends BaseForm {
      
                    int id=Session.getInstance().getLoggedInUser().getId();
                    System.out.println(id);
+                     boolean test= true;
+                       if( PROPf.getText().isEmpty()){
+         
+            test = false;
+             Dialog.show("champs", "vide", "OK", "Cancel");  
+        }
+                       else if( PROPs.getText().isEmpty()){
+         
+            test = false;
+             Dialog.show("champs", "vide", "OK", "Cancel");  
+        }
+                       else if( Des.getText().isEmpty()){
+         
+            test = false;
+             Dialog.show("champs", "vide", "OK", "Cancel");  
+        }
+       if(test)
+       {
       
               Echange ec = new Echange(PROPf.getText(),PROPs.getText(),Des.getText(),id);
                ConnectionRequest con = new ConnectionRequest();
                String Url ="http://localhost/fixitweb1/web/app_dev.php/Iheb/ajouterMobile2Action?propositionOfferte="+ec.getPropositionofferte()+"&propositionsouhaitee="+ec.getPropositionsouhaitée()+ "&descriptionEchange="+ec.getDescription_echange()+"&idposteurfg="+ec.getId_posteurfg();
                  con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
+  
                   Dialog.show("Ajout", "avec sucess", "OK", "Cancel");  
                  new MesEchangeForm (res).show();
                  
-
+       
         con.addResponseListener((e) -> {
             String str = new String(con.getResponseData());//Récupération de la réponse du serveur
             System.out.println(str);//Affichage de la réponse serveur sur la console
       
-    });
-        NetworkManager.getInstance().addToQueueAndWait(con);
+    });    NetworkManager.getInstance().addToQueueAndWait(con);
+       }
+    
             }
             
            
         
     });
+         
                  }
+                 
          
        private void addStringValue(String s, Component v) {
         add(BorderLayout.west(new Label(s, "PaddedLabel")).
