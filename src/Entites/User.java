@@ -26,6 +26,8 @@ public class User {
     private String role;
     private String job;
     private String address;
+    private int code;
+    private String imgp;
 
     public User() {
     }
@@ -63,6 +65,92 @@ public class User {
         this.role = role;
         this.job = job;
     }
+
+    public User(int id, String cin, String nom, String prenom, String email, String sexe, String password, Date date_naissance, int tel, String etat, String role, String job, String address, int code) {
+        this.id = id;
+        this.cin = cin;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.sexe = sexe;
+        this.password = password;
+        this.date_naissance = date_naissance;
+        this.tel = tel;
+        this.etat = etat;
+        this.role = role;
+        this.job = job;
+        this.address = address;
+        this.code = code;
+    }
+
+    public User(String cin, String nom, String prenom, String email, String sexe, String password, Date date_naissance, int tel, String etat, String role, String job, String address, int code) {
+        this.cin = cin;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.sexe = sexe;
+        this.password = password;
+        this.date_naissance = date_naissance;
+        this.tel = tel;
+        this.etat = etat;
+        this.role = role;
+        this.job = job;
+        this.address = address;
+        this.code = code;
+    }
+
+    public User(String cin, String nom, String prenom, String email, String sexe, String password, Date date_naissance, int tel, String etat, String role, String job, String address, int code, String imgp) {
+        this.cin = cin;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.sexe = sexe;
+        this.password = password;
+        this.date_naissance = date_naissance;
+        this.tel = tel;
+        this.etat = etat;
+        this.role = role;
+        this.job = job;
+        this.address = address;
+        this.code = code;
+        this.imgp = imgp;
+    }
+
+    public User(int id, String cin, String nom, String prenom, String email, String sexe, String password, Date date_naissance, int tel, String etat, String role, String job, String address, int code, String imgp) {
+        this.id = id;
+        this.cin = cin;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.sexe = sexe;
+        this.password = password;
+        this.date_naissance = date_naissance;
+        this.tel = tel;
+        this.etat = etat;
+        this.role = role;
+        this.job = job;
+        this.address = address;
+        this.code = code;
+        this.imgp = imgp;
+    }
+
+    public User(String cin, String nom, String prenom, String email, String sexe, String password, Date date_naissance, int tel, String etat, String role, String job, String address, String imgp) {
+        this.cin = cin;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.sexe = sexe;
+        this.password = password;
+        this.date_naissance = date_naissance;
+        this.tel = tel;
+        this.etat = etat;
+        this.role = role;
+        this.job = job;
+        this.address = address;
+        this.imgp = imgp;
+    }
+    
+    
     
 
     public void setId(int id) {
@@ -164,6 +252,25 @@ public class User {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getImgp() {
+        return imgp;
+    }
+
+    public void setImgp(String imgp) {
+        this.imgp = imgp;
+    }
+    
+    
+    
 
     @Override
     public String toString() {

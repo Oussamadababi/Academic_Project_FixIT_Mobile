@@ -19,19 +19,23 @@
 
 package com.codename1.uikit.cleanmodern;
 
+import Service.Session;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.ui.Component;
 import com.codename1.ui.Display;
+import com.codename1.ui.EncodedImage;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
 import com.codename1.ui.Toolbar;
+import com.codename1.ui.URLImage;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.layouts.Layout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
+import java.io.IOException;
 
 /**
  * Base class for the forms with common functionality
@@ -39,6 +43,9 @@ import com.codename1.ui.util.Resources;
  * @author Shai Almog
  */
 public class BaseForm extends Form {
+    Image imgg;
+    Image img1;
+        EncodedImage enc ;
 
     public BaseForm() {
     }
@@ -67,6 +74,20 @@ public class BaseForm extends Form {
     }
 
     protected void addSideMenu(Resources res) {
+        try {
+            enc = EncodedImage.create("/load.png");
+        } catch (IOException ex) { 
+        }
+        
+        if (Session.getInstance().getLoggedInUser().getImgp()==null)
+         {
+             //String url2="http://localhost/fixitweb1/web/upload/aucun.png";
+             img1=res.getImage("profile-pic.jpg");
+         }
+         else{
+            String url="http://localhost/fixitweb1/web/upload/"+Session.getInstance().getLoggedInUser().getImgp();
+              img1 =URLImage.createToStorage(enc,url,url,URLImage.RESIZE_SCALE);
+         }
         Toolbar tb = getToolbar();
         Image img = res.getImage("profile-background.jpg");
         if(img.getHeight() > Display.getInstance().getDisplayHeight() / 3) {
@@ -79,7 +100,7 @@ public class BaseForm extends Form {
         tb.addComponentToSideMenu(LayeredLayout.encloseIn(
                 sl,
                 FlowLayout.encloseCenterBottom(
-                        new Label(res.getImage("profile-pic.jpg"), "PictureWhiteBackgrond"))
+                        new Label(img1, "PictureWhiteBackgrond"))
         ));
         
        

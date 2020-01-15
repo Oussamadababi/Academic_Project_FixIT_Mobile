@@ -29,21 +29,35 @@ public class UserService {
         ConnectionRequest con = new ConnectionRequest();// création d'une nouvelle demande de connexion
         String Url = "http://localhost/fixitweb1/web/app_dev.php/login/" + username + "/" + password;// création de l'URL
         con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
-
         con.addResponseListener((e) -> {
             String str = new String(con.getResponseData());//Récupération de la réponse du serveur
-        if(str.equals("false"))
+            System.out.println(str);
+                    System.out.println(Url);
+
+            if(str.equals("123"))
+        {
+          loggedUser.setEtat("Attente");
+          loggedUser.setCin(username);
+          Session.getInstance().setLoggedInUser(loggedUser);
+        }
+            
+            else if(str.equals("false"))
         {
             loggedUser = null;
+            
         }
         else
         {
             UserService ser = new UserService();
                 try {
                     loggedUser = ser.parseUserJson(new String(con.getResponseData()));
+                    System.out.println("raed : "+ser.parseUserJson(new String(con.getResponseData())));
+                                        System.out.println("raed1 : "+loggedUser.getEtat());
+
                 } catch (ParseException ex) {
                     
                 }
+                loggedUser.setEtat("Active");
             Session.getInstance().setLoggedInUser(loggedUser);
         }
         
@@ -95,6 +109,10 @@ public class UserService {
                 u.setRole(obj.get("roles").toString());
                 u.setTel((int) (double) obj.get("tel"));
                 u.setDate_naissance(new SimpleDateFormat("yyyy-MM-dd").parse(obj.get("dateNaissance").toString()));
+                if(obj.get("attach")!=null)
+                {
+                u.setImgp(obj.get("attach").toString());
+                }
 
                 listUsers.add(u);
 
@@ -115,10 +133,9 @@ public class UserService {
     {
         
         ConnectionRequest con = new ConnectionRequest();// création d'une nouvelle demande de connexion
-
         String Url = "http://localhost/fixitweb1/web/app_dev.php/updateprofile?id="+u.getId()+"&nom="+u.getNom()+"&prenom="+u.getPrenom()+"&username="+u.getCin()+"&email="+u.getEmail()+"&tel="+u.getTel()+"&birth="+u.getDate_naissance();// création de l'URL
         con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
-
+        System.out.println(Url);
         con.addResponseListener((e) -> {
             String str = new String(con.getResponseData());//Récupération de la réponse du serveur
             System.out.println(str);//Affichage de la réponse serveur sur la console
@@ -134,7 +151,7 @@ public class UserService {
 
         String Url = "http://localhost/fixitweb1/web/app_dev.php/registermobile?nom="+u.getNom()+"&prenom="+u.getPrenom()
                 + "&username="+u.getCin()+"&email="+u.getEmail()+"&tel="+u.getTel()+"&birth="+u.getDate_naissance()+"&sexe="+u.getSexe()+"&spec="+u.getJob()
-                + "&pass="+u.getPassword()+"&role="+u.getRole();// création de l'URL
+                + "&pass="+u.getPassword()+"&role="+u.getRole()+"&code="+u.getCode();// création de l'URL
         con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
 
         con.addResponseListener((e) -> {
@@ -148,4 +165,36 @@ public class UserService {
      
      
      /////////////////////////////////////
+      public boolean updatecode(String user) 
+    {
+        
+        ConnectionRequest con = new ConnectionRequest();// création d'une nouvelle demande de connexion
+
+        String Url = "http://localhost/fixitweb1/web/app_dev.php/userverfication?user="+user;// création de l'URL
+        con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
+        
+        con.addResponseListener((e) -> {
+            String str = new String(con.getResponseData());//Récupération de la réponse du serveur
+            System.out.println(str);//Affichage de la réponse serveur sur la console
+
+        });
+        NetworkManager.getInstance().addToQueueAndWait(con);// Ajout de notre demande de connexion à la file d'attente du NetworkManager
+        
+       return true;
+    }
+      
+    public void envoyermail(String email,int code)
+    {
+        ConnectionRequest con = new ConnectionRequest();// création d'une nouvelle demande de connexion
+        
+        String Url = "http://localhost/fixitweb1/web/app_dev.php/envoyezmail?email="+email+"&code="+code;
+        con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
+
+        con.addResponseListener((e) -> {
+            String str = new String(con.getResponseData());//Récupération de la réponse du serveur
+            System.out.println(str);//Affichage de la réponse serveur sur la console
+
+        });
+        NetworkManager.getInstance().addToQueueAndWait(con);// Ajout de notre demande de connexion à la file d'attente du NetworkManager
+    }
 }

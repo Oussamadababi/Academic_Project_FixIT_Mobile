@@ -22,6 +22,9 @@ package com.codename1.uikit.cleanmodern;
 import Entites.User;
 import Service.UserService;
 import com.codename1.components.FloatingHint;
+import com.codename1.io.ConnectionRequest;
+import com.codename1.io.NetworkManager;
+import com.codename1.messaging.Message;
 import com.codename1.ui.Button;
 import com.codename1.ui.ComboBox;
 import com.codename1.ui.Container;
@@ -89,14 +92,13 @@ public class SignUpForm extends BaseForm {
         if(!email.getText().matches(pattern))
             errlog += "Invalid Email! Must match pattern (address@host.domain)\n";
         pattern = "^[0-9]{8}$";
-        if(!phoneNumber.getText().matches(pattern))
+        if(!telephone.getText().matches(pattern))
             errlog += "Invalid Phone Number! Please provide an 8 digit number\n";
         pattern = "^[0-9]{4}$";
-        if(!zipCode.getText().matches(pattern))
-            errlog += "Invalid zip Code ! Please provide a 4 digit number";
+        
         return errlog;
-    }*/
-    
+    }
+    */
     public SignUpForm(Resources res) {
         
         super(new BorderLayout());
@@ -173,7 +175,9 @@ public class SignUpForm extends BaseForm {
                         if(passwordMatches())
                         {
                             User u = new User();
-                           
+                           Random a = new Random();
+                           int n = a.nextInt(9000)+1000;
+                           u.setCode(n);
                             u.setNom(nom.getText());
                             u.setPrenom(prenom.getText());
                             u.setCin(username.getText());
@@ -210,8 +214,13 @@ public class SignUpForm extends BaseForm {
 
                             UserService us = new UserService();
                            us.SignUp(u);
+                           ///////////////////envoyer mail/////////////////////
+                           us.envoyermail(email.getText(), n);
+                           if(us.Authentification(u.getCin(), u.getPassword())!= null)
+                    {}
+                           
                             Dialog.show("Registration Successful","Welcome to fix'it !\n a verification email has been sent,\nYou must provide the verification token in order to confirm your account","ok",null);
-                            new ActivateForm(res).show();
+                            new ActivateForm(res,n,password.getText()).show();
                         }
                         else
                             Dialog.show("Password mismatch","Please verify the confirmation password","ok",null);       
@@ -221,5 +230,9 @@ public class SignUpForm extends BaseForm {
             }
         });
     }
+    
+    
+    
+   
     
 }

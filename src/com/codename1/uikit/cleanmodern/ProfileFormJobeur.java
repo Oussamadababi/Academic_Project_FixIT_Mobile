@@ -195,7 +195,19 @@ public class ProfileFormJobeur extends BaseForm {
                     String path = "C:\\wamp64\\www\\fixitweb1\\web\\upload\\"+image_name[0];
                    File file = new File(path);
                     System.out.println(file);
-
+                    User user = Session.getInstance().getLoggedInUser();
+                UserService S = new UserService();
+                
+                user.setEmail(email.getText());
+                user.setNom(Nom.getText());
+                user.setCin(username.getText());
+                user.setPrenom(Prenom.getText());
+                user.setPassword(Prenom.getText());
+                user.setDate_naissance(dp.getDate());
+                user.setTel(Integer.parseInt(Telephone.getText()));
+                S.update(user);
+                Session.getInstance().setLoggedInUser(user);
+                new ProfileForm(res).show();
                 }
             });
 

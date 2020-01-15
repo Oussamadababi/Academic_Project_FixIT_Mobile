@@ -38,11 +38,13 @@ import com.codename1.ui.CheckBox;
 import com.codename1.ui.Component;
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
+import com.codename1.ui.EncodedImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
 import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
+import com.codename1.ui.URLImage;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
@@ -66,6 +68,9 @@ import java.io.OutputStream;
  */
 public class ProfileForm extends BaseForm {
     private Form hi;
+    Image imgg;
+    Image img1;
+        EncodedImage enc ;
 
     public ProfileForm(Resources res) {
         super("Newsfeed", BoxLayout.y());
@@ -78,9 +83,23 @@ public class ProfileForm extends BaseForm {
         super.addSideMenu(res);
         
         tb.addSearchCommand(e -> {});
+       try {
+            enc = EncodedImage.create("/load.png");
+        } catch (IOException ex) { 
+        }
+        
+        if (Session.getInstance().getLoggedInUser().getImgp()==null)
+         {
+             //String url2="http://localhost/fixitweb1/web/upload/aucun.png";
+             img1=res.getImage("profile-pic.jpg");
+         }
+         else{
+            String url="http://localhost/fixitweb1/web/upload/"+Session.getInstance().getLoggedInUser().getImgp();
+              img1 =URLImage.createToStorage(enc,url,url,URLImage.RESIZE_SCALE);
+         }
         
         
-        Image img = res.getImage("profile-background.jpg");
+       Image img = res.getImage("profile-background.jpg");
         if(img.getHeight() > Display.getInstance().getDisplayHeight() / 3) {
             img = img.scaledHeight(Display.getInstance().getDisplayHeight() / 3);
         }
@@ -88,8 +107,8 @@ public class ProfileForm extends BaseForm {
         sl.setUIID("BottomPad");
         sl.setBackgroundType(Style.BACKGROUND_IMAGE_SCALED_FILL);
 
-        Label facebook = new Label("786 followers", res.getImage("facebook-logo.png"), "BottomPad");
-        Label twitter = new Label("486 followers", res.getImage("twitter-logo.png"), "BottomPad");
+        Label facebook = new Label();
+        Label twitter = new Label();
         facebook.setTextPosition(BOTTOM);
         twitter.setTextPosition(BOTTOM);
         
@@ -98,13 +117,13 @@ public class ProfileForm extends BaseForm {
                 BorderLayout.south(
                     GridLayout.encloseIn(3, 
                             facebook,
-                            FlowLayout.encloseCenter(
-                                new Label(res.getImage("profile-pic.jpg"), "PictureWhiteBackgrond")),
+                            FlowLayout.encloseCenter( 
+                                new Label(img1, "PictureWhiteBackgrond")),
                             twitter
                     )
                 )
         ));
-
+        System.out.println("raed profile "+Session.getInstance().getLoggedInUser());
         Label username = new Label(Session.getInstance().getLoggedInUser().getCin());
         username.setUIID("TextFieldBlack");
         addStringValue("Username", username);
@@ -134,10 +153,7 @@ public class ProfileForm extends BaseForm {
         Telephone.setUIID("TextFieldBlack");
         addStringValue("Telephone", Telephone);
        
-        
-        TextField Password = new TextField(Session.getInstance().getLoggedInUser().getPassword(), "Password", 5, TextField.PASSWORD);
-        Password.setUIID("TextFieldBlack");
-        addStringValue("Password", Password);
+       
         
                 CheckBox multiSelect = new CheckBox("Multi-select");
 
@@ -195,15 +211,7 @@ public class ProfileForm extends BaseForm {
                     String path = "C:\\wamp64\\www\\fixitweb1\\web\\upload\\"+image_name[0];
                    File file = new File(path);
                     System.out.println(file);
-
-                }
-            });
-
-       
-        
-    
-
-             /*   User user = Session.getInstance().getLoggedInUser();
+                    User user = Session.getInstance().getLoggedInUser();
                 UserService S = new UserService();
                 
                 user.setEmail(email.getText());
@@ -215,7 +223,15 @@ public class ProfileForm extends BaseForm {
                 user.setTel(Integer.parseInt(Telephone.getText()));
                 S.update(user);
                 Session.getInstance().setLoggedInUser(user);
-                new ProfileForm(res).show();*/
+                new ProfileForm(res).show();
+                }
+            });
+
+       
+        
+    
+
+                
                 
             
       

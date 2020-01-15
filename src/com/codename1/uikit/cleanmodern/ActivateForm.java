@@ -20,6 +20,8 @@
 package com.codename1.uikit.cleanmodern;
 
 import Entites.User;
+import Service.Session;
+import Service.UserService;
 import com.codename1.components.FloatingHint;
 import com.codename1.components.SpanLabel;
 import com.codename1.io.CharArrayReader;
@@ -43,6 +45,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+
+
 /**
  * Account activation UI
  *
@@ -50,7 +54,7 @@ import java.util.Map;
  */
 public class ActivateForm extends BaseForm {
 
-    public ActivateForm(Resources res) {
+    public ActivateForm(Resources res,int codev,String pass) {
         super(new BorderLayout());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
@@ -92,8 +96,27 @@ public class ActivateForm extends BaseForm {
         signUp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
+                System.out.println(codev);
+                if(code.getText().equals(Integer.toString(codev)))
+                {
+                UserService us = new UserService();
+                
+
+                
+                    System.out.println(Session.getInstance().getLoggedInUser().getId());
                 Dialog.show("Verfication Successful","Welcome to fix'it !\n Your account now is full confirmed","ok",null);
-               
+                if(us.updatecode(Session.getInstance().getLoggedInUser().getCin()))
+                    {System.out.println(Session.getInstance().getLoggedInUser());
+                    if(us.Authentification(Session.getInstance().getLoggedInUser().getCin(), pass)!= null)
+                    {
+                    new ProfileForm(res).show();  
+                    }
+                    }
+                 
+                }
+                else
+                    Dialog.show("Wrong code","please check your email to get correct code!","ok",null);
+
             }
         });
     }

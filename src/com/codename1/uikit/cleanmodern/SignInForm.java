@@ -22,6 +22,9 @@ package com.codename1.uikit.cleanmodern;
 import Service.Session;
 import Service.UserService;
 import com.codename1.components.FloatingHint;
+import com.codename1.io.ConnectionRequest;
+import com.codename1.io.NetworkManager;
+import com.codename1.messaging.Message;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
@@ -41,7 +44,7 @@ import com.codename1.ui.util.Resources;
  * @author Shai Almog
  */
 public class SignInForm extends BaseForm {
-
+        String reponse="";
     public SignInForm(Resources res) {
         super(new BorderLayout());
         
@@ -64,7 +67,10 @@ public class SignInForm extends BaseForm {
         signUp.addActionListener(e -> new SignUpForm(res).show());
         signUp.setUIID("Link");
         Label doneHaveAnAccount = new Label("Don't have an account?");
-        
+        ////////////
+           
+
+        ////////////
         Container content = BoxLayout.encloseY(
                 new FloatingHint(username),
                 createLineSeparator(),
@@ -78,13 +84,33 @@ public class SignInForm extends BaseForm {
         signIn.requestFocus();
 signIn.addActionListener(new ActionListener() 
         {
+            
             @Override
             public void actionPerformed(ActionEvent evt) {
+                
+                           
+                           //////////////////////////////////
                if(!username.getText().equals("") && !password.getText().equals("") )
                {
+                    ConnectionRequest con = new ConnectionRequest();// création d'une nouvelle demande de connexion
+        String Url = "http://localhost/fixitweb1/web/app_dev.php/getcode?user="+username.getText();// création de l'URL
+        con.setUrl(Url);// Insertion de l'URL de notre demande de connexion
+
+        con.addResponseListener((e) -> {
+            reponse = new String(con.getResponseData());//Récupération de la réponse du serveur
+            System.out.println(reponse);
+        });
+         NetworkManager.getInstance().addToQueueAndWait(con);// Ajout de notre demande de connexion à la file d'attente du NetworkManager
                     UserService us = new UserService();
                     if(us.Authentification(username.getText(), password.getText())!= null)
-                    {
+                    {   System.out.println("raed hh  "+Session.getInstance().getLoggedInUser());
+                        if(Session.getInstance().getLoggedInUser().getEtat().contains("Attente"))
+                        {
+                            Dialog.show("Registration uncomplete","You must provide the verification token in order to use your account","ok",null);
+                            new ActivateForm(res,Integer.parseInt(reponse),password.getText()).show();
+                        }
+                        else
+                        {
                         if(Session.getInstance().getLoggedInUser().getRole().contains("POSTEUR"))
                         {
                        new ProfileForm(res).show();
@@ -96,6 +122,8 @@ signIn.addActionListener(new ActionListener()
                             new ProfileFormJobeur(res).show();
                        Session.getInstance().getLoggedInUser().ShowUserDebug();
                         }
+                        }
+                        
                         
                     }
                     else
