@@ -130,13 +130,13 @@ public class AjouterEchange extends BaseForm {
         add(LayeredLayout.encloseIn(swipe, radioContainer));
         
         ButtonGroup barGroup = new ButtonGroup();
-        RadioButton all = RadioButton.createToggle("All", barGroup);
+        RadioButton all = RadioButton.createToggle("All ", barGroup);
         all.setUIID("SelectBar");
         RadioButton featured = RadioButton.createToggle("Mes Trocs", barGroup);
         featured.setUIID("SelectBar");
-        RadioButton popular = RadioButton.createToggle("Trocs", barGroup);
+        RadioButton popular = RadioButton.createToggle(" Ajouter Trocs", barGroup);
        popular.setUIID("SelectBar");
-         RadioButton acc = RadioButton.createToggle("commander", barGroup);
+         RadioButton acc = RadioButton.createToggle("Trocs commandée", barGroup);
        acc.setUIID("SelectBar");
            featured .addActionListener(new ActionListener() {
                     @Override

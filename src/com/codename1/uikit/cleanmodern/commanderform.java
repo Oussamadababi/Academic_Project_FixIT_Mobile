@@ -114,9 +114,9 @@ public class commanderform extends BaseForm {
         all.setUIID("SelectBar");
         RadioButton featured = RadioButton.createToggle("Mes Trocs", barGroup);
         featured.setUIID("SelectBar");
-        RadioButton popular = RadioButton.createToggle("Trocs", barGroup);
+        RadioButton popular = RadioButton.createToggle("Ajouter Trocs", barGroup);
         popular.setUIID("SelectBar");
-          RadioButton acc = RadioButton.createToggle("commander", barGroup);
+          RadioButton acc = RadioButton.createToggle("Trocs commandée", barGroup);
        acc.setUIID("SelectBar");
         all.addActionListener(new ActionListener() {
                     @Override
