@@ -10,6 +10,8 @@ import Entites.Offre;
 import Entites.User;
 import Service.Posteur_service;
 import Service.Session;
+import Service.UserService;
+import com.codename1.components.FloatingHint;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
 import com.codename1.components.ToastBar;
@@ -18,6 +20,7 @@ import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
+import com.codename1.messaging.Message;
 import com.codename1.ui.Button;
 import com.codename1.ui.ButtonGroup;
 import com.codename1.ui.Component;
@@ -57,7 +60,7 @@ import java.util.Map;
  *
  * @author Asus
  */
-public class offresayed extends BaseForm{
+public class offresayed extends BaseFormJ{
       static int idj;
           
    
@@ -204,11 +207,16 @@ public class offresayed extends BaseForm{
            addButton3(res.getImage("electricte.JPG"),false,55,55,obj.get("adress").toString(),obj.get("descriptionOffre").toString(),obj.get("tel").toString(),obj.get("etatOffre").toString(),res,obj5.get("nom").toString());
         int height = Display.getInstance().convertToPixels(11.5f);
        int width = Display.getInstance().convertToPixels(14f);
+      
+       //////////////////
           Button R =new Button("refuser");
             Button A=new Button("accpeter");
+              
                  addStringValue1("",A);
                  addStringValue1("",R);
+      
             
+ 
                   /*****************/
                   /****************/
                  A.addActionListener(new ActionListener() {
@@ -218,6 +226,12 @@ public class offresayed extends BaseForm{
                           float id1 = Float.parseFloat(obj.get("id").toString());
                           int id2=(int) id1;
                       con1.setUrl("http://localhost/fixitweb1/web/app_dev.php/oussama/accepter/"+id2); 
+                      
+                     
+                      Message m = new Message("Je suis prét pour votre Mission");
+                     
+
+Display.getInstance().sendMessage(new String[] {obj.get("email").toString()}, "Offre Acceptée", m);
                      System.out.println(id2);
                        NetworkManager.getInstance().addToQueueAndWait(con1);
                            new offresayed (res).show();
@@ -231,7 +245,10 @@ public class offresayed extends BaseForm{
                           float id1 = Float.parseFloat(obj.get("id").toString());
                           int id2=(int) id1;
                       con2.setUrl("http://localhost/fixitweb1/web/app_dev.php/oussama/refuser/"+id2); 
-                   
+                    Message m = new Message("Desolée, Je ne suis pas disponible pour cette Mission");
+                     
+
+Display.getInstance().sendMessage(new String[] {obj.get("email").toString()}, "Offre Refusée", m);
                      NetworkManager.getInstance().addToQueueAndWait(con2);
                        new offresayed (res).show();
                     }
