@@ -19,10 +19,14 @@
 
 package com.codename1.uikit.cleanmodern;
 
+import com.codename1.components.MediaPlayer;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
+import com.codename1.media.Media;
+import com.codename1.media.MediaManager;
 import com.codename1.ui.Button;
 import com.codename1.ui.ButtonGroup;
+import com.codename1.ui.Component;
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
@@ -35,6 +39,7 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.util.Resources;
+import java.io.IOException;
 
 /**
  * Swiping thru tutorial
@@ -52,6 +57,10 @@ public class WalkthruForm extends Form {
         t.setUIID("Container");
         t.getContentPane().setUIID("Container");
         add(BorderLayout.CENTER, t);
+       
+       
+      
+        
         
         ScaleImageLabel page1 = new ScaleImageLabel(res.getImage(""));
         ScaleImageLabel page2 = new ScaleImageLabel(res.getImage(""));

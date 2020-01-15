@@ -22,6 +22,7 @@ package com.codename1.uikit.cleanmodern;
 import Service.Session;
 import Service.UserService;
 import com.codename1.components.FloatingHint;
+import com.codename1.notifications.LocalNotification;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
@@ -42,7 +43,8 @@ import com.codename1.ui.util.Resources;
  */
 public class SignInForm extends BaseForm {
 
-    public SignInForm(Resources res) {
+    public SignInForm(Resources res)
+    {
         super(new BorderLayout());
         
         if(!Display.getInstance().isTablet()) {
@@ -76,10 +78,13 @@ public class SignInForm extends BaseForm {
         content.setScrollableY(true);
         add(BorderLayout.SOUTH, content);
         signIn.requestFocus();
+        
 signIn.addActionListener(new ActionListener() 
         {
             @Override
             public void actionPerformed(ActionEvent evt) {
+       
+       
                if(!username.getText().equals("") && !password.getText().equals("") )
                {
                     UserService us = new UserService();
@@ -106,6 +111,7 @@ signIn.addActionListener(new ActionListener()
                else
                     Dialog.show("Missing info","You must provide both username and password","ok",null);
             }
+            
         });    }
-    
+  
 }

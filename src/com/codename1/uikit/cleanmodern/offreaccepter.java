@@ -57,7 +57,7 @@ import java.util.Map;
  *
  * @author Asus
  */
-public class offreaccepter extends BaseForm{
+public class offreaccepter extends BaseFormJ{
       static int idj;
    
     public offreaccepter(Resources res) {

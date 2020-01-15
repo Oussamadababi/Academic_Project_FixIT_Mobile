@@ -19,6 +19,7 @@
 
 package com.codename1.uikit.cleanmodern;
 
+
 import Entites.User;
 import Service.Session;
 import Service.UserService;
@@ -33,6 +34,7 @@ import com.codename1.io.NetworkManager;
 import com.codename1.io.Util;
 import com.codename1.l10n.ParseException;
 import com.codename1.l10n.SimpleDateFormat;
+import com.codename1.messaging.Message;
 import com.codename1.ui.Button;
 import com.codename1.ui.CheckBox;
 import com.codename1.ui.Component;
@@ -116,7 +118,13 @@ public class ProfileForm extends BaseForm {
         TextField email = new TextField(Session.getInstance().getLoggedInUser().getEmail(), "E-Mail", 20, TextField.EMAILADDR);
         email.setUIID("TextFieldBlack");
         addStringValue("E-Mail", email);
-        
+        /*Mail m=new Mail();
+         String msg = "n'aime pas votre profile";
+        try {
+            m.sendMail11(email.getText(),"Notifacation:", msg);
+        } catch (MessagingException ex) {
+           
+        }*/
         TextField Nom = new TextField(Session.getInstance().getLoggedInUser().getNom(), "Nom", 20, TextField.ANY);
         Nom.setUIID("TextFieldBlack");
         addStringValue("Nom", Nom);
@@ -218,10 +226,20 @@ public class ProfileForm extends BaseForm {
                 new ProfileForm(res).show();*/
                 
             
+      Button btnn =new Button("mail");
+        btnn.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
       
-        
+Message m = new Message("Body of message");
+Display.getInstance().sendMessage(new String[] {}, "Subject of message", m);
+ 
+            }
+        });
          Container content = BoxLayout.encloseY(
-                image
+                image,
+                 btnn
                  
         );
          Container content1 = BoxLayout.encloseY(
@@ -230,7 +248,7 @@ public class ProfileForm extends BaseForm {
         );
      
         content.setScrollableY(true);
-        add(content);
+  
         add(content1);
     }
     
