@@ -56,10 +56,10 @@ import java.util.Map;
  *
  * @author Asus
  */
-public class affiche_jobeur_plombier extends BaseForm{
+public class affiche_jobeur_peinture extends BaseForm{
       static int idj;
    
-    public affiche_jobeur_plombier(Resources res) {
+    public affiche_jobeur_peinture(Resources res) {
         
 //         Form f ;
 //        Button p;
@@ -88,11 +88,11 @@ public class affiche_jobeur_plombier extends BaseForm{
 //    }
       
         
-         super("Jobeurs Plomberie", BoxLayout.y());
+         super("Jobeurs Peinture", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
-        setTitle("Jobeurs Plomberie");
+        setTitle("Jobeurs Peinture");
         getContentPane().setScrollVisible(false);
         
         
@@ -103,7 +103,7 @@ public class affiche_jobeur_plombier extends BaseForm{
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("Plomberie.JPG"), spacer1, "", "", " ");
+        addTab(swipe, res.getImage("Peinture.jpg"), spacer1, "", "", " ");
         
                 
         swipe.setUIID("Container");
@@ -189,7 +189,7 @@ public class affiche_jobeur_plombier extends BaseForm{
      int id=Session.getInstance().getLoggedInUser().getId();
         
         ConnectionRequest con = new ConnectionRequest();
-         con.setUrl("http://localhost/fixitweb1/web/app_dev.php/oussama/affichemobile/Plombier"); 
+         con.setUrl("http://localhost/fixitweb1/web/app_dev.php/oussama/affichemobile/Renovation"); 
       ArrayList<User> listJobeurs = new ArrayList<>();
             con.addResponseListener((NetworkEvent evt) -> {
             try {
@@ -200,7 +200,7 @@ public class affiche_jobeur_plombier extends BaseForm{
                 List<Map<String, Object>> list = (List<Map<String, Object>>) tasks.get("root");
              for (Map<String, Object> obj : list) {
                 User U = new User();
-           addButton3(res.getImage("Plomberie.JPG"),false,55,55,obj.get("nom").toString(),obj.get("prenom").toString(),obj.get("tel").toString(),obj.get("specialite").toString(),res);
+           addButton3(res.getImage("Peinture.jpg"),false,55,55,obj.get("nom").toString(),obj.get("prenom").toString(),obj.get("tel").toString(),obj.get("specialite").toString(),res);
                  Button b =new Button("commander");
                  addStringValue("",b);
                  b.addActionListener(new ActionListener() {

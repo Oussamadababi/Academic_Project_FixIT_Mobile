@@ -206,6 +206,8 @@ public class offresayed extends BaseForm{
        int width = Display.getInstance().convertToPixels(14f);
           Button R =new Button("refuser");
             Button A=new Button("accpeter");
+           
+        
                  addStringValue1("",A);
                  addStringValue1("",R);
             
