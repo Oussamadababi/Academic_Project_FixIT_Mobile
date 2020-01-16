@@ -23,7 +23,6 @@ import static com.codename1.ui.Component.CENTER;
 import static com.codename1.ui.Component.LEFT;
 import static com.codename1.ui.Component.RIGHT;
 import com.codename1.ui.Container;
-import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Graphics;
@@ -52,10 +51,9 @@ import java.util.Map;
  *
  * @author DELL
  */
-public class AnnonceForm extends BaseForm{
-    public static String loc;
+public class MesAnnonce extends BaseForm{
     
-public AnnonceForm(Resources res) {
+public MesAnnonce (Resources res) {
         super("Annonce", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
@@ -114,33 +112,33 @@ public AnnonceForm(Resources res) {
         ButtonGroup barGroup = new ButtonGroup();
         RadioButton all = RadioButton.createToggle("All", barGroup);
         all.setUIID("SelectBar");
-        RadioButton mes = RadioButton.createToggle("Mes annonces", barGroup);
+        RadioButton mes = RadioButton.createToggle("Mes Annonce", barGroup);
         mes.setUIID("SelectBar");
         RadioButton ajouter = RadioButton.createToggle("Ajouter Annonce", barGroup);
-       ajouter.setUIID("SelectBar");
-         all.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        
-                        {
-                       new AnnonceForm (res).show();
-                          
-                          
-                        }
-                        }
-                });
-           mes.addActionListener(new ActionListener() {
+        ajouter.setUIID("SelectBar");
+        all.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
                         
                         {
                        
-                   new MesAnnonce (res).show();
-                          
+                         new AnnonceForm (res).show();  
                           
                         }
                         }
                 });
+          ajouter.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        
+                        {
+                       
+                        new AjouterAnnonce (res).show();  
+                          
+                        }
+                        }
+                });
+     
      
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         
@@ -154,7 +152,7 @@ public AnnonceForm(Resources res) {
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
-            updateArrowPosition(all, arrow);
+            updateArrowPosition(mes, arrow);
         });
         bindButtonSelection(all, arrow);
         bindButtonSelection(mes, arrow);
@@ -166,9 +164,10 @@ public AnnonceForm(Resources res) {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
             
         });
-     int id=Session.getInstance().getLoggedInUser().getId();
-     ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/heni/afficherannonce/"+id);  
+       
+         int id=Session.getInstance().getLoggedInUser().getId();
+        ConnectionRequest con = new ConnectionRequest();
+        con.setUrl("http://localhost/fixitweb1/web/app_dev.php/heni/mes/"+id);  
       
             con.addResponseListener((NetworkEvent evt) -> {
             ArrayList<Annonce> listTasks = new ArrayList<>();
@@ -180,45 +179,37 @@ public AnnonceForm(Resources res) {
                 List<Map<String, Object>> list = (List<Map<String, Object>>) tasks.get("root");
              for (Map<String, Object> obj : list) {
                 Annonce a = new Annonce();
-   
-           LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurFg") ;
+              
+          
+           LinkedHashMap<String,Object> obj1 =  (LinkedHashMap<String,Object>) obj.get("idposteurfg") ;
            int pos = 1;
+          //a.setNom_posteur(obj1.get("username").toString());
+         
+           
           
-          
-           
-           
-           
-           //loc =obj.get("localisation").toString() ; 
-             //          System.out.println(loc); 
-           Button location= new Button("location");
-           addStringValue(" ",  location);
-           System.out.println(loc);
-          location.addActionListener(new ActionListener() {
+  Button supprimer=new Button("Supprimer");
+  addStringValue(" ",  supprimer);
+  supprimer.addActionListener(new ActionListener() {
 
                     @Override
                     public void actionPerformed(ActionEvent evt) {
                         
-                        System.out.println("11111");
-                         loc =obj.get("localisation").toString() ; 
-                       System.out.println(loc); 
-                MapsDemo maCarte = new MapsDemo();
-                maCarte.start();
-                
+                        String iddd=obj.get("id").toString();
+                    
+                        System.out.println("oooooo");
+                    ConnectionRequest con1 = new ConnectionRequest();
+                    con1.setUrl("http://localhost/fixitweb1/web/app_dev.php/heni/supprimer/"+iddd);   
+                    NetworkManager.getInstance().addToQueueAndWait(con1);
                     }
                 });
-          
-          
-          
-          
-          
-          
-           
-          
-          addButton3(res.getImage("ann.jpg"),false,55,55,obj.get("nomAnnonce").toString(),obj.get("adress").toString(),obj.get("date").toString(),obj.get("descriptionAnnonce").toString(),obj.get("tel").toString(),obj.get("prix").toString(),obj.get("localisation").toString(),obj1.get("nom").toString());
-          
+  
+  
+               addButton3(res.getImage("ann.jpg"),false,55,55,obj.get("nomAnnonce").toString(),obj.get("adress").toString(),obj.get("date").toString(),obj.get("descriptionAnnonce").toString(),obj.get("tel").toString(),obj.get("prix").toString());        
+                           
+                          
+                      
 
                 listTasks.add(a);
-                   
             }} 
             catch (IOException ex) {
             }
@@ -227,6 +218,10 @@ public AnnonceForm(Resources res) {
                 });
               
         NetworkManager.getInstance().addToQueueAndWait(con);
+       // addButton(res.getImage("news-item-1.jpg"), "Morbi per tincidunt tellus sit of amet eros laoreet.", false, 26, 32);
+       // addButton(res.getImage("news-item-2.jpg"), "Fusce ornare cursus masspretium tortor integer placera.", true, 15, 21);
+        //addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15);
+        //addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);*/
       
     }
      
@@ -276,7 +271,7 @@ public AnnonceForm(Resources res) {
         swipe.addTab("", page1);
     }
 
-private void addButton3(Image img, boolean liked, int likeCount, int commentCount,String nomA,String address,String date,String description,String tel,String prix,String loc,String nom) {
+private void addButton3(Image img, boolean liked, int likeCount, int commentCount,String nomA,String address,String date,String description,String tel,String prix) {
        int height = Display.getInstance().convertToPixels(11.5f);
        int width = Display.getInstance().convertToPixels(14f);
        Button image = new Button(img.fill(width, height));
@@ -289,25 +284,26 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
        Label likes = new Label(likeCount + " Likes  ", "NewsBottomLine");
       // Label likes1 = new Label("asazd" + " Likes  ", "NewsBottomLine");
        likes.setTextPosition(RIGHT);
-       Label num = new Label("Nom annonce  :  "+nomA , "NewsBottomLine"); 
+
+      
+      
+      Label num = new Label("Nom annonce  :  "+nomA , "NewsBottomLine"); 
        Label likes1 = new Label("Adresse  :  " + address  , "NewsBottomLine");
        Label comments = new Label( " Date : "+date , "NewsBottomLine"); 
         Label comments1 = new Label( " Description : "+description , "NewsBottomLine");
          Label comments2 = new Label( " Telephone : "+tel , "NewsBottomLine");
           Label comments3 = new Label( " Prix : "+prix , "NewsBottomLine");
-         Label user = new Label( "username  : "+nom , "NewsBottomLine"); 
-         //Label local = new Label( "username  : "+nom , "NewsBottomLine");
-      
+       
        cnt.add(BorderLayout.CENTER, 
                BoxLayout.encloseY(
                       
                        BoxLayout.encloseX(likes1,num ),
-                       comments,comments1,comments2,comments3,user
+                       comments,comments1,comments2,comments3
                        
                ));
  
        add(cnt);
-      // cnt.add(location);
+       
      
    }
     
@@ -358,4 +354,6 @@ private void addButton3(Image img, boolean liked, int likeCount, int commentCoun
                 add(BorderLayout.CENTER, v));
         add(createLineSeparator(0xeeeeee));
     }
+     
+    
 }

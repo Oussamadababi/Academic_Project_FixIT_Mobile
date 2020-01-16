@@ -98,6 +98,45 @@ public class Annonce {
     public String toString() {
         return "Annonce{" + "id=" + id + ", nom_annonce=" + nom_annonce + ", adress=" + adress + ", date=" + date + ", description_annonce=" + description_annonce + ", etat_annonce=" + etat_annonce + ", tel=" + tel + ", prix=" + prix + ", idposteur_fg=" + idposteur_fg + '}';
     }
+
+    public Annonce(int id, String nom_annonce, String adress, String date, String description_annonce, int tel, int prix) {
+        this.id = id;
+        this.nom_annonce = nom_annonce;
+        this.adress = adress;
+        this.date = date;
+        this.description_annonce = description_annonce;
+        this.tel = tel;
+        this.prix = prix;
+    }
+
+    public Annonce(String nom_annonce, String adress, String date, String description_annonce, int tel, int prix, int idposteur_fg) {
+        this.nom_annonce = nom_annonce;
+        this.adress = adress;
+        this.date = date;
+        this.description_annonce = description_annonce;
+        this.tel = tel;
+        this.prix = prix;
+        this.idposteur_fg = idposteur_fg;
+    }
+
+    public Annonce(String nom_annonce, String adress, String date, String description_annonce, int tel, int prix) {
+        this.nom_annonce = nom_annonce;
+        this.adress = adress;
+        this.date = date;
+        this.description_annonce = description_annonce;
+        this.tel = tel;
+        this.prix = prix;
+    }
+
+    public Annonce(String nom_annonce, String adress, String description_annonce, int tel, int prix, int idposteur_fg) {
+        this.nom_annonce = nom_annonce;
+        this.adress = adress;
+        this.description_annonce = description_annonce;
+        this.tel = tel;
+        this.prix = prix;
+        this.idposteur_fg = idposteur_fg;
+    }
+    
     
     
     
